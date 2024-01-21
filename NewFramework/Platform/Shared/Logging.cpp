@@ -1,5 +1,5 @@
 #include "Logging.h"
-#include "Framework/NewFramework/Analytics/DGAnalytics.h"
+#include "NewFramework/Analytics/DGAnalytics.h"
 #include <boost/thread/mutex.hpp>
 
 CLogging::CLogging() : m_mutex(new boost::mutex) {}
@@ -57,7 +57,7 @@ void CLogging::RemoveComponent(ILoggingComponent* component)
 void CLogging::SendToComponents(const char* message)
 {
     for (ILoggingComponent* component : m_components)
-        component->log(message);
+        component->Log(message);
 }
 
 size_t CLogging::StripPath(const char* path)

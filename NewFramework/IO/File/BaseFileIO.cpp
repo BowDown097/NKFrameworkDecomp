@@ -1,5 +1,5 @@
 #include "BaseFileIO.h"
-#include "Framework/NewFramework/Platform/Shared/Logging.h"
+#include "NewFramework/Platform/Shared/Logging.h"
 
 CBaseFileIO::CBaseFileIO() : archivePassword("Q%_{6#Px]]")
 {
