@@ -1,0 +1,31 @@
+#include "StringHelper.h"
+#include <cstdarg>
+
+namespace StringHelper
+{
+    std::string Format(std::string formatString, ...)
+    {
+        static const char* sEncodingError = "Encoding error when calling StringHelper::Format()";
+        static const char* sEmptyFormatStringError = "Empty format string passed to StringHelper::Format()";
+
+        if (formatString.empty())
+            return sEmptyFormatStringError;
+
+        va_list va;
+        va_start(va, formatString);
+
+        int dryRunChars = vsnprintf(NULL, 0, formatString.c_str(), va);
+        va_end(va);
+        if (dryRunChars < 0)
+            return sEncodingError;
+
+        std::string out;
+        out.resize(dryRunChars);
+
+        va_start(va, formatString);
+        int realRunChars = vsnprintf(out.data(), out.size() + 1, formatString.c_str(), va);
+        va_end(va);
+
+        return realRunChars > 0 ? out : sEncodingError;
+    }
+}
