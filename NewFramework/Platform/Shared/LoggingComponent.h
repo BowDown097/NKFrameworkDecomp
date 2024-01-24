@@ -5,8 +5,8 @@
 struct ILoggingComponent
 {
     std::type_info typeInfo;
-    virtual ~ILoggingComponent() = 0;
-    virtual void Log(const char* message) = 0;
+    virtual ~ILoggingComponent();
+    virtual void Log(const char* message);
 };
 
 #endif // LOGGINGCOMPONENT_H

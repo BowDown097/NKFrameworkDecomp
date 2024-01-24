@@ -9,8 +9,8 @@ void CFilePolicy::AddLocation(eFileLocation location)
 void CFilePolicy::AddPath(ePolicyItemType type, const std::string& path)
 {
     std::string pathCopy(path);
-    if (type == ePolicyItemType::Directory && path.back() != '*')
-        pathCopy.push_back('*');
+    if (type == ePolicyItemType::Directory && !pathCopy.empty() && pathCopy.back() != '/')
+        pathCopy.push_back('/');
 
     policyItems.insert(policyItems.begin(), SPolicyItem {
         .path = path,
@@ -36,7 +36,7 @@ void CFilePolicy::UpdateWritePermissions()
 
     for (const SPolicyItem& policyItem : policyItems)
     {
-        if (policyItem.type == ePolicyItemType::Unknown)
+        if (policyItem.type == ePolicyItemType::Archive)
             break;
 
         if (policyItem.type == ePolicyItemType::File && policyItem.location == eFileLocation::Assets)

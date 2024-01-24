@@ -8,13 +8,16 @@ enum class eFileLocation { Documents, Cache, Unknown1, Assets, Unknown2, Externa
 class CFilePolicy
 {
 public:
-    enum class ePolicyItemType { Unknown, File, Directory };
+    enum class ePolicyItemType { Archive, File, Directory };
 
     struct SPolicyItem
     {
         eFileLocation location;
         std::string path;
         ePolicyItemType type;
+
+        friend bool operator==(const SPolicyItem& lhs, const SPolicyItem& rhs)
+        { return lhs.location == rhs.location && lhs.path == rhs.path && lhs.type == rhs.type; }
     };
 
     bool hasWritePermission = true;

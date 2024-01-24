@@ -20,6 +20,7 @@ set(HEADER_FILES
     NewFramework/Analytics/DGAnalytics.h
     NewFramework/IO/File/BaseFileIO.h
     NewFramework/IO/File/FilePolicy.h
+    NewFramework/IO/File/IFile.h
     NewFramework/Platform/Shared/Logging.h
     Uncategorized/StringHelper.h
     Uncategorized/Version.h
