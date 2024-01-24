@@ -28,4 +28,27 @@ namespace StringHelper
 
         return realRunChars > 0 ? out : sEncodingError;
     }
+
+    std::string Join(const std::vector<std::string>& values, const std::string& separator)
+    {
+        std::string out;
+
+        if (values.empty())
+            return out;
+
+        size_t stringSize = 0;
+        for (const std::string& value : values)
+            stringSize += value.size();
+
+        out.reserve(stringSize);
+        out.append(values[0]);
+
+        for (const std::string& value : values)
+        {
+            out.append(separator);
+            out.append(value);
+        }
+
+        return out;
+    }
 }

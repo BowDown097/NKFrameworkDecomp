@@ -3,6 +3,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#ifndef NDEBUG
+#include "Uncategorized/StringHelper.h"
+#endif
+
 CBaseFileIO::CBaseFileIO() : archivePassword("Q%_{6#Px]]")
 {
     assetPolicy.SetPolicyName("Asset");
@@ -356,10 +360,8 @@ IFile* CBaseFileIO::OpenFile(const std::string& path, const CFilePolicy& policy,
     }
 
 #ifndef NDEBUG // speculative
-/*
     if (!openFileFailures.empty())
-        LOG_ERROR("OpenFile failures: %s", StringHelper::Join(openFileFailures, ", "));
-*/
+        LOG_ERROR("OpenFile failures: %s", StringHelper::Join(openFileFailures, ", ").c_str());
 #endif
 
     if (!file)
