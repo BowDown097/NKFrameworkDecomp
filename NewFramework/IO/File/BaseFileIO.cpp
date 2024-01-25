@@ -1,5 +1,7 @@
-#include "BaseFileIO.h"
+#include "NewFramework/Platform/iOS/File.h" // TODO: change this #include based on platform when that's done
+#include "NewFramework/Platform/Shared/Core.h"
 #include "NewFramework/Platform/Shared/Logging.h"
+#include <cstring>
 #include <dirent.h>
 #include <sys/stat.h>
 
@@ -97,8 +99,8 @@ bool CBaseFileIO::FileCopy(const std::string& source, const CFilePolicy& sourceP
     if (writeTotal != sourceLength)
         FileDelete(dest, destPolicy);
 
-    sourceObject->Close(IFile::eWriteSyncBehaviour::Blablabla2);
-    destObject->Close(IFile::eWriteSyncBehaviour::Blablabla2);
+    sourceObject->Close(IFile::eWriteSyncBehaviour::NoSync);
+    destObject->Close(IFile::eWriteSyncBehaviour::NoSync);
 
     delete sourceObject;
     delete destObject;
@@ -168,8 +170,8 @@ bool CBaseFileIO::FileMove(const std::string& source, const CFilePolicy& sourceP
     return result;
 }
 
-bool FileNamesInPath(const std::string& dir, const std::string& extension,
-                     std::vector<std::string>* files, std::vector<std::string>* folders)
+bool CBaseFileIO::FileNamesInPath(const std::string& dir, const std::string& extension,
+                                  std::vector<std::string>* files, std::vector<std::string>* folders)
 {
     std::string dirCopy(dir);
     if (!dirCopy.empty() && dirCopy.back() != '/')
@@ -193,7 +195,9 @@ bool FileNamesInPath(const std::string& dir, const std::string& extension,
         struct stat innerStat;
         if (stat(innerDir.c_str(), &innerStat) != 0)
         {
-            // CCore::instance()->ThreadSafeStrError(errno());
+#ifndef NDEBUG // speculative
+            LOG_ERROR("stat() failed on file (%s): %s", innerDir.c_str(), CCore::ThreadSafeStrError(errno).c_str());
+#endif
             continue;
         }
 
@@ -334,41 +338,66 @@ IFile* CBaseFileIO::OpenFile(const std::string& path, const CFilePolicy& policy,
     if (policyItems.empty())
     {
         LOG_ERROR("Error loading file (%s) using %s policy.", path.c_str(), policy.policyName.c_str());
-        openFileFailures.clear();
         return nullptr;
     }
 
+    std::vector<std::string> errors;
     IFile* file = nullptr;
     for (const CFilePolicy::SPolicyItem& policyItem : policyItems)
     {
-        std::string openFilePath;
+        std::string error;
         switch (policyItem.type)
         {
         case CFilePolicy::ePolicyItemType::Archive:
-            file = OpenFileFromArchive(path, policyItem.path, openFilePath);
+            file = OpenFileFromArchive(path, policyItem.path, error);
             break;
         case CFilePolicy::ePolicyItemType::File:
-            file = OpenFileFromPath(GetPath(policyItem.location, path), openMode, openFilePath);
+            file = OpenFileFromPath(GetPath(policyItem.location, path), openMode, error);
             break;
         case CFilePolicy::ePolicyItemType::Directory:
-            file = OpenFileFromPath(policyItem.path + path, openMode, openFilePath);
+            file = OpenFileFromPath(policyItem.path + path, openMode, error);
             break;
         }
 
         if (!file)
-            openFileFailures.push_back(openFilePath);
+            errors.push_back(error);
     }
 
 #ifndef NDEBUG // speculative
-    if (!openFileFailures.empty())
-        LOG_ERROR("OpenFile failures: %s", StringHelper::Join(openFileFailures, ", ").c_str());
+    if (!errors.empty())
+        LOG_ERROR("OpenFile error: %s", StringHelper::Join(errors, ", ").c_str());
 #endif
 
     if (!file)
         LOG_ERROR("Error loading file (%s) using %s policy.", path.c_str(), policy.policyName.c_str());
 
-    openFileFailures.clear();
     return file;
+}
+
+CBaseFileIO::CFile* OpenFileFromPath(const std::string& path, eFileOpenMode openMode, std::string& error)
+{
+    if (openMode == eFileOpenMode::Append || openMode == eFileOpenMode::ReadWriteNew)
+    {
+        for (int i = path.size() - 1; i >= 0; i--)
+        {
+            if (memchr("\\/", path[i], 2))
+            {
+                std::string pathSegment(path, 0, i);
+                /* wtf does this call!!!
+                    v9 = (*(__int64 (__fastcall **)(CBaseFileIO *, char *))(*(_QWORD *)this + 56LL))(this, pathSegment);
+                    if (!v9)
+                        return 0LL;
+                */
+                break;
+            }
+        }
+    }
+
+    CBaseFileIO::CFile* result = new CBaseFileIO::CFile;
+    if (result->Open(path, openMode, error))
+        return result;
+    delete result;
+    return nullptr;
 }
 
 int CBaseFileIO::RenameFileAtPath(const std::string& source, const std::string& dest)

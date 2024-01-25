@@ -9,6 +9,8 @@ class C_ZipArchive;
 class CBaseFileIO
 {
 public:
+    class CFile;
+
     CBaseFileIO();
     void AddSupportedStorage(eFileLocation location, const std::string& path);
     bool FileCopy(const std::string& source, const CFilePolicy& sourcePolicy,
@@ -36,15 +38,14 @@ private:
     CFilePolicy cachePolicy;
     CFilePolicy documentPolicy;
     CFilePolicy externalPolicy;
-    std::vector<std::string> openFileFailures;
     std::map<std::string, CFilePolicy*> policyMap;
     std::map<eFileLocation, std::string> storageMap;
 
     bool DeleteFileFromPath(const std::string& path) const;
     bool DoesFileExistAtPath(const std::string& path);
     bool DoesFileExistInArchive(const std::string& archive, const std::string& file) const; // UNIMPLEMENTED
-    IFile* OpenFileFromArchive(const std::string& archive, const std::string& file, std::string& outPath); // UNIMPLEMENTED, returns some other file type
-    IFile* OpenFileFromPath(const std::string& path, eFileOpenMode openMode, std::string& outPath); // UNIMPLEMENTED, returns CBaseFileIO::CFile*
+    IFile* OpenFileFromArchive(const std::string& archive, const std::string& file, std::string& error); // UNIMPLEMENTED, returns some other file type
+    CBaseFileIO::CFile* OpenFileFromPath(const std::string& path, eFileOpenMode openMode, std::string& error);
     int RenameFileAtPath(const std::string& source, const std::string& dest);
 
     void FilesAndFoldersInDirectory(const std::string& dir, const CFilePolicy& policy, std::vector<std::string>* files,
