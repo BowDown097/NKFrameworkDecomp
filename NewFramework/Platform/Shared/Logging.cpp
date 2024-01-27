@@ -92,8 +92,6 @@ void CLogging::VPrintError(const char* file, const char* function, int line, con
     SendToComponents(final);
 
     DGAnalytics::Instance()->Log("ERROR: %s(%d) %s %s", &file[fileStrippedIndex], line, function, text);
-
-    lock.unlock();
 }
 
 void CLogging::VPrintWarning(const char* message, va_list* args)

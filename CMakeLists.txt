@@ -31,10 +31,14 @@ set(HEADER_FILES
     Uncategorized/Version.h
 )
 
-#if(APPLE)
+if(UNIX)
     list(APPEND SOURCE_FILES NewFramework/Platform/iOS/File.cpp)
     list(APPEND HEADER_FILES NewFramework/Platform/iOS/File.h)
-#endif()
+endif()
+
+if(APPLE)
+    list(APPEND SOURCE_FILES NewFramework/Platform/iOS/OSXCore.mm)
+endif()
 
 target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")

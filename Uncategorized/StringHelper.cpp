@@ -51,4 +51,17 @@ namespace StringHelper
 
         return out;
     }
+
+    std::string Replace(const std::string& string, const std::string& before, const std::string& after)
+    {
+        std::string out(string);
+        size_t startPos = 0;
+        while ((startPos = out.find(before, startPos)) != std::string::npos)
+        {
+            out.replace(startPos, before.size(), after);
+            startPos += after.size();
+        }
+
+        return out;
+    }
 }
