@@ -2,6 +2,7 @@
 #define CORE_H
 #include <cstdint>
 #include <string>
+#include <vector>
 
 #define THREAD_ID int
 

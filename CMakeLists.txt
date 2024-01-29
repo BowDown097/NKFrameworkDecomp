@@ -9,6 +9,7 @@ add_library(${PROJECT_NAME})
 
 set(SOURCE_FILES
     NewFramework/Analytics/DGAnalytics.cpp
+    NewFramework/BaseApplication/BasePointers.cpp
     NewFramework/IO/File/BaseFileIO.cpp
     NewFramework/IO/File/FilePolicy.cpp
     NewFramework/Platform/Shared/Assert.cpp
@@ -20,6 +21,8 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     NewFramework/Analytics/DGAnalytics.h
+    NewFramework/BaseApplication/AppClass/AppClass.h
+    NewFramework/BaseApplication/BasePointers.h
     NewFramework/IO/File/BaseFileIO.h
     NewFramework/IO/File/FilePolicy.h
     NewFramework/IO/File/IFile.h
