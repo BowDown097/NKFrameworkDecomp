@@ -7,18 +7,23 @@
 #include <fcntl.h>
 #include <functional>
 
+CBaseFileIO::CFile::~CFile()
+{
+    CBaseFileIO::CFile::Close(eWriteSyncBehaviour::Sync);
+}
+
 void CBaseFileIO::CFile::Close(eWriteSyncBehaviour writeSyncBehaviour)
 {
-    if (!filePtr)
+    if (!platformData->file)
         return;
 
     if (openMode == eFileOpenMode::ReadWriteNew && writeSyncBehaviour == eWriteSyncBehaviour::Sync &&
-        ferror(filePtr.get()) == 0)
+        ferror(platformData->file) == 0)
     {
         SyncToDisk();
     }
 
-    if (fclose(filePtr.get()) != 0)
+    if (fclose(platformData->file) != 0)
     {
         std::string error = "Error running fclose: " + CCore::ThreadSafeStrError(errno);
         NKAssert(false, error.c_str());
@@ -61,17 +66,17 @@ bool CBaseFileIO::CFile::Open(const std::string& path, eFileOpenMode openMode, s
         break;
     }
 
-    FILE* f = fopen(path.c_str(), modeString.c_str());
-    if (!f)
+    platformData->file = fopen(path.c_str(), modeString.c_str());
+    if (!platformData->file)
     {
         error = StringHelper::Format("CFile::Open unable to open file ('%s') : %s", path.c_str(), CCore::ThreadSafeStrError(errno).c_str());
         return false;
     }
 
-    filePtr = std::shared_ptr<FILE>(f, std::bind(&CBaseFileIO::CFile::Close, this, eWriteSyncBehaviour::Sync));
     UpdateFileLength();
     this->path = path;
-    return static_cast<bool>(filePtr);
+
+    return platformData->file != NULL;
 }
 
 size_t CBaseFileIO::CFile::ReadBytes(uint8_t* const data, const size_t size)
@@ -87,24 +92,24 @@ IFile::SFileIOResult CBaseFileIO::CFile::ReadBytes_Internal(uint8_t* const data,
     SFileIOResult result;
     result.bytesAttempted = size;
 
-    if (fseek(filePtr.get(), offset, SEEK_SET) != 0)
+    if (fseek(platformData->file, offset, SEEK_SET) != 0)
     {
         result.info = "Error: " + CCore::ThreadSafeStrError(errno);
         result.status = eFileIOStatus::IOFailed;
         return result;
     }
 
-    result.bytesTransferred = fread(data, 1, size, filePtr.get());
+    result.bytesTransferred = fread(data, 1, size, platformData->file);
     if (result.bytesTransferred == result.bytesAttempted)
     {
         result.info = "All bytes were read successfully";
     }
     else
     {
-        int eof = feof(filePtr.get());
+        int eof = feof(platformData->file);
         if (eof == 0)
         {
-            int errorInd = ferror(filePtr.get());
+            int errorInd = ferror(platformData->file);
             if (errorInd == 0)
             {
                 result.info = "Unable to read all bytes, but eof and error flags not set";
@@ -122,7 +127,7 @@ IFile::SFileIOResult CBaseFileIO::CFile::ReadBytes_Internal(uint8_t* const data,
 
     result.status = eFileIOStatus::Success;
 
-    size_t pos = ftell(filePtr.get());
+    size_t pos = ftell(platformData->file);
     if (pos == -1)
     {
         LOG_ERROR("Unable to get file stream position (%s). Setting current offset manually.", CCore::ThreadSafeStrError(errno).c_str());
@@ -208,13 +213,13 @@ IFile::SFileIOResult CBaseFileIO::CFile::ReadStringWithResult(std::string& data)
 
 bool CBaseFileIO::CFile::SanityCheck(std::string& errorString, eFileOpenMode expectedOpenMode)
 {
-    if (!filePtr)
+    if (!platformData->file)
     {
         errorString = StringHelper::Format("Sanity check failed for file '%s' - handle is not valid", path.c_str());
         return false;
     }
 
-    if (ferror(filePtr.get()))
+    if (ferror(platformData->file))
     {
         errorString = StringHelper::Format("Sanity check failed for file '%s' - error indicator is set", path.c_str());
         return false;
@@ -238,13 +243,13 @@ void CBaseFileIO::CFile::SyncToDisk()
         return;
     }
 
-    if (fflush(filePtr.get()) != 0)
+    if (fflush(platformData->file) != 0)
     {
         LOG_ERROR("Can't sync file '%s' to disk - fflush failed (%s)", path.c_str(), CCore::ThreadSafeStrError(errno).c_str());
         return;
     }
 
-    int desc = fileno(filePtr.get());
+    int desc = fileno(platformData->file);
     if (desc == -1)
     {
         LOG_ERROR("Can't sync file '%s' to disk - fileno failed (%s)", path.c_str(), CCore::ThreadSafeStrError(errno).c_str());
@@ -257,9 +262,9 @@ void CBaseFileIO::CFile::SyncToDisk()
 
 int CBaseFileIO::CFile::UpdateFileLength()
 {
-    fseek(filePtr.get(), 0, SEEK_END);
-    length = ftell(filePtr.get());
-    return fseek(filePtr.get(), offset, SEEK_SET);
+    fseek(platformData->file, 0, SEEK_END);
+    length = ftell(platformData->file);
+    return fseek(platformData->file, offset, SEEK_SET);
 }
 
 size_t CBaseFileIO::CFile::WriteBytes(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour)
@@ -297,9 +302,9 @@ IFile::SFileIOResult CBaseFileIO::CFile::WriteBytesWithResult(uint8_t* const inp
         return result;
     }
 
-    fseek(filePtr.get(), offset, SEEK_SET);
+    fseek(platformData->file, offset, SEEK_SET);
     result.bytesAttempted = size;
-    result.bytesTransferred = fwrite(input, 1, size, filePtr.get());
+    result.bytesTransferred = fwrite(input, 1, size, platformData->file);
 
     if (result.bytesTransferred == 0)
     {
@@ -308,7 +313,7 @@ IFile::SFileIOResult CBaseFileIO::CFile::WriteBytesWithResult(uint8_t* const inp
         return result;
     }
 
-    if (result.bytesAttempted != result.bytesTransferred || ferror(filePtr.get()))
+    if (result.bytesAttempted != result.bytesTransferred || ferror(platformData->file))
     {
         result.info = StringHelper::Format(
             "WriteBytesWithResult() Did not write all data - the file will contain some data, but the pointer has been reset."

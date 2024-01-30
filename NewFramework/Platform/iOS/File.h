@@ -5,25 +5,25 @@
 class CBaseFileIO::CFile : public IFile
 {
 public:
-    void Close(eWriteSyncBehaviour writeSyncBehaviour) override;
-    bool Open(const std::string& path, eFileOpenMode openMode, std::string& error) override;
-
-    size_t ReadBytes(uint8_t* const data, const size_t size) override;
-    bool ReadString(std::string& data) override;
-    size_t WriteBytes(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour) override;
-    bool WriteString(const std::string& input, eWriteSyncBehaviour writeSyncBehaviour) override;
-
-    size_t GetFileLength() override;
-    bool SanityCheck(std::string& errorString, eFileOpenMode expectedOpenMode);
-    void SyncToDisk();
+    ~CFile() override;
+    bool Open(const std::string& path, eFileOpenMode openMode, std::string& error);
     int UpdateFileLength();
-private:
-    SFileIOResult ReadBytesWithResult(uint8_t* const data, const size_t size) override;
+    void Close(eWriteSyncBehaviour writeSyncBehaviour) override;
+    void SyncToDisk();
+    bool SanityCheck(std::string& errorString, eFileOpenMode expectedOpenMode);
+    bool ReadString(std::string& data) override;
     SFileIOResult ReadStringWithResult(std::string& data) override;
-    SFileIOResult WriteBytesWithResult(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour) override;
-    SFileIOResult WriteStringWithResult(const std::string& input, eWriteSyncBehaviour writeSyncBehaviour) override;
-
     SFileIOResult ReadBytes_Internal(uint8_t* const data, const size_t size);
+    size_t ReadBytes(uint8_t* const data, const size_t size) override;
+    SFileIOResult ReadBytesWithResult(uint8_t* const data, const size_t size) override;
+    bool WriteString(const std::string& input, eWriteSyncBehaviour writeSyncBehaviour) override;
+    SFileIOResult WriteStringWithResult(const std::string& input, eWriteSyncBehaviour writeSyncBehaviour) override;
+    size_t WriteBytes(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour) override;
+    SFileIOResult WriteBytesWithResult(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour) override;
+    std::string GetFilePath() override { return path; }
+    void SetOffset(size_t offset) override { this->offset = offset; }
+    size_t GetOffset() override { return offset; }
+    size_t GetFileLength() override;
 };
 
 #endif // IOS_FILE_H

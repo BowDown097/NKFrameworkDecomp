@@ -2,7 +2,7 @@
 
 void CFilePolicy::AddLocation(eFileLocation location)
 {
-    policyItems.insert(policyItems.begin(), SPolicyItem { .location = location, .type = ePolicyItemType::File });
+    policyItems.insert(policyItems.begin(), SPolicyItem { .type = ePolicyItemType::File, .location = location });
     UpdateWritePermissions();
 }
 
@@ -12,11 +12,7 @@ void CFilePolicy::AddPath(ePolicyItemType type, const std::string& path)
     if (type == ePolicyItemType::Directory && !pathCopy.empty() && pathCopy.back() != '/')
         pathCopy.push_back('/');
 
-    policyItems.insert(policyItems.begin(), SPolicyItem {
-        .path = path,
-        .type = type
-    });
-
+    policyItems.insert(policyItems.begin(), SPolicyItem { .type = type, .path = path });
     UpdateWritePermissions();
 }
 

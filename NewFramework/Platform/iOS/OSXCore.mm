@@ -168,7 +168,7 @@ std::string CCore::GetSystemVersion()
 
 // TODO: i don't feel like doing this yet because this relies on some stuff and it might be a headache:
 // CSteamInterface class (CSteamInterface::IsSteamRunning), hashlib++ library, and the steam API
-std::string CCore::GetVendorID()
+std::string CCore::GetVendorId()
 {
     return "";
 }

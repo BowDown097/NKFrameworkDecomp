@@ -27,27 +27,22 @@ namespace boost { class mutex; }
 class CLogging
 {
 public:
+    static CLogging* GetSingletonPtr();
     CLogging();
     ~CLogging();
-
-    static CLogging* GetSingletonPtr();
     static size_t StripPath(const char* path);
-
     void AddComponent(ILoggingComponent* component);
-    ILoggingComponent* GetComponentByTypeID(const std::type_info& info) const;
     void RemoveComponent(ILoggingComponent* component);
-    void SendToComponents(const char* message);
-
+    ILoggingComponent* GetComponentByTypeID(const std::type_info& info) const;
     void PrintError(const char* file, const char* function, int line, const char* message, ...);
+    void VPrintError(const char* file, const char* function, int line, const char* message, va_list* args);
+    void SendToComponents(const char* message);
     void PrintWarning(const char* message, ...);
+    void VPrintWarning(const char* message, va_list* args);
 private:
     static inline CLogging* m_pInstance;
-
     std::list<ILoggingComponent*> m_components;
     boost::mutex* m_mutex;
-
-    void VPrintError(const char* file, const char* function, int line, const char* message, va_list* args);
-    void VPrintWarning(const char* message, va_list* args);
 };
 
 #endif // LOGGING_H

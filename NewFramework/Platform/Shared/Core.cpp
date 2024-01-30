@@ -38,9 +38,9 @@ std::string CCore::GetDeviceDisplayName()
 }
 
 // not sure why this method exists. maybe it doesn't call GetVendorID on some other device(s)?
-std::string CCore::GetDeviceID()
+std::string CCore::GetDeviceId()
 {
-    return GetVendorID();
+    return GetVendorId();
 }
 
 // TODO: unimplemented on macOS, check other platforms
@@ -60,6 +60,8 @@ std::string CCore::GetManufacturer()
 {
 #ifdef __APPLE__
     return "Apple";
+#else
+    return "";
 #endif
 }
 
@@ -77,6 +79,8 @@ std::string CCore::GetSystemName()
     #if TARGET_OS_MAC
         return "macOS";
     #endif
+#else
+    return "";
 #endif
 }
 

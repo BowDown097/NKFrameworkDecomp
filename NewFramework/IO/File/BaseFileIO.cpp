@@ -374,7 +374,7 @@ IFile* CBaseFileIO::OpenFile(const std::string& path, const CFilePolicy& policy,
     return file;
 }
 
-CBaseFileIO::CFile* OpenFileFromPath(const std::string& path, eFileOpenMode openMode, std::string& error)
+CBaseFileIO::CFile* CBaseFileIO::OpenFileFromPath(const std::string& path, eFileOpenMode openMode, std::string& error)
 {
     if (openMode == eFileOpenMode::Append || openMode == eFileOpenMode::ReadWriteNew)
     {
@@ -383,11 +383,8 @@ CBaseFileIO::CFile* OpenFileFromPath(const std::string& path, eFileOpenMode open
             if (memchr("\\/", path[i], 2))
             {
                 std::string pathSegment(path, 0, i);
-                /* wtf does this call!!!
-                    v9 = (*(__int64 (__fastcall **)(CBaseFileIO *, char *))(*(_QWORD *)this + 56LL))(this, pathSegment);
-                    if (!v9)
-                        return 0LL;
-                */
+                if (!CreateDirectoryForPath(pathSegment))
+                    return nullptr;
                 break;
             }
         }
