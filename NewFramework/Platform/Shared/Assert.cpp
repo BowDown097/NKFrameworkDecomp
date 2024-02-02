@@ -1,6 +1,6 @@
 #include "Assert.h"
+#include "NewFramework/Utilities/StringHelper.h"
 #include "Logging.h"
-#include "Uncategorized/StringHelper.h"
 
 bool _NKAssert(bool condition, const char* message, const char* file, const char* function, int line)
 {

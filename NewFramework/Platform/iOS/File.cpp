@@ -2,7 +2,7 @@
 #include "NewFramework/Platform/Shared/Assert.h"
 #include "NewFramework/Platform/Shared/Core.h"
 #include "NewFramework/Platform/Shared/Logging.h"
-#include "Uncategorized/StringHelper.h"
+#include "NewFramework/Utilities/StringHelper.h"
 #include <cstring>
 #include <fcntl.h>
 #include <functional>

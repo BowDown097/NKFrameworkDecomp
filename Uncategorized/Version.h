@@ -6,10 +6,10 @@
 class CVersion
 {
 public:
-    int8_t major = 0;
-    int8_t minor = 0;
-    int8_t patch = 0;
-    int versionCode = 0;
+    int8_t major{};
+    int8_t minor{};
+    int8_t patch{};
+    int versionCode{};
     std::string versionString;
 
     CVersion(int major, int minor, int patch);

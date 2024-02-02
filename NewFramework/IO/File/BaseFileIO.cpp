@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 
 #ifndef NDEBUG
-#include "Uncategorized/StringHelper.h"
+#include "NewFramework/Utilities/StringHelper.h"
 #endif
 
 CBaseFileIO::CBaseFileIO() : archivePassword("Q%_{6#Px]]")

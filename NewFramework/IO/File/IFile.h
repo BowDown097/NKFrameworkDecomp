@@ -47,7 +47,7 @@ public:
     virtual size_t WriteBytes(uint8_t* const input, const size_t inputSz, eWriteSyncBehaviour writeSyncBehaviour);
     virtual SFileIOResult WriteBytesWithResult(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour);
 protected:
-    void* field_0; // 0x00
+    void* field_0{}; // 0x00
     std::string path; // 0x08
     size_t length = 0; // 0x20
     size_t offset = 0; // 0x28

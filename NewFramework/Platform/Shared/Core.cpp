@@ -1,5 +1,5 @@
 #include "Core.h"
-#include "Uncategorized/StringHelper.h"
+#include "NewFramework/Utilities/StringHelper.h"
 #include <cstring>
 
 #if defined(__unix__) || defined(__APPLE__)

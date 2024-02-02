@@ -16,12 +16,12 @@ public:
     CApp();
     virtual ~CApp();
 
-    void* field_D8; // 0xD8
-    class CMemoryTracker* memoryTracker = nullptr; // 0xE0
-    class CTimerTracker* timerTracker = nullptr; // 0xE8
-    class CTimerTrackerGraph* timerTrackerGraph = nullptr; // 0xF0
+    void* field_D8{}; // 0xD8
+    class CMemoryTracker* memoryTracker{}; // 0xE0
+    class CTimerTracker* timerTracker{}; // 0xE8
+    class CTimerTrackerGraph* timerTrackerGraph{}; // 0xF0
     eREACH_Availability reachAvailability; // 0xF8
-    void* field_FC; // 0xFC
+    void* field_FC{}; // 0xFC
     int field_100; // 0x100
     bool field_104; // 0x104
     bool quitFlag = false; // 0x105

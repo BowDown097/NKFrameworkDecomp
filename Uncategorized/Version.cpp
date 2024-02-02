@@ -1,5 +1,5 @@
 #include "Version.h"
-#include "StringHelper.h"
+#include "NewFramework/Utilities/StringHelper.h"
 
 CVersion::CVersion(int major, int minor, int patch)
     : major(major), minor(minor), patch(patch),

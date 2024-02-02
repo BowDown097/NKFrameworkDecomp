@@ -5,7 +5,7 @@
 class CFilePlatformData
 {
 public:
-    FILE* file;
+    FILE* file{};
 };
 
 #endif // FILEPLATFORMDATA_H
