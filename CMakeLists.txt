@@ -16,7 +16,7 @@ set(SOURCE_FILES
     NewFramework/Platform/Shared/Core.cpp
     NewFramework/Platform/Shared/Logging.cpp
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
-    Uncategorized/StringHelper.cpp
+    NewFramework/Utilities/StringHelper.cpp
     Uncategorized/Version.cpp
 )
 
@@ -34,7 +34,7 @@ set(HEADER_FILES
     NewFramework/Platform/Shared/LoggingComponent.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
-    Uncategorized/StringHelper.h
+    NewFramework/Utilities/StringHelper.h
     Uncategorized/Version.h
 )
 
