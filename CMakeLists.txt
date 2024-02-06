@@ -9,6 +9,8 @@ add_library(${PROJECT_NAME})
 
 set(SOURCE_FILES
     NewFramework/Analytics/DGAnalytics.cpp
+    NewFramework/Analytics/DGAnalyticsData.cpp
+    NewFramework/Analytics/DGAnalyticsEventGroups.cpp
     NewFramework/BaseApplication/BasePointers.cpp
     NewFramework/IO/File/BaseFileIO.cpp
     NewFramework/IO/File/FilePolicy.cpp
@@ -22,6 +24,10 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     NewFramework/Analytics/DGAnalytics.h
+    NewFramework/Analytics/DGAnalyticsData.h
+    NewFramework/Analytics/DGAnalyticsEventGroups.h
+    NewFramework/Analytics/IAnalytics.h
+    NewFramework/Analytics/SAnalyticsInitialisation.h
     NewFramework/BaseApplication/AppClass/AppClass.h
     NewFramework/BaseApplication/BasePointers.h
     NewFramework/IO/File/BaseFileIO.h
