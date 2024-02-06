@@ -50,7 +50,7 @@ if(UNIX)
 endif()
 
 if(APPLE)
-    list(APPEND SOURCE_FILES NewFramework/Platform/iOS/OSXCore.mm)
+    list(APPEND SOURCE_FILES NewFramework/Platform/OSX/OSXCore.mm)
 endif()
 
 cmake_policy(SET CMP0048 NEW)

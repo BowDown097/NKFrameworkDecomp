@@ -123,4 +123,8 @@ private:
     }
 };
 
+template<> void JSON_PropertyReader::Adjust(json_spirit::mArray& a, json_spirit::mArray& b);
+template<> void JSON_PropertyReader::Adjust(json_spirit::mObject& a, json_spirit::mObject& b);
+template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit::mValue& b);
+
 #endif // JSON_READ_H

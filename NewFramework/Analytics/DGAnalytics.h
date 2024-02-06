@@ -1,11 +1,11 @@
 #ifndef DGANALYTICS_H
 #define DGANALYTICS_H
 #include "DGAnalyticsEventGroups.h"
+#include "SAnalyticsInitialisation.h"
 
 class CVersion;
 class DGAnalyticsData;
 class IAnalytics;
-class SAnalyticsInitialisation;
 
 class DGAnalytics
 {

@@ -5,8 +5,6 @@
 // but i did a little look through and couldn't find anything that looks similar.
 // but this explicit specialization stuff definitely doesn't look right.
 
-template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit::mValue& b);
-
 template<> void JSON_PropertyReader::Adjust(json_spirit::mArray& a, json_spirit::mArray& b)
 {
     for (const json_spirit::mValue& value : b)
