@@ -78,8 +78,8 @@ public:
 
     void Unload();
 private:
-    bool reading = false; // 0x20
-    size_t field_24; // 0x24
+    bool reading{}; // 0x20
+    double field_24 = 1.0; // 0x24
 
     template<typename T>
     void ReadFromObject(T& out, std::string propertyName)

@@ -1,6 +1,7 @@
 #ifndef IFILE_H
 #define IFILE_H
 #include "FilePlatformData.h"
+#include <boost/make_shared.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 enum class eFileOpenMode { Write, Read, ReadWriteNew, ReadWriteExisting, Append };
@@ -32,6 +33,7 @@ public:
         std::string info; // 0x18
     };
 
+    IFile() : platformData(boost::make_shared<CFilePlatformData>()) {}
     virtual ~IFile();
     virtual void Close(eWriteSyncBehaviour writeSyncBehaviour);
     virtual std::string GetFilePath();
@@ -47,12 +49,10 @@ public:
     virtual size_t WriteBytes(uint8_t* const input, const size_t inputSz, eWriteSyncBehaviour writeSyncBehaviour);
     virtual SFileIOResult WriteBytesWithResult(uint8_t* const input, const size_t size, eWriteSyncBehaviour writeSyncBehaviour);
 protected:
-    void* field_0{}; // 0x00
     std::string path; // 0x08
-    size_t length = 0; // 0x20
-    size_t offset = 0; // 0x28
+    size_t length{}; // 0x20
+    size_t offset{}; // 0x28
     eFileOpenMode openMode; // 0x30
-    int field_34; // 0x34
     boost::shared_ptr<CFilePlatformData> platformData; // 0x38
 };
 

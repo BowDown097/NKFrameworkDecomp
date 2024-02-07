@@ -4,6 +4,8 @@
 #include <cfloat>
 #include <string>
 
+class CVersion;
+
 class CApp : public IBasePointers // IBasePointers occupies 0x08-0xD8
 {
 public:
@@ -16,22 +18,22 @@ public:
     CApp();
     virtual ~CApp();
 
-    void* field_D8{}; // 0xD8
+    void* field_D8; // 0xD8
     class CMemoryTracker* memoryTracker{}; // 0xE0
     class CTimerTracker* timerTracker{}; // 0xE8
     class CTimerTrackerGraph* timerTrackerGraph{}; // 0xF0
-    eREACH_Availability reachAvailability; // 0xF8
-    void* field_FC{}; // 0xFC
+    eREACH_Availability reachAvailability{}; // 0xF8
+    int field_FC{}; // 0xFC
     int field_100; // 0x100
     bool field_104; // 0x104
-    bool quitFlag = false; // 0x105
+    bool quitFlag; // 0x105
     bool field_106; // 0x106
-    bool hackerAppURLFlag = false; // 0x107
-    bool hackerBinaryFlag = false; // 0x108
-    short field_109; // 0x109
-    bool field_10B; // 0x10B
-    int field_10C; // 0x10C
+    bool hackerAppURLFlag{}; // 0x107
+    bool hackerBinaryFlag{}; // 0x108
+    bool field_109{}; // 0x109
+    int field_10C{}; // 0x10C
     double field_110 = DBL_MAX; // 0x110
+    CVersion* field_118; // 0x118
 
     bool NotesEnabled();
     class CAgeGate* GetAgeGate();

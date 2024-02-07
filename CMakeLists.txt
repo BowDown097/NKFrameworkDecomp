@@ -11,6 +11,7 @@ set(SOURCE_FILES
     NewFramework/Analytics/DGAnalytics.cpp
     NewFramework/Analytics/DGAnalyticsData.cpp
     NewFramework/Analytics/DGAnalyticsEventGroups.cpp
+    NewFramework/BaseApplication/AppClass/AppClass.cpp
     NewFramework/BaseApplication/BasePointers.cpp
     NewFramework/IO/File/BaseFileIO.cpp
     NewFramework/IO/File/FilePolicy.cpp

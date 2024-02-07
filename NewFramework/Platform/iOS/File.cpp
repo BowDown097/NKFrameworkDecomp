@@ -3,6 +3,7 @@
 #include "NewFramework/Platform/Shared/Core.h"
 #include "NewFramework/Platform/Shared/Logging.h"
 #include "NewFramework/Utilities/StringHelper.h"
+#include <boost/make_shared.hpp>
 #include <cstring>
 #include <fcntl.h>
 #include <functional>
@@ -38,6 +39,7 @@ size_t CBaseFileIO::CFile::GetFileLength()
 
 bool CBaseFileIO::CFile::Open(const std::string& path, eFileOpenMode openMode, std::string& error)
 {
+    this->offset = 0;
     this->openMode = openMode;
     if (openMode == eFileOpenMode::Append)
     {
