@@ -1,5 +1,41 @@
 #include "JSON_Read.h"
 
+void JSON_PropertyReader::Unload()
+{
+    delete sourceArray;
+    delete otherSourceArray;
+    delete sourceObject;
+    delete otherSourceObject;
+}
+
+void JSON_PropertyReader::ObjectErrorCheck(std::string propertyName)
+{
+    if (sourceObject || otherSourceObject)
+        return;
+
+    if (sourceArray)
+        throw JSON_PropertyException(propertyName.c_str(), "Object property read was called, but an array is loaded");
+    else
+        throw JSON_PropertyException(propertyName.c_str(), "No source object has been loaded");
+}
+
+void JSON_PropertyReader::ArrayErrorCheck(int index)
+{
+    std::stringstream sstream;
+    sstream << index;
+
+    if (!sourceArray && !otherSourceArray)
+    {
+        if (!sourceObject)
+            throw JSON_PropertyException(sstream.str().c_str(), "No source array has been loaded.");
+        else
+            throw JSON_PropertyException(sstream.str().c_str(), "Array property read was called, but an object is loaded");
+    }
+
+    if (index < 0 || (sourceArray ? sourceArray->size() <= index : otherSourceArray->size() < index))
+        throw JSON_PropertyException(sstream.str().c_str(), "Specified array index out of bounds");
+}
+
 // the implementation for Adjust is correct pretty sure, but...
 // i have a feeling it's just inlining a TON of json_spirit's code,
 // but i did a little look through and couldn't find anything that looks similar.
@@ -48,40 +84,4 @@ template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit:
     case json_spirit::Value_type::null_type:
         break;
     }
-}
-
-void JSON_PropertyReader::ArrayErrorCheck(int index)
-{
-    std::stringstream sstream;
-    sstream << index;
-
-    if (!sourceArray && !otherSourceArray)
-    {
-        if (!sourceObject)
-            throw JSON_PropertyException(sstream.str().c_str(), "No source array has been loaded.");
-        else
-            throw JSON_PropertyException(sstream.str().c_str(), "Array property read was called, but an object is loaded");
-    }
-
-    if (index < 0 || (sourceArray ? sourceArray->size() <= index : otherSourceArray->size() < index))
-        throw JSON_PropertyException(sstream.str().c_str(), "Specified array index out of bounds");
-}
-
-void JSON_PropertyReader::ObjectErrorCheck(std::string propertyName)
-{
-    if (sourceObject || otherSourceObject)
-        return;
-
-    if (sourceArray)
-        throw JSON_PropertyException(propertyName.c_str(), "Object property read was called, but an array is loaded");
-    else
-        throw JSON_PropertyException(propertyName.c_str(), "No source object has been loaded");
-}
-
-void JSON_PropertyReader::Unload()
-{
-    delete sourceArray;
-    delete otherSourceArray;
-    delete sourceObject;
-    delete otherSourceObject;
 }

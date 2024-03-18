@@ -4,14 +4,16 @@
 
 namespace AnalyticsEventGroups
 {
-    enum class Group { Global, AlwaysSend, Gameplay, Network, Account, Framework, Asset, LiNK };
-    enum class Server { Server1, Server2, Server3 };
+    enum class Group { Global, AlwaysSend, Gameplay, Network, Account, Framework, Assert, LiNK };
+    enum class Server { Unk0, Unk1, Unk2 };
     static std::string names[] = { "global", "alwaysSend", "gameplay", "network", "account", "framework", "assert", "link" };
 
     // i'm not sure about this, but it's the best guess i can make
     // based on its one and only usage in CGroupSettingsContainer's constructor.
     // might have to look at this in a debugger later.
-    static int server[] = { 0, 0, 0, 0, 0, 0, 1, 2, 0, 0, 0, 0 };
+    static Server server[] = { Server::Unk0, Server::Unk0, Server::Unk0, Server::Unk0, Server::Unk0,
+                               Server::Unk0, Server::Unk1, Server::Unk2, Server::Unk0, Server::Unk0,
+                               Server::Unk0, Server::Unk0 };
 
     struct SGroupSettings
     {

@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-enum class eFileLocation { Documents, Cache, Unknown1, Assets, Unknown2, External };
+enum class eFileLocation { Documents, Cache, Unk0, Assets, Unk1, External };
 
 class CFilePolicy
 {

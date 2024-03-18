@@ -1,9 +1,9 @@
 #ifndef IANALYTICS_H
 #define IANALYTICS_H
+#include "DGAnalyticsData.h"
 #include "DGAnalyticsEventGroups.h"
 
 class CVersion;
-class DGAnalyticsData;
 
 struct IAnalytics
 {

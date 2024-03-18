@@ -1,6 +1,12 @@
 #include "Logging.h"
 #include "NewFramework/Analytics/DGAnalytics.h"
-#include <boost/thread/mutex.hpp>
+
+CLogging* CLogging::GetSingletonPtr()
+{
+    if (!m_pInstance)
+        m_pInstance = new CLogging;
+    return m_pInstance;
+}
 
 CLogging::CLogging() : m_mutex(new boost::mutex) {}
 
@@ -10,54 +16,6 @@ CLogging::~CLogging()
         delete component;
     m_components.clear();
     delete m_mutex;
-}
-
-void CLogging::AddComponent(ILoggingComponent* component)
-{
-    m_components.push_back(component);
-}
-
-ILoggingComponent* CLogging::GetComponentByTypeID(const std::type_info& info) const
-{
-    auto it = std::find_if(m_components.cbegin(), m_components.cend(), [&info](ILoggingComponent* c) {
-        return c->typeInfo == info;
-    });
-
-    return it != m_components.cend() ? *it : nullptr;
-}
-
-CLogging* CLogging::GetSingletonPtr()
-{
-    if (!m_pInstance)
-        m_pInstance = new CLogging;
-    return m_pInstance;
-}
-
-void CLogging::PrintError(const char* file, const char* function, int line, const char* message, ...)
-{
-    va_list args;
-    va_start(args, message);
-    VPrintError(file, function, line, message, &args);
-    va_end(args);
-}
-
-void CLogging::PrintWarning(const char* message, ...)
-{
-    va_list args;
-    va_start(args, message);
-    VPrintWarning(message, &args);
-    va_end(args);
-}
-
-void CLogging::RemoveComponent(ILoggingComponent* component)
-{
-    return m_components.remove(component);
-}
-
-void CLogging::SendToComponents(const char* message)
-{
-    for (ILoggingComponent* component : m_components)
-        component->Log(message);
 }
 
 size_t CLogging::StripPath(const char* path)
@@ -73,6 +31,33 @@ size_t CLogging::StripPath(const char* path)
     }
 
     return index;
+}
+
+void CLogging::AddComponent(ILoggingComponent* component)
+{
+    m_components.push_back(component);
+}
+
+void CLogging::RemoveComponent(ILoggingComponent* component)
+{
+    return m_components.remove(component);
+}
+
+ILoggingComponent* CLogging::GetComponentByTypeID(const std::type_info& info) const
+{
+    auto it = std::find_if(m_components.cbegin(), m_components.cend(), [&info](ILoggingComponent* c) {
+        return c->typeInfo == info;
+    });
+
+    return it != m_components.cend() ? *it : nullptr;
+}
+
+void CLogging::PrintError(const char* file, const char* function, int line, const char* message, ...)
+{
+    va_list args;
+    va_start(args, message);
+    VPrintError(file, function, line, message, &args);
+    va_end(args);
 }
 
 void CLogging::VPrintError(const char* file, const char* function, int line, const char* message, va_list* args)
@@ -92,6 +77,20 @@ void CLogging::VPrintError(const char* file, const char* function, int line, con
     SendToComponents(final);
 
     DGAnalytics::Instance()->Log("ERROR: %s(%d) %s %s", &file[fileStrippedIndex], line, function, text);
+}
+
+void CLogging::SendToComponents(const char* message)
+{
+    for (ILoggingComponent* component : m_components)
+        component->Log(message);
+}
+
+void CLogging::PrintWarning(const char* message, ...)
+{
+    va_list args;
+    va_start(args, message);
+    VPrintWarning(message, &args);
+    va_end(args);
 }
 
 void CLogging::VPrintWarning(const char* message, va_list* args)

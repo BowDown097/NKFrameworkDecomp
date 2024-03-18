@@ -5,6 +5,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/comparison/greater.hpp>
 #include <boost/preprocessor/variadic/size.hpp>
+#include <boost/thread/mutex.hpp>
 #include <cstdarg>
 #include <list>
 
@@ -21,8 +22,6 @@
     CLogging::GetSingletonPtr()->PrintWarning(message)
 #define LOG_WARNING_1(message, ...) \
     CLogging::GetSingletonPtr()->PrintWarning(message, __VA_ARGS__)
-
-namespace boost { class mutex; }
 
 class CLogging
 {

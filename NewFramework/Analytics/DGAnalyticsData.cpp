@@ -17,6 +17,18 @@ DGAnalyticsData& operator<<(DGAnalyticsData& data, const std::string& str)
     return data;
 }
 
+DGAnalyticsData::DGAnalyticsData(const DGAnalyticsData& other)
+{
+    field_0 = other.field_0;
+    field_8 = other.field_8;
+    field_20 = other.field_20;
+    field_38 = other.field_38;
+    field_40 = other.field_40;
+    field_48 = other.field_48;
+
+    for (auto it = other.field_60.begin(); it != other.field_60.end(); ++it)
+        field_60.emplace(it->first, it->second);
+}
 
 DGAnalyticsData& operator<<(DGAnalyticsData& data, int num)
 {
@@ -32,19 +44,6 @@ DGAnalyticsData& operator<<(DGAnalyticsData& data, int num)
     }
 
     return data;
-}
-
-DGAnalyticsData::DGAnalyticsData(const DGAnalyticsData& other)
-{
-    field_0 = other.field_0;
-    field_8 = other.field_8;
-    field_20 = other.field_20;
-    field_38 = other.field_38;
-    field_40 = other.field_40;
-    field_48 = other.field_48;
-
-    for (auto it = other.field_60.begin(); it != other.field_60.end(); ++it)
-        field_60.emplace(it->first, it->second);
 }
 
 void DGAnalyticsData::AddPair(const std::string& key, const std::string& value)

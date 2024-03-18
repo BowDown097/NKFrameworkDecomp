@@ -1,7 +1,7 @@
 #ifndef JSON_READ_H
 #define JSON_READ_H
-#include <json_spirit/json_spirit_value.h>
 #include "JSON_PropertyException.h"
+#include <json_spirit/json_spirit_value.h>
 
 // why are thesenot in the class?
 template<typename T>

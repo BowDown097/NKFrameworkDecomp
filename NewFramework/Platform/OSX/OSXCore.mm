@@ -10,47 +10,25 @@
 #include <sys/socket.h>
 #include <sys/sysctl.h>
 
-void CCore::CopyToClipboard(std::string text)
-{
-    NSString* textNS = [[[NSString alloc] initWithUTF8String:text.c_str()] autorelease];
-    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
-    [pasteboard setString:textNS forType:NSStringPboardType];
-}
-
-std::string CCore::GetCountryCode()
-{
-    NSString* countryCode = [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode];
-    return countryCode ? [countryCode UTF8String] : "";
-}
-
 CFTimeInterval CCore::getCurrentTime()
 {
     return CACurrentMediaTime();
 }
 
-NSTimeInterval CCore::GetDeviceBootTime()
+float CCore::GetMemoryUsage(bool mb)
 {
-    static NSTimeInterval boot_time = 0;
-    if (!boot_time)
-    {
-        NSTimeInterval timeNow = [[NSDate date] timeIntervalSince1970];
-        NSTimeInterval uptime = [[NSProcessInfo processInfo] systemUptime];
-        boot_time = timeNow - uptime;
-    }
+    struct task_basic_info task_info_out;
+    mach_msg_type_number_t task_info_outCnt = TASK_BASIC_INFO_COUNT;
 
-    return boot_time;
-}
+    kern_return_t kr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&task_info_out, &task_info_outCnt);
+    if (kr != KERN_SUCCESS)
+        return -1;
 
-std::string CCore::GetDeviceName()
-{
-    CFMutableDictionaryRef expertDevice = IOServiceMatching("IOPlatformExpertDevice");
-    io_service_t expertService = IOServiceGetMatchingService(kIOMasterPortDefault, expertDevice);
-    CFTypeRef modelProperty = IORegistryEntryCreateCFProperty(expertService, CFSTR("model"), kCFAllocatorDefault, 0);
-    NSString* modelString = [[NSString alloc] initWithData:(__bridge NSData*)modelProperty encoding:NSUTF8StringEncoding];
-    CFRelease(modelProperty);
-    IOObjectRelease(expertService);
-    return modelString ? [modelString UTF8String] : "";
+    float result = task_info_out.resident_size;
+    if (mb)
+        result *= 0.00000095367432;
+
+    return result;
 }
 
 std::string CCore::GetHTTPProxyName()
@@ -68,12 +46,6 @@ uint32_t CCore::GetHTTPProxyPort()
     CFNumberRef httpPortRef = (CFNumberRef)CFDictionaryGetValue(proxySettings, kCFNetworkProxiesHTTPPort);
     uint32_t valuePtr;
     return CFNumberGetValue(httpPortRef, kCFNumberSInt32Type, &valuePtr) ? valuePtr : 0xFFFFFFFF;
-}
-
-std::string CCore::GetLanguageCode()
-{
-    NSString* languageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
-    return languageCode ? [languageCode UTF8String] : "";
 }
 
 std::string CCore::GetMACAddress()
@@ -120,7 +92,7 @@ std::string CCore::GetMACAddress()
         // read from char array into a string object, into traditional MAC address format
         NSString* macAddressString = [NSString stringWithFormat:@"%02X:%02X:%02X:%02X:%02X:%02X",
             macAddress[0], macAddress[1], macAddress[2], macAddress[3], macAddress[4], macAddress[5]];
-        
+
         // release the buffer memory
         free(msgBuffer);
 
@@ -132,20 +104,86 @@ std::string CCore::GetMACAddress()
     return [errorFlag UTF8String];
 }
 
-float CCore::GetMemoryUsage(bool mb)
+// TODO: i don't feel like doing this yet because this relies on some stuff and it might be a headache:
+// CSteamInterface class (CSteamInterface::IsSteamRunning), hashlib++ library, and the steam API
+std::string CCore::GetVendorId()
 {
-    struct task_basic_info task_info_out;
-    mach_msg_type_number_t task_info_outCnt = TASK_BASIC_INFO_COUNT;
+    return "";
+}
 
-    kern_return_t kr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&task_info_out, &task_info_outCnt);
-    if (kr != KERN_SUCCESS)
-        return -1;
+void CCore::CopyToClipboard(std::string text)
+{
+    NSString* textNS = [[[NSString alloc] initWithUTF8String:text.c_str()] autorelease];
+    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
+    [pasteboard declareTypes:[NSArray arrayWithObject:NSStringPboardType] owner:nil];
+    [pasteboard setString:textNS forType:NSStringPboardType];
+}
 
-    float result = task_info_out.resident_size;
-    if (mb)
-        result *= 0.00000095367432;
-    
-    return result;
+bool CCore::HasClipboardTextEntry()
+{
+    return [[NSPasteboard generalPasteboard] canReadObjectForClasses:@[[NSString class]] options:[NSDictionary dictionary]];
+}
+
+std::string CCore::PasteFromClipboard()
+{
+    NSString* clipboardText = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
+    return clipboardText ? [clipboardText UTF8String] : "";
+}
+
+bool CCore::OpenURL(std::string url)
+{
+    CFURLRef cfurl = CFURLCreateWithBytes(NULL, reinterpret_cast<const uint8_t*>(url.c_str()), url.size(), kCFStringEncodingASCII, NULL);
+    LSOpenCFURLRef(cfurl, NULL);
+    CFRelease(cfurl);
+    return true;
+}
+
+void CCore::ShowMessageBox(std::string title, std::string body)
+{
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        NSAlert* alert = [[[NSAlert alloc] init] autorelease];
+        NSString* titleNS = [[[NSString alloc] initWithUTF8String:title.c_str()] autorelease];
+        NSString* bodyNS = [[[NSString alloc] initWithUTF8String:body.c_str()] autorelease];
+        [alert setMessageText:titleNS];
+        [alert setInformativeText:bodyNS];
+        [alert runModal];
+    });
+}
+
+std::string CCore::GetDeviceName()
+{
+    CFMutableDictionaryRef expertDevice = IOServiceMatching("IOPlatformExpertDevice");
+    io_service_t expertService = IOServiceGetMatchingService(kIOMasterPortDefault, expertDevice);
+    CFTypeRef modelProperty = IORegistryEntryCreateCFProperty(expertService, CFSTR("model"), kCFAllocatorDefault, 0);
+    NSString* modelString = [[NSString alloc] initWithData:(__bridge NSData*)modelProperty encoding:NSUTF8StringEncoding];
+    CFRelease(modelProperty);
+    IOObjectRelease(expertService);
+    return modelString ? [modelString UTF8String] : "";
+}
+
+NSTimeInterval CCore::GetDeviceBootTime()
+{
+    static NSTimeInterval boot_time = 0;
+    if (!boot_time)
+    {
+        NSTimeInterval timeNow = [[NSDate date] timeIntervalSince1970];
+        NSTimeInterval uptime = [[NSProcessInfo processInfo] systemUptime];
+        boot_time = timeNow - uptime;
+    }
+
+    return boot_time;
+}
+
+std::string CCore::GetLanguageCode()
+{
+    NSString* languageCode = [[NSLocale preferredLanguages] objectAtIndex:0];
+    return languageCode ? [languageCode UTF8String] : "";
+}
+
+std::string CCore::GetCountryCode()
+{
+    NSString* countryCode = [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode];
+    return countryCode ? [countryCode UTF8String] : "";
 }
 
 std::string CCore::GetSystemVersion()
@@ -164,42 +202,4 @@ std::string CCore::GetSystemVersion()
     }
 
     return [versionString UTF8String];
-}
-
-// TODO: i don't feel like doing this yet because this relies on some stuff and it might be a headache:
-// CSteamInterface class (CSteamInterface::IsSteamRunning), hashlib++ library, and the steam API
-std::string CCore::GetVendorId()
-{
-    return "";
-}
-
-bool CCore::HasClipboardTextEntry()
-{
-    return [[NSPasteboard generalPasteboard] canReadObjectForClasses:@[[NSString class]] options:[NSDictionary dictionary]];
-}
-
-bool CCore::OpenURL(std::string url)
-{
-    CFURLRef cfurl = CFURLCreateWithBytes(NULL, reinterpret_cast<const uint8_t*>(url.c_str()), url.size(), kCFStringEncodingASCII, NULL);
-    LSOpenCFURLRef(cfurl, NULL);
-    CFRelease(cfurl);
-    return true;
-}
-
-std::string CCore::PasteFromClipboard()
-{
-    NSString* clipboardText = [[NSPasteboard generalPasteboard] stringForType:NSPasteboardTypeString];
-    return clipboardText ? [clipboardText UTF8String] : "";
-}
-
-void CCore::ShowMessageBox(std::string title, std::string body)
-{
-    dispatch_async(dispatch_get_main_queue(), ^() {
-        NSAlert* alert = [[[NSAlert alloc] init] autorelease];
-        NSString* titleNS = [[[NSString alloc] initWithUTF8String:title.c_str()] autorelease];
-        NSString* bodyNS = [[[NSString alloc] initWithUTF8String:body.c_str()] autorelease];
-        [alert setMessageText:titleNS];
-        [alert setInformativeText:bodyNS];
-        [alert runModal];
-    });
 }

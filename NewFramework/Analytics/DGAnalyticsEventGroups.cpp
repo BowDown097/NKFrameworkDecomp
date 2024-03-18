@@ -6,7 +6,12 @@ AnalyticsEventGroups::CGroupSettingsContainer::CGroupSettingsContainer()
 {
     groupSettings.reserve(8);
     for (int i = 0; i < 8; i++)
-        groupSettings.emplace_back(static_cast<Group>(i), true, static_cast<Server>(server[i]));
+        groupSettings.emplace_back(static_cast<AnalyticsEventGroups::Group>(i), true, server[i]);
+}
+
+AnalyticsEventGroups::SGroupSettings& AnalyticsEventGroups::CGroupSettingsContainer::GetSettings(Group group)
+{
+    return groupSettings.at(static_cast<int>(group));
 }
 
 bool AnalyticsEventGroups::CGroupSettingsContainer::Deserialize(int throttleThreshold, json_spirit::mObject& obj)
@@ -22,11 +27,6 @@ bool AnalyticsEventGroups::CGroupSettingsContainer::Deserialize(int throttleThre
     }
 
     return true;
-}
-
-AnalyticsEventGroups::SGroupSettings& AnalyticsEventGroups::CGroupSettingsContainer::GetSettings(Group group)
-{
-    return groupSettings.at(static_cast<int>(group));
 }
 
 void AnalyticsEventGroups::CGroupSettingsContainer::Serialize(json_spirit::mObject& obj)

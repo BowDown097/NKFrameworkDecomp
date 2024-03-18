@@ -6,7 +6,6 @@
 #include <boost/make_shared.hpp>
 #include <cstring>
 #include <fcntl.h>
-#include <functional>
 
 CBaseFileIO::CFile::~CFile()
 {
