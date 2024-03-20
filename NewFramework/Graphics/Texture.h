@@ -5,12 +5,10 @@
 #include <cstdint>
 #include <string>
 
+enum class eTextureFilePolicy { Document, Cache, Unk1, Asset, Unk2, External };
 enum class eTextureSize { Low, High, Tablet, Ultra };
+enum class eTextureState { None, Loading, Created, Loaded, Failure, Unloaded };
 enum class eTextureType { PNG, PVR, JPG, JPNG, Empty };
-
-// unofficial name :(
-// unsure of Loaded (i think it means loaded but not rendered, field_70 might give more clues)
-enum class eTextureState { None, Loading, Created, Loaded, Failure };
 
 struct STextureRect
 {
@@ -34,17 +32,18 @@ public:
     eTextureState state{}; // 0x4C
     void* field_50{}; // 0x50
     uint8_t* pixelData{}; // 0x58
-    int field_60{}; // 0x60
-    int platformData = 3; // 0x64
-    int field_68{}; // 0x68, need information from CMemoryTracker::TextureEvent to know what this is, may be bytes
+    eTextureFilePolicy filePolicy = eTextureFilePolicy::Asset; // 0x60
+    int platformData{}; // 0x64
+    int pixels{}; // 0x68
     eTextureSize size; // 0x6C
-    bool field_70{}; // 0x70, need information from GLTextureLoader::TextureEvent to know what this is
-    bool field_72{}; // 0x72, need information from CTextureLoader::LoadTexture to know what this is
-    int repeat{}; // 0x74, controls repeating the texture in GLTextureLoader::TextureEvent
+    bool inUse{}; // 0x70, need information from GLTextureLoader::TextureEvent to know what this is
+    bool applyAlpha{}; // 0x72
+    bool repeat{}; // 0x74
     ePixelFormat pixelFormat1 = ePixelFormat::RGBA8; // 0x78
     ePixelFormat pixelFormat2 = ePixelFormat::RGBA8; // 0x7C
-    void* field_80{}; // 0x80, unused outside of SetPlatformData which is completely weird lol
+    void* field_80{}; // 0x80, unused outside of being read in SetPlatformData apparently?
 
+    ~CTexture();
     void DeletePixelData();
     void ReadData(int xOffset, int yOffset, int width, int height, uint8_t* dataOut);
     void PatchData(const STextureRect& sourceRect, uint8_t const* sourceData,

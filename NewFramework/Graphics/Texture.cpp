@@ -11,19 +11,20 @@ void patch_texture(const STextureRect& sourceRect, uint8_t const* sourceData,
     if (!sourceData || !destData || destRect.width >= destRect.xOffset || destRect.height >= destRect.yOffset)
         return;
 
-    for (int i = 0; i + sourceRect.width < sourceRect.xOffset && i < width;)
+    for (int x = 0; x + sourceRect.width < sourceRect.xOffset && x + destRect.width < destRect.xOffset && x < width; ++x)
     {
-        for (int j = 0; j + sourceRect.height < sourceRect.yOffset && j < height;)
+        for (int y = 0; y + sourceRect.height < sourceRect.yOffset && y + destRect.height < destRect.yOffset && y < height; ++y)
         {
-            patchFunc(sourceData, 4 * (sourceRect.xOffset * (j + sourceRect.height) + i + sourceRect.width),
-                      destData, 4 * (destRect.xOffset * destRect.height + i + destRect.width));
-            if ((++j + destRect.height) >= destRect.yOffset)
-                break;
+            int sourceIndex = 4 * (sourceRect.xOffset * (y + sourceRect.height) + x + sourceRect.width);
+            int destIndex = 4 * (destRect.xOffset * (y + destRect.height) + x + destRect.width);
+            patchFunc(sourceData, sourceIndex, destData, destIndex);
         }
-
-        if ((destRect.width + ++i) >= destRect.xOffset)
-            break;
     }
+}
+
+CTexture::~CTexture()
+{
+    DeletePixelData();
 }
 
 void CTexture::DeletePixelData()
@@ -40,24 +41,18 @@ void CTexture::ReadData(int xOffset, int yOffset, int width, int height, uint8_t
     if (!pixelData || !dataOut || rect->width <= xOffset || width <= 0 || rect->height <= yOffset || height <= 0)
         return;
 
-    uint8_t* theActualData = dataOut + 3;
-    for (int i = 0, j = 0; j + xOffset < rect->width;)
+    for (int x = 0; x + xOffset < rect->width && x < width; ++x)
     {
-        uint8_t* pixel = &theActualData[i];
-        for (int k = 1;; pixel += 4 * width, ++k)
+        for (int y = 0; y + yOffset < rect->height && y < height; ++y)
         {
-            int pixelInd = 4 * (j + xOffset + rect->width * (yOffset + k - 1));
-            *(pixel - 3) = pixelData[pixelInd];
-            *(pixel - 2) = pixelData[pixelInd + 1];
-            *(pixel - 1) = pixelData[pixelInd + 2];
-            *pixel = pixelData[pixelInd + 3];
-            if (yOffset + k >= rect->height || k >= height)
-                break;
-        }
+            int sourceIndex = 4 * (x + xOffset + rect->width * (yOffset + y));
+            int destIndex = 4 * (x + y * width);
 
-        ++j, i += 4;
-        if (j >= width)
-            break;
+            dataOut[destIndex] = pixelData[sourceIndex];
+            dataOut[destIndex + 1] = pixelData[sourceIndex + 1];
+            dataOut[destIndex + 2] = pixelData[sourceIndex + 2];
+            dataOut[destIndex + 3] = pixelData[sourceIndex + 3];
+        }
     }
 }
 
@@ -74,19 +69,18 @@ void CTexture::UpdateData(int xOffset, int yOffset, int width, int height, uint8
     if (!dataIn || !pixelData || rect->width <= xOffset || rect->height <= yOffset)
         return;
 
-    for (int i = 4 * (yOffset * rect->width + xOffset), j = 0, k = 0; k != width;)
+    for (int x = 0; x + xOffset < rect->width && x < width; ++x)
     {
-        for (int l = i, m = j, n = 0; height != n;)
+        for (int y = 0; y + yOffset < rect->height && y < height; ++y)
         {
-            pixelData[l] = dataIn[m];
-            ++n, m += 4 * width, l += 4 * rect->width;
-            if (rect->height - yOffset == n)
-                break;
-        }
+            int targetIndex = 4 * (x + xOffset + rect->width * (yOffset + y));
+            int sourceIndex = 4 * (x + y * width);
 
-        ++k, j += 4, i += 4;
-        if (k == rect->width - xOffset)
-            break;
+            pixelData[targetIndex] = dataIn[sourceIndex];
+            pixelData[targetIndex + 1] = dataIn[sourceIndex + 1];
+            pixelData[targetIndex + 2] = dataIn[sourceIndex + 2];
+            pixelData[targetIndex + 3] = dataIn[sourceIndex + 3];
+        }
     }
 }
 
