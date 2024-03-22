@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
-
-find_package(Boost COMPONENTS function preprocessor smart_ptr spirit threads utility)
 add_library(${PROJECT_NAME})
 
 # Source files
@@ -11,12 +9,18 @@ set(SOURCE_FILES
     NewFramework/Analytics/DGAnalyticsEventGroups.cpp
     NewFramework/BaseApplication/AppClass/AppClass.cpp
     NewFramework/BaseApplication/BasePointers.cpp
+    NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
+    NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
+    NewFramework/Graphics/Management/PVR/PVRTextures.cpp
+    NewFramework/Graphics/Management/TextureLoader.cpp
     NewFramework/Graphics/Texture.cpp
     NewFramework/IO/File/BaseFileIO.cpp
     NewFramework/IO/File/FilePolicy.cpp
+    NewFramework/IO/File/PNGInMemory.cpp
     NewFramework/Platform/Shared/Assert.cpp
     NewFramework/Platform/Shared/Core.cpp
     NewFramework/Platform/Shared/Logging.cpp
+    NewFramework/ThirdParty/libpng/load_png.cpp
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
     NewFramework/Utilities/StringHelper.cpp
     Uncategorized/Version.cpp
@@ -30,15 +34,21 @@ set(HEADER_FILES
     NewFramework/Analytics/SAnalyticsInitialisation.h
     NewFramework/BaseApplication/AppClass/AppClass.h
     NewFramework/BaseApplication/BasePointers.h
+    NewFramework/Graphics/Management/JPEG/JPEGTextures.h
+    NewFramework/Graphics/Management/JPNG/JPNGTextures.h
+    NewFramework/Graphics/Management/PVR/PVRTextures.h
+    NewFramework/Graphics/Management/TextureLoader.h
     NewFramework/Graphics/Texture.h
     NewFramework/IO/File/BaseFileIO.h
     NewFramework/IO/File/FilePlatformData.h
     NewFramework/IO/File/FilePolicy.h
     NewFramework/IO/File/IFile.h
+    NewFramework/IO/File/PNGInMemory.h
     NewFramework/Platform/Shared/Assert.h
     NewFramework/Platform/Shared/Core.h
     NewFramework/Platform/Shared/Logging.h
     NewFramework/Platform/Shared/LoggingComponent.h
+    NewFramework/ThirdParty/libpng/load_png.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
     NewFramework/Utilities/StringHelper.h
@@ -55,6 +65,11 @@ endif()
 if(APPLE)
     list(APPEND SOURCE_FILES NewFramework/Platform/OSX/OSXCore.mm)
 endif()
+
+# Packages
+find_package(Boost COMPONENTS function preprocessor smart_ptr spirit threads unordered utility)
+find_package(JPEG REQUIRED)
+find_package(PNG REQUIRED)
 
 # jsonspirit
 include(FetchContent)
@@ -85,10 +100,12 @@ target_include_directories(${PROJECT_NAME}
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     PRIVATE
         ${Boost_INCLUDE_DIRS}
+        ${JPEG_INCLUDE_DIR}
         ${jsonspirit_SOURCE_DIR}
+        ${PNG_PNG_INCLUDE_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} ${JPEG_LIBRARY} ${PNG_LIBRARY})
 
 # Installation
 include(GNUInstallDirs)

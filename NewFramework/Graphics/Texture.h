@@ -36,7 +36,7 @@ public:
     int platformData{}; // 0x64
     int pixels{}; // 0x68
     eTextureSize size; // 0x6C
-    bool inUse{}; // 0x70, need information from GLTextureLoader::TextureEvent to know what this is
+    bool inUse{}; // 0x70
     bool applyAlpha{}; // 0x72
     bool repeat{}; // 0x74
     ePixelFormat pixelFormat1 = ePixelFormat::RGBA8; // 0x78

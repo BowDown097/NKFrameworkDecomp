@@ -11,6 +11,13 @@ class CBaseFileIO
 public:
     class CFile;
 
+    std::map<eFileLocation, std::string> storageMap; // 0x08
+    CFilePolicy assetPolicy; // 0x20
+    CFilePolicy documentPolicy; // 0x58
+    CFilePolicy cachePolicy; // 0x90
+    CFilePolicy externalPolicy; // 0xC8
+    std::map<std::string, CFilePolicy*> policyMap; // 0x100
+
     CBaseFileIO();
     CFilePolicy* GetPolicyByName(const std::string& name) const;
     std::string GetPath(eFileLocation location, const std::string& fileName) const;
@@ -47,12 +54,6 @@ protected:
     virtual uint64_t GetFreeDiskSpace(const std::string& path) const;
     virtual const bool CreateDirectoryForPath(const std::string& path);
 private:
-    std::map<eFileLocation, std::string> storageMap; // 0x08
-    CFilePolicy assetPolicy; // 0x20
-    CFilePolicy documentPolicy; // 0x58
-    CFilePolicy cachePolicy; // 0x90
-    CFilePolicy externalPolicy; // 0xC8
-    std::map<std::string, CFilePolicy*> policyMap; // 0x100
     std::string archivePassword; // 0x118
 };
 
