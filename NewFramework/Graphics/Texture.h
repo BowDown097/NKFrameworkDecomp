@@ -6,16 +6,22 @@
 #include <string>
 
 enum class eTextureFilePolicy { Document, Cache, Unk1, Asset, Unk2, External };
-enum class eTextureSize { Low, High, Tablet, Ultra };
+enum class eTextureSize { Unknown, Low, High, Tablet, Ultra };
 enum class eTextureState { None, Loading, Created, Loaded, Failure, Unloaded };
 enum class eTextureType { PNG, PVR, JPG, JPNG, Empty };
 
-struct STextureRect
+// unofficial name
+struct STextureDimensions
 {
     uint32_t width; // 0x00
     uint32_t height; // 0x04
-    uint32_t xOffset; // 0x08
-    uint32_t yOffset; // 0x0C
+};
+
+struct STextureRect
+{
+    uint32_t startX; // 0x00
+    uint32_t startY; // 0x04
+    STextureDimensions dimensions; // 0x08
 };
 
 class CTexture : public CReferenceCounted
@@ -25,7 +31,7 @@ public:
     enum class ePixelFormat { Unknown, RGBA8, RGBA4, RGBA, RGB8, RGB565, LA8, LA };
 
     int field_8 = INT_MAX; // 0x08
-    STextureRect* rect{}; // 0x10
+    STextureDimensions dimensions{}; // 0x10
     std::string id; // 0x18
     std::string path; // 0x30
     eTextureType type{}; // 0x48
@@ -38,17 +44,17 @@ public:
     eTextureSize size; // 0x6C
     bool inUse{}; // 0x70
     bool applyAlpha{}; // 0x72
-    bool repeat{}; // 0x74
+    bool wrap{}; // 0x74
     ePixelFormat pixelFormat1 = ePixelFormat::RGBA8; // 0x78
     ePixelFormat pixelFormat2 = ePixelFormat::RGBA8; // 0x7C
     void* field_80{}; // 0x80, unused outside of being read in SetPlatformData apparently?
 
     ~CTexture();
-    void ReadData(int xOffset, int yOffset, int width, int height, uint8_t* dataOut);
-    void PatchData(const STextureRect& sourceRect, uint8_t const* sourceData,
+    void ReadData(int startX, int startY, int width, int height, uint8_t* dataOut);
+    void PatchData(const STextureRect& sourceRect, const uint8_t* sourceData,
                    uint32_t startX, uint32_t startY, uint32_t width, uint32_t height,
-                   void (*patchFunc)(uint8_t const*, uint32_t, uint8_t*, uint32_t));
-    void UpdateData(int xOffset, int yOffset, int width, int height, uint8_t const* dataIn);
+                   void (*patchFunc)(const uint8_t*, uint32_t, uint8_t*, uint32_t));
+    void UpdateData(int startX, int startY, int width, int height, const uint8_t* dataIn);
     void SetPlatformData(int platformData);
     static uint32_t GetTextureMemSize(uint32_t width, uint32_t height, ePixelFormat format);
     static std::string TextureSizeToString(const eTextureSize& size);

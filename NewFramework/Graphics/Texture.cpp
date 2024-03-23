@@ -1,22 +1,26 @@
 #include "Texture.h"
 
-// This method is literally broken. The usage of rect is the opposite of what it should be.
-// Now they did account for this in PatchData I think, which is the only method
-// to reference this one, so it still works if that's the case. But it's still fucked up.
-void patch_texture(const STextureRect& sourceRect, uint8_t const* sourceData,
+void patch_texture(const STextureRect& sourceRect, const uint8_t* sourceData,
                    const STextureRect& destRect, uint8_t* destData,
                    uint32_t width, uint32_t height,
-                   void (*patchFunc)(uint8_t const*, uint32_t, uint8_t*, uint32_t))
+                   void (*patchFunc)(const uint8_t*, uint32_t, uint8_t*, uint32_t))
 {
-    if (!sourceData || !destData || destRect.width >= destRect.xOffset || destRect.height >= destRect.yOffset)
-        return;
-
-    for (int x = 0; x + sourceRect.width < sourceRect.xOffset && x + destRect.width < destRect.xOffset && x < width; ++x)
+    if (!sourceData || !destData ||
+        destRect.dimensions.width <= destRect.startX || destRect.dimensions.height <= destRect.startY)
     {
-        for (int y = 0; y + sourceRect.height < sourceRect.yOffset && y + destRect.height < destRect.yOffset && y < height; ++y)
+        return;
+    }
+
+    for (int x = 0; x + sourceRect.startX < sourceRect.dimensions.width &&
+                    x + destRect.startX < destRect.dimensions.width &&
+                    x < width; ++x)
+    {
+        for (int y = 0; y + sourceRect.startY < sourceRect.dimensions.height &&
+                        y + destRect.startY < destRect.dimensions.height &&
+                        y < height; ++y)
         {
-            int sourceIndex = 4 * (sourceRect.xOffset * (y + sourceRect.height) + x + sourceRect.width);
-            int destIndex = 4 * (destRect.xOffset * (y + destRect.height) + x + destRect.width);
+            int sourceIndex = 4 * (sourceRect.dimensions.width * (y + sourceRect.startY) + (x + sourceRect.startX));
+            int destIndex = 4 * (destRect.dimensions.width * (y + destRect.startY) + (x + destRect.startX));
             patchFunc(sourceData, sourceIndex, destData, destIndex);
         }
     }
@@ -31,16 +35,16 @@ CTexture::~CTexture()
     }
 }
 
-void CTexture::ReadData(int xOffset, int yOffset, int width, int height, uint8_t* dataOut)
+void CTexture::ReadData(int startX, int startY, int width, int height, uint8_t* dataOut)
 {
-    if (!pixelData || !dataOut || rect->width <= xOffset || width <= 0 || rect->height <= yOffset || height <= 0)
+    if (!pixelData || !dataOut || dimensions.width <= startX || width <= 0 || dimensions.height <= startY || height <= 0)
         return;
 
-    for (int x = 0; x + xOffset < rect->width && x < width; ++x)
+    for (int x = 0; x + startX < dimensions.width && x < width; ++x)
     {
-        for (int y = 0; y + yOffset < rect->height && y < height; ++y)
+        for (int y = 0; y + startY < dimensions.height && y < height; ++y)
         {
-            int sourceIndex = 4 * (x + xOffset + rect->width * (yOffset + y));
+            int sourceIndex = 4 * ((x + startX) + dimensions.width * (y + startY));
             int destIndex = 4 * (x + y * width);
 
             dataOut[destIndex] = pixelData[sourceIndex];
@@ -51,24 +55,29 @@ void CTexture::ReadData(int xOffset, int yOffset, int width, int height, uint8_t
     }
 }
 
-void CTexture::PatchData(const STextureRect& sourceRect, uint8_t const* sourceData,
+void CTexture::PatchData(const STextureRect& sourceRect, const uint8_t* sourceData,
                          uint32_t startX, uint32_t startY, uint32_t width, uint32_t height,
-                         void (*patchFunc)(uint8_t const*, uint32_t, uint8_t*, uint32_t))
+                         void (*patchFunc)(const uint8_t*, uint32_t, uint8_t*, uint32_t))
 {
-    STextureRect destRect { .width = startX, .height = startY, .xOffset = rect->width, .yOffset = rect->height };
+    STextureRect destRect {
+        .startX = startX,
+        .startY = startY,
+        .dimensions = STextureDimensions { .width = this->dimensions.width, .height = this->dimensions.height }
+    };
+
     patch_texture(sourceRect, sourceData, destRect, pixelData, width, height, patchFunc);
 }
 
-void CTexture::UpdateData(int xOffset, int yOffset, int width, int height, uint8_t const* dataIn)
+void CTexture::UpdateData(int startX, int startY, int width, int height, const uint8_t* dataIn)
 {
-    if (!dataIn || !pixelData || rect->width <= xOffset || rect->height <= yOffset)
+    if (!dataIn || !pixelData || dimensions.width <= startX || dimensions.height <= startY)
         return;
 
-    for (int x = 0; x + xOffset < rect->width && x < width; ++x)
+    for (int x = 0; x + startX < dimensions.width && x < width; ++x)
     {
-        for (int y = 0; y + yOffset < rect->height && y < height; ++y)
+        for (int y = 0; y + startY < dimensions.height && y < height; ++y)
         {
-            int targetIndex = 4 * (x + xOffset + rect->width * (yOffset + y));
+            int targetIndex = 4 * ((x + startX) + dimensions.width * (startY + y));
             int sourceIndex = 4 * (x + y * width);
 
             pixelData[targetIndex] = dataIn[sourceIndex];

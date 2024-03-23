@@ -41,25 +41,23 @@ void CTextureLoader::Process()
     {
         switch (texture->state)
         {
-            case eTextureState::Loading:
-                break;
-            case eTextureState::Created:
+        case eTextureState::Loading:
+            break;
+        case eTextureState::Created:
+        case eTextureState::Loaded:
+        case eTextureState::Failure:
+            if (texture->state == eTextureState::Created)
                 TextureLoaded(texture);
-                BroadcastEvent(eTextureLoaderEvent::Loaded, texture);
-                goto delete_texture;
-            case eTextureState::Loaded:
-                BroadcastEvent(eTextureLoaderEvent::Loaded, texture);
-                goto delete_texture;
-            case eTextureState::Failure:
-                BroadcastEvent(eTextureLoaderEvent::Failure, texture);
-                goto delete_texture;
-            case eTextureState::Unloaded:
-                delete_texture:
-                    textures.remove(texture);
-                    break;
-            default:
-                LOG_ERROR("Unhandled texture state, potential memory leaks and thread locks ahoy!");
-                break;
+            BroadcastEvent(
+                texture->state == eTextureState::Failure ? eTextureLoaderEvent::Failure : eTextureLoaderEvent::Loaded,
+                texture
+            );
+        case eTextureState::Unloaded:
+            textures.remove(texture);
+            break;
+        default:
+            LOG_ERROR("Unhandled texture state, potential memory leaks and thread locks ahoy!");
+            break;
         }
     }
 }
@@ -152,8 +150,8 @@ bool CTextureLoader::LoadTexture(CTexture* texture, CFilePolicy& filePolicy)
 
     textureMutex.lock();
 
-    texture->rect->width = width;
-    texture->rect->height = height;
+    texture->dimensions.width = width;
+    texture->dimensions.height = height;
     texture->pixels = loadedPixels;
     texture->SetPlatformData(platformData);
 
