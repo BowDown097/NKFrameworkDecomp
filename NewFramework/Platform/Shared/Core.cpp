@@ -129,7 +129,6 @@ void CCore::SetThreadID(THREAD_ID id)
     }
 
     boost::unique_lock<boost::mutex> lock(g_mapMutex);
-    lock.lock();
     g_globalThreadLookup.emplace(id, pthread_self());
 #endif
 }
@@ -138,7 +137,6 @@ void CCore::UnsetThreadID()
 {
 #if defined(__unix__) || defined(__APPLE__)
     boost::unique_lock<boost::mutex> lock(g_mapMutex);
-    lock.lock();
     THREAD_ID currentThreadID = GetCurrentThreadID();
     if (currentThreadID != -1)
         g_globalThreadLookup.erase(g_globalThreadLookup.find(currentThreadID));

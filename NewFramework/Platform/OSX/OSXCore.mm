@@ -1,4 +1,5 @@
 #include "NewFramework/Platform/Shared/Core.h"
+#include <cstdint>
 #include <AppKit/NSAlert.h>
 #include <AppKit/NSPasteboard.h>
 #include <Foundation/NSLocale.h>
@@ -17,7 +18,7 @@ CFTimeInterval CCore::getCurrentTime()
 
 float CCore::GetMemoryUsage(bool mb)
 {
-    struct task_basic_info task_info_out;
+    task_basic_info task_info_out;
     mach_msg_type_number_t task_info_outCnt = TASK_BASIC_INFO_COUNT;
 
     kern_return_t kr = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&task_info_out, &task_info_outCnt);
@@ -40,19 +41,19 @@ std::string CCore::GetHTTPProxyName()
         ? std::string(httpProxyBuffer) : "";
 }
 
-uint32_t CCore::GetHTTPProxyPort()
+int CCore::GetHTTPProxyPort()
 {
     CFDictionaryRef proxySettings = CFNetworkCopySystemProxySettings();
     CFNumberRef httpPortRef = (CFNumberRef)CFDictionaryGetValue(proxySettings, kCFNetworkProxiesHTTPPort);
-    uint32_t valuePtr;
-    return CFNumberGetValue(httpPortRef, kCFNumberSInt32Type, &valuePtr) ? valuePtr : 0xFFFFFFFF;
+    int valuePtr;
+    return CFNumberGetValue(httpPortRef, kCFNumberSInt32Type, &valuePtr) ? valuePtr : -1;
 }
 
 std::string CCore::GetMACAddress()
 {
     int mgmtInfoBase[6];
-    char* msgBuffer = NULL;
-    NSString* errorFlag = NULL;
+    char* msgBuffer;
+    NSString* errorFlag;
     size_t length;
 
     // setup the management information base
@@ -66,13 +67,13 @@ std::string CCore::GetMACAddress()
     if ((mgmtInfoBase[5] = if_nametoindex("en0")) == 0)
         errorFlag = @"if_nametoindex failure";
     // get the size of the data available (store in len)
-    else if (sysctl(mgmtInfoBase, 6, NULL, &length, NULL, 0) < 0)
+    else if (sysctl(mgmtInfoBase, 6, nullptr, &length, nullptr, 0) < 0)
         errorFlag = @"sysctl mgmtInfoBase failure";
     // alloc memory based on above call
-    else if ((msgBuffer = (char*)malloc(length)) == NULL)
+    else if (!(msgBuffer = (char*)malloc(length)))
         errorFlag = @"buffer allocation failure";
     // get system information, store in buffer
-    else if (sysctl(mgmtInfoBase, 6, msgBuffer, &length, NULL, 0) < 0)
+    else if (sysctl(mgmtInfoBase, 6, msgBuffer, &length, nullptr, 0) < 0)
     {
         free(msgBuffer);
         errorFlag = @"sysctl msgBuffer failure";
@@ -80,10 +81,10 @@ std::string CCore::GetMACAddress()
     else
     {
         // map msgbuffer to interface message structure
-        struct if_msghdr* interfaceMsgStruct = (struct if_msghdr*)msgBuffer;
+        if_msghdr* interfaceMsgStruct = (if_msghdr*)msgBuffer;
 
         // map to link-level socket structure
-        struct sockaddr_dl* socketStruct = (struct sockaddr_dl*)(interfaceMsgStruct + 1);
+        sockaddr_dl* socketStruct = (sockaddr_dl*)(interfaceMsgStruct + 1);
 
         // copy link layer address data in socket structure to an array
         unsigned char macAddress[6];
@@ -132,8 +133,8 @@ std::string CCore::PasteFromClipboard()
 
 bool CCore::OpenURL(std::string url)
 {
-    CFURLRef cfurl = CFURLCreateWithBytes(NULL, reinterpret_cast<const uint8_t*>(url.c_str()), url.size(), kCFStringEncodingASCII, NULL);
-    LSOpenCFURLRef(cfurl, NULL);
+    CFURLRef cfurl = CFURLCreateWithBytes(kCFAllocatorDefault, reinterpret_cast<const uint8_t*>(url.c_str()), url.size(), kCFStringEncodingASCII, nullptr);
+    LSOpenCFURLRef(cfurl, nullptr);
     CFRelease(cfurl);
     return true;
 }
@@ -189,7 +190,7 @@ std::string CCore::GetCountryCode()
 std::string CCore::GetSystemVersion()
 {
     NSProcessInfo* processInfo = [NSProcessInfo processInfo];
-    NSString* versionString = nil;
+    NSString* versionString;
     if (processInfo)
     {
         NSOperatingSystemVersion osVersion = [processInfo operatingSystemVersion];

@@ -1,6 +1,5 @@
 #ifndef CORE_H
 #define CORE_H
-#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -13,7 +12,7 @@ public:
     static float GetMemoryUsage(bool mb);
     static size_t GetPhysicalMemory();
     static std::string GetHTTPProxyName();
-    static uint32_t GetHTTPProxyPort();
+    static int GetHTTPProxyPort();
     static std::string GetMACAddress();
     static bool GetIsCellularNetworkTypeSlow();
     static std::string GetVendorId();

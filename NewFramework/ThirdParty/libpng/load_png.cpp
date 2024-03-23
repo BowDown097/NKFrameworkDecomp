@@ -26,7 +26,7 @@ uint8_t* load_png(IFile* file, int* width, int* height, bool grayToRgb, bool alp
     uint8_t sigBytes[PNG_SIG_BYTES];
     file->ReadBytes(sigBytes, PNG_SIG_BYTES);
 
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, png_error_func, png_error_func);
+    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, png_error_func, png_error_func);
     png_infop info = png_create_info_struct(png);
 
     png_set_read_fn(png, file, custom_png_read_data);
@@ -63,7 +63,7 @@ uint8_t* load_png(IFile* file, int* width, int* height, bool grayToRgb, bool alp
 
     png_read_image(png, rowPointers);
     free(rowPointers);
-    png_destroy_read_struct(&png, &info, NULL);
+    png_destroy_read_struct(&png, &info, nullptr);
     return imageData;
 }
 
@@ -73,7 +73,7 @@ uint8_t* load_png(CBaseFileIO* fileIO, const char* path, CFilePolicy& filePolicy
     if (!file)
     {
         LOG_ERROR("Couldn't load PNG file (%s)", path);
-        return NULL;
+        return nullptr;
     }
 
     uint8_t* png = load_png(file, width, height, true, true, true);

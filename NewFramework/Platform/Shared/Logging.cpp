@@ -45,11 +45,10 @@ void CLogging::RemoveComponent(ILoggingComponent* component)
 
 ILoggingComponent* CLogging::GetComponentByTypeID(const std::type_info& info) const
 {
-    auto it = std::find_if(m_components.cbegin(), m_components.cend(), [&info](ILoggingComponent* c) {
-        return c->typeInfo == info;
-    });
-
-    return it != m_components.cend() ? *it : nullptr;
+    for (ILoggingComponent* component : m_components)
+        if (component->typeInfo == info)
+            return component;
+    return nullptr;
 }
 
 void CLogging::PrintError(const char* file, const char* function, int line, const char* message, ...)
@@ -66,7 +65,6 @@ void CLogging::VPrintError(const char* file, const char* function, int line, con
         return;
 
     boost::unique_lock<boost::mutex> lock(*m_mutex);
-    lock.lock();
 
     static char text[20479];
     vsnprintf(text, sizeof(text) - 1, message, *args);
@@ -99,14 +97,13 @@ void CLogging::VPrintWarning(const char* message, va_list* args)
         return;
 
     boost::unique_lock<boost::mutex> lock(*m_mutex);
-    lock.lock();
 
     static size_t result = 0;
     static char timestamp[32];
-    static time_t t = time(NULL);
+    static time_t t = time(nullptr);
     size_t timestampSize;
 
-    time_t currentTime = time(NULL);
+    time_t currentTime = time(nullptr);
     if (t != currentTime)
     {
         tm* local = localtime(&currentTime);

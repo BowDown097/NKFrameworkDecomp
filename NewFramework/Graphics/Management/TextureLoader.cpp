@@ -9,8 +9,6 @@
 void CTextureLoader::AddTextureToLoad(CTexture* texture)
 {
     boost::unique_lock<boost::mutex> lock(textureMutex);
-    lock.lock();
-
     if (texture)
     {
         texture->state = eTextureState::Loading;
@@ -29,8 +27,6 @@ void CTextureLoader::BeginASyncLoad()
 void CTextureLoader::BlockingAddTexture(CTexture* texture)
 {
     boost::unique_lock<boost::mutex> lock(textureMutex);
-    lock.lock();
-
     if (texture)
     {
         texture->state = eTextureState::Loading;
@@ -41,8 +37,6 @@ void CTextureLoader::BlockingAddTexture(CTexture* texture)
 void CTextureLoader::Process()
 {
     boost::unique_lock<boost::mutex> lock(textureMutex);
-    lock.lock();
-
     for (CTexture* texture : textures)
     {
         switch (texture->state)
@@ -73,8 +67,6 @@ void CTextureLoader::Process()
 void CTextureLoader::BroadcastEvent(eTextureLoaderEvent event, CTexture* texture)
 {
     boost::unique_lock<boost::mutex> lock(listenerMutex);
-    lock.lock();
-
     for (ITextureLoaderListener* listener : listeners)
         listener->TextureEvent(event, texture);
 }
@@ -165,8 +157,8 @@ bool CTextureLoader::LoadTexture(CTexture* texture, CFilePolicy& filePolicy)
     texture->pixels = loadedPixels;
     texture->SetPlatformData(platformData);
 
-    if (!texture->inUse)
-        texture->DeletePixelData();
+    if (pixelData && !texture->inUse)
+        free(pixelData);
 
     texture->pixelData = loadedPixelData;
     texture->state = eTextureState::Created;
@@ -229,14 +221,12 @@ void CTextureLoader::TextureLoaded(CTexture* texture)
 bool CTextureLoader::TexturesLoading()
 {
     boost::unique_lock<boost::mutex> lock(textureMutex);
-    lock.lock();
-    return thread != NULL;
+    return thread != nullptr;
 }
 
 bool CTextureLoader::TexturesToLoad()
 {
     boost::unique_lock<boost::mutex> lock(textureMutex);
-    lock.lock();
     return !textures.empty();
 }
 
@@ -278,7 +268,7 @@ void CTextureLoader::ThreadLoader()
         textureMutex.lock();
     }
 
-    BroadcastEvent(eTextureLoaderEvent::Loading, NULL);
+    BroadcastEvent(eTextureLoaderEvent::Loading, nullptr);
     CCore::UnsetThreadID();
     EndThread();
     textureMutex.unlock();
@@ -292,15 +282,12 @@ void CTextureLoader::EndThread()
 void CTextureLoader::AddListener(ITextureLoaderListener* listener)
 {
     boost::unique_lock<boost::mutex> lock(listenerMutex);
-    lock.lock();
     listeners.push_back(listener);
 }
 
 void CTextureLoader::RemoveListener(ITextureLoaderListener* listener)
 {
     boost::unique_lock<boost::mutex> lock(listenerMutex);
-    lock.lock();
-
     for (ITextureLoaderListener* l : listeners)
     {
         if (l == listener)
@@ -313,6 +300,5 @@ void CTextureLoader::RemoveListener(ITextureLoaderListener* listener)
 void CTextureLoader::ClearListeners()
 {
     boost::unique_lock<boost::mutex> lock(listenerMutex);
-    lock.lock();
     listeners.clear();
 }

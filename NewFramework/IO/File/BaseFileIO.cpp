@@ -67,7 +67,7 @@ IFile* CBaseFileIO::OpenFile(const std::string& path, const CFilePolicy& policy,
         LOG_ERROR(
             "Attempted to open file (%s) in write mode using %s policy which contains non-writable locations or archives",
             path.c_str(), policy.policyName.c_str()
-            );
+        );
         return nullptr;
     }
 
@@ -164,7 +164,7 @@ bool CBaseFileIO::DoesFileExistAtPath(const std::string& path)
 {
     std::string ignore;
     IFile* file = OpenFileFromPath(path, eFileOpenMode::Read, ignore);
-    bool result = file != NULL;
+    bool result = file != nullptr;
 
     delete file;
     return result;

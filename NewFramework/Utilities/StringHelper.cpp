@@ -37,7 +37,7 @@ namespace StringHelper
         va_list va;
         va_start(va, formatString);
 
-        int dryRunChars = vsnprintf(NULL, 0, formatString.c_str(), va);
+        int dryRunChars = vsnprintf(nullptr, 0, formatString.c_str(), va);
         va_end(va);
         if (dryRunChars < 0)
             return sEncodingError;

@@ -32,7 +32,7 @@ uint8_t* LoadJPEGTexture(CBaseFileIO* fileIO, const std::string& path, CFilePoli
     if (!file)
     {
         LOG_ERROR("Can't open JPEG '%s'.\n", path.c_str());
-        return NULL;
+        return nullptr;
     }
 
     jpeg_decompress_struct cinfo;
@@ -47,7 +47,7 @@ uint8_t* LoadJPEGTexture(CBaseFileIO* fileIO, const std::string& path, CFilePoli
         LOG_ERROR("JPEG code has signaled an error: '%s'.", lasterror);
         jpeg_destroy_decompress(&cinfo);
         delete file;
-        return NULL;
+        return nullptr;
     }
 
     jpeg_create_decompress(&cinfo);
@@ -96,7 +96,7 @@ void LoadJPEGTexture(uint8_t* data, uint32_t size, int* width, int* height, uint
     if (setjmp(jerr.jb))
     {
         LOG_ERROR("JPEG code has signaled an error: '%s'.", lasterror);
-        out = NULL;
+        out = nullptr;
         jpeg_destroy_decompress(&cinfo);
         return;
     }

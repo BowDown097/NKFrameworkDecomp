@@ -44,7 +44,6 @@ public:
     void* field_80{}; // 0x80, unused outside of being read in SetPlatformData apparently?
 
     ~CTexture();
-    void DeletePixelData();
     void ReadData(int xOffset, int yOffset, int width, int height, uint8_t* dataOut);
     void PatchData(const STextureRect& sourceRect, uint8_t const* sourceData,
                    uint32_t startX, uint32_t startY, uint32_t width, uint32_t height,

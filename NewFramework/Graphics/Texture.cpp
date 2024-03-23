@@ -24,16 +24,11 @@ void patch_texture(const STextureRect& sourceRect, uint8_t const* sourceData,
 
 CTexture::~CTexture()
 {
-    DeletePixelData();
-}
-
-void CTexture::DeletePixelData()
-{
-    if (!pixelData)
-        return;
-
-    free(pixelData);
-    pixelData = nullptr;
+    if (pixelData)
+    {
+        free(pixelData);
+        pixelData = nullptr;
+    }
 }
 
 void CTexture::ReadData(int xOffset, int yOffset, int width, int height, uint8_t* dataOut)

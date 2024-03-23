@@ -10,7 +10,7 @@ uint8_t* LoadJPNGTexture(CBaseFileIO* fileIO, const std::string& path, int* widt
     if (!file)
     {
         LOG_ERROR("Can't open JPNG '%s'.\n", path.c_str());
-        return NULL;
+        return nullptr;
     }
 
     size_t fileLength = file->GetFileLength();

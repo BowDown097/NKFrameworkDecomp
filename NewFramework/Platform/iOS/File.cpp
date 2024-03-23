@@ -77,7 +77,7 @@ bool CBaseFileIO::CFile::Open(const std::string& path, eFileOpenMode openMode, s
     UpdateFileLength();
     this->path = path;
 
-    return platformData->file != NULL;
+    return platformData->file != nullptr;
 }
 
 size_t CBaseFileIO::CFile::ReadBytes(uint8_t* const data, const size_t size)
