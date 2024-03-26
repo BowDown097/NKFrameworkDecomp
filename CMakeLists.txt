@@ -17,6 +17,7 @@ set(SOURCE_FILES
     NewFramework/IO/File/BaseFileIO.cpp
     NewFramework/IO/File/FilePolicy.cpp
     NewFramework/IO/File/PNGInMemory.cpp
+    NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
     NewFramework/Platform/Shared/Assert.cpp
     NewFramework/Platform/Shared/Core.cpp
     NewFramework/Platform/Shared/Logging.cpp
@@ -44,6 +45,7 @@ set(HEADER_FILES
     NewFramework/IO/File/FilePolicy.h
     NewFramework/IO/File/IFile.h
     NewFramework/IO/File/PNGInMemory.h
+    NewFramework/Math/MathematicTypes/VectorDataStructures.h
     NewFramework/Platform/Shared/Assert.h
     NewFramework/Platform/Shared/Core.h
     NewFramework/Platform/Shared/Logging.h

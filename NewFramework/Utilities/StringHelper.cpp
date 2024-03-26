@@ -3,6 +3,23 @@
 
 namespace StringHelper
 {
+    size_t Explode(const std::string& in, const std::string& sep, std::vector<std::string>* out)
+    {
+        std::string inCopy = in;
+        size_t pos = std::string::npos;
+        std::string token;
+
+        while ((pos = inCopy.find(sep)) != std::string::npos)
+        {
+            token = inCopy.substr(0, pos);
+            out->push_back(token);
+            inCopy.erase(0, pos + sep.size());
+        }
+
+        out->push_back(inCopy);
+        return out->size();
+    }
+
     std::string Join(const std::vector<std::string>& values, const std::string& separator)
     {
         std::string out;
