@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
-add_library(${PROJECT_NAME})
+add_library(NKFrameworkDecomp)
 
 # Source files
 set(SOURCE_FILES
@@ -18,10 +18,14 @@ set(SOURCE_FILES
     NewFramework/IO/File/FilePolicy.cpp
     NewFramework/IO/File/PNGInMemory.cpp
     NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
+    NewFramework/Networking/NKAPI/NKEndpoints.cpp
+    NewFramework/Networking/NKAPI/NKSignature.cpp
+    NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
     NewFramework/Platform/Shared/Assert.cpp
     NewFramework/Platform/Shared/Core.cpp
     NewFramework/Platform/Shared/Logging.cpp
     NewFramework/ThirdParty/libpng/load_png.cpp
+    NewFramework/Utilities/Encoding.cpp
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
     NewFramework/Utilities/StringHelper.cpp
     Uncategorized/Version.cpp
@@ -46,15 +50,23 @@ set(HEADER_FILES
     NewFramework/IO/File/IFile.h
     NewFramework/IO/File/PNGInMemory.h
     NewFramework/Math/MathematicTypes/VectorDataStructures.h
+    NewFramework/Networking/NKAPI/NKEndpoints.h
+    NewFramework/Networking/NKAPI/NKMessage.h
+    NewFramework/Networking/NKAPI/NKSignature.h
+    NewFramework/Networking/Protocols/HTTP/HttpRequest.h
+    NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
+    NewFramework/Networking/Protocols/HTTP/IHttpRequestManager.h
     NewFramework/Platform/Shared/Assert.h
     NewFramework/Platform/Shared/Core.h
     NewFramework/Platform/Shared/Logging.h
     NewFramework/Platform/Shared/LoggingComponent.h
     NewFramework/ThirdParty/libpng/load_png.h
+    NewFramework/Utilities/Encoding.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
     NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
     NewFramework/Utilities/StringHelper.h
     Uncategorized/ReferenceCounted.h
+    Uncategorized/StuffToRefactor.h
     Uncategorized/Version.h
 )
 
@@ -89,14 +101,22 @@ set(JSON_SPIRIT_TESTS OFF CACHE BOOL "Enable building tests")
 FetchContent_MakeAvailable(jsonspirit)
 
 if(JSON_SPIRIT_MVALUE_ENABLED)
-    target_compile_definitions(${PROJECT_NAME} PRIVATE JSON_SPIRIT_MVALUE_ENABLED)
+    target_compile_definitions(NKFrameworkDecomp PRIVATE JSON_SPIRIT_MVALUE_ENABLED)
 endif()
 
-# Target files
-target_sources(${PROJECT_NAME} PRIVATE ${SOURCE_FILES})
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
+# hashlibpp
+FetchContent_Declare(
+    hashlibpp
+    GIT_REPOSITORY https://github.com/ErrorFlexXx/hashlibpp.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(hashlibpp)
 
-target_include_directories(${PROJECT_NAME}
+# Target files
+target_sources(NKFrameworkDecomp PRIVATE ${SOURCE_FILES})
+set_target_properties(NKFrameworkDecomp PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
+
+target_include_directories(NKFrameworkDecomp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
@@ -107,12 +127,12 @@ target_include_directories(${PROJECT_NAME}
         ${PNG_PNG_INCLUDE_DIR}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ${Boost_LIBRARIES} ${JPEG_LIBRARY} ${PNG_LIBRARY})
+target_link_libraries(NKFrameworkDecomp PRIVATE hashlibpp ${Boost_LIBRARIES} ${JPEG_LIBRARY} ${PNG_LIBRARY})
 
 # Installation
 include(GNUInstallDirs)
 install(
-    TARGETS ${PROJECT_NAME}
+    TARGETS NKFrameworkDecomp
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/NKFrameworkDecomp
 )
