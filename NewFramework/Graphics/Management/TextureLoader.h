@@ -1,5 +1,4 @@
-#ifndef CTEXTURELOADER_H
-#define CTEXTURELOADER_H
+#pragma once
 #include "NewFramework/Graphics/Texture.h"
 #include "NewFramework/IO/File/BaseFileIO.h"
 #include <boost/thread.hpp>
@@ -47,5 +46,3 @@ public:
     void RemoveListener(ITextureLoaderListener* listener);
     void ClearListeners();
 };
-
-#endif // CTEXTURELOADER_H

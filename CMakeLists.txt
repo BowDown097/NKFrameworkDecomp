@@ -2,86 +2,89 @@ cmake_minimum_required(VERSION 3.5)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
 add_library(NKFrameworkDecomp)
 
-# Source files
-set(SOURCE_FILES
-    NewFramework/Analytics/DGAnalytics.cpp
-    NewFramework/Analytics/DGAnalyticsData.cpp
-    NewFramework/Analytics/DGAnalyticsEventGroups.cpp
-    NewFramework/BaseApplication/AppClass/AppClass.cpp
-    NewFramework/BaseApplication/BasePointers.cpp
-    NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
-    NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
-    NewFramework/Graphics/Management/PVR/PVRTextures.cpp
-    NewFramework/Graphics/Management/TextureLoader.cpp
-    NewFramework/Graphics/Texture.cpp
-    NewFramework/IO/File/BaseFileIO.cpp
-    NewFramework/IO/File/FilePolicy.cpp
-    NewFramework/IO/File/PNGInMemory.cpp
-    NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
-    NewFramework/Networking/NKAPI/NKEndpoints.cpp
-    NewFramework/Networking/NKAPI/NKSignature.cpp
-    NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
-    NewFramework/Platform/Shared/Assert.cpp
-    NewFramework/Platform/Shared/Core.cpp
-    NewFramework/Platform/Shared/Logging.cpp
-    NewFramework/ThirdParty/libpng/load_png.cpp
-    NewFramework/Utilities/Encoding.cpp
-    NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
-    NewFramework/Utilities/StringHelper.cpp
-    Uncategorized/Version.cpp
-)
-
-set(HEADER_FILES
-    NewFramework/Analytics/DGAnalytics.h
-    NewFramework/Analytics/DGAnalyticsData.h
-    NewFramework/Analytics/DGAnalyticsEventGroups.h
-    NewFramework/Analytics/IAnalytics.h
-    NewFramework/Analytics/SAnalyticsInitialisation.h
-    NewFramework/BaseApplication/AppClass/AppClass.h
-    NewFramework/BaseApplication/BasePointers.h
-    NewFramework/Graphics/Management/JPEG/JPEGTextures.h
-    NewFramework/Graphics/Management/JPNG/JPNGTextures.h
-    NewFramework/Graphics/Management/PVR/PVRTextures.h
-    NewFramework/Graphics/Management/TextureLoader.h
-    NewFramework/Graphics/Texture.h
-    NewFramework/IO/File/BaseFileIO.h
-    NewFramework/IO/File/FilePlatformData.h
-    NewFramework/IO/File/FilePolicy.h
-    NewFramework/IO/File/IFile.h
-    NewFramework/IO/File/PNGInMemory.h
-    NewFramework/Math/MathematicTypes/VectorDataStructures.h
-    NewFramework/Networking/NKAPI/NKEndpoints.h
-    NewFramework/Networking/NKAPI/NKMessage.h
-    NewFramework/Networking/NKAPI/NKSignature.h
-    NewFramework/Networking/Protocols/HTTP/HttpRequest.h
-    NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
-    NewFramework/Networking/Protocols/HTTP/IHttpRequestManager.h
-    NewFramework/Platform/Shared/Assert.h
-    NewFramework/Platform/Shared/Core.h
-    NewFramework/Platform/Shared/Logging.h
-    NewFramework/Platform/Shared/LoggingComponent.h
-    NewFramework/ThirdParty/libpng/load_png.h
-    NewFramework/Utilities/Encoding.h
-    NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
-    NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
-    NewFramework/Utilities/StringHelper.h
-    Uncategorized/ReferenceCounted.h
-    Uncategorized/StuffToRefactor.h
-    Uncategorized/Version.h
+target_sources(NKFrameworkDecomp
+    PRIVATE
+        NewFramework/Analytics/DGAnalytics.cpp
+        NewFramework/Analytics/DGAnalyticsData.cpp
+        NewFramework/Analytics/DGAnalyticsEventGroups.cpp
+        NewFramework/BaseApplication/AppClass/AppClass.cpp
+        NewFramework/BaseApplication/BasePointers.cpp
+        NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
+        NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
+        NewFramework/Graphics/Management/PVR/PVRTextures.cpp
+        NewFramework/Graphics/Management/TextureLoader.cpp
+        NewFramework/Graphics/Management/TextureManager.cpp
+        NewFramework/Graphics/Texture.cpp
+        NewFramework/IO/File/BaseFileIO.cpp
+        NewFramework/IO/File/FilePolicy.cpp
+        NewFramework/IO/File/PNGInMemory.cpp
+        NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
+        NewFramework/Networking/NKAPI/NKEndpoints.cpp
+        NewFramework/Networking/NKAPI/NKSignature.cpp
+        NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
+        NewFramework/Platform/Shared/Assert.cpp
+        NewFramework/Platform/Shared/Core.cpp
+        NewFramework/Platform/Shared/Logging.cpp
+        NewFramework/ThirdParty/libpng/load_png.cpp
+        NewFramework/Utilities/Encoding.cpp
+        NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
+        NewFramework/Utilities/StringHelper.cpp
+        Uncategorized/SpriteInformation.cpp
+        Uncategorized/Version.cpp
+    PUBLIC
+        FILE_SET HEADERS FILES
+            NewFramework/Analytics/DGAnalytics.h
+            NewFramework/Analytics/DGAnalyticsData.h
+            NewFramework/Analytics/DGAnalyticsEventGroups.h
+            NewFramework/Analytics/IAnalytics.h
+            NewFramework/Analytics/SAnalyticsInitialisation.h
+            NewFramework/BaseApplication/AppClass/AppClass.h
+            NewFramework/BaseApplication/BasePointers.h
+            NewFramework/Graphics/Management/JPEG/JPEGTextures.h
+            NewFramework/Graphics/Management/JPNG/JPNGTextures.h
+            NewFramework/Graphics/Management/PVR/PVRTextures.h
+            NewFramework/Graphics/Management/TextureLoader.h
+            NewFramework/Graphics/Management/TextureManager.h
+            NewFramework/Graphics/Texture.h
+            NewFramework/IO/File/BaseFileIO.h
+            NewFramework/IO/File/FilePlatformData.h
+            NewFramework/IO/File/FilePolicy.h
+            NewFramework/IO/File/IFile.h
+            NewFramework/IO/File/PNGInMemory.h
+            NewFramework/Math/MathematicTypes/VectorDataStructures.h
+            NewFramework/Networking/NKAPI/NKEndpoints.h
+            NewFramework/Networking/NKAPI/NKMessage.h
+            NewFramework/Networking/NKAPI/NKSignature.h
+            NewFramework/Networking/Protocols/HTTP/HttpRequest.h
+            NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
+            NewFramework/Networking/Protocols/HTTP/IHttpRequestManager.h
+            NewFramework/Platform/Shared/Assert.h
+            NewFramework/Platform/Shared/Core.h
+            NewFramework/Platform/Shared/Logging.h
+            NewFramework/Platform/Shared/LoggingComponent.h
+            NewFramework/ThirdParty/libpng/load_png.h
+            NewFramework/Utilities/Encoding.h
+            NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
+            NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
+            NewFramework/Utilities/StringHelper.h
+            Uncategorized/ReferenceCounted.h
+            Uncategorized/SpriteInformation.h
+            Uncategorized/StuffToRefactor.h
+            Uncategorized/Version.h
 )
 
 ## Platform-specific
 if(UNIX)
-    list(APPEND SOURCE_FILES NewFramework/Platform/iOS/File.cpp)
-    list(APPEND HEADER_FILES NewFramework/Platform/iOS/File.h)
+    target_sources(NKFrameworkDecomp PRIVATE NewFramework/Platform/iOS/File.cpp)
+    target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/Platform/iOS/File.h)
 endif()
 
 if(APPLE)
-    list(APPEND SOURCE_FILES NewFramework/Platform/OSX/OSXCore.mm)
+    target_sources(NKFrameworkDecomp PRIVATE NewFramework/Platform/OSX/OSXCore.mm)
 endif()
 
 # Packages
-find_package(Boost COMPONENTS function preprocessor smart_ptr spirit threads unordered utility)
+find_package(Boost REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
@@ -104,6 +107,14 @@ if(JSON_SPIRIT_MVALUE_ENABLED)
     target_compile_definitions(NKFrameworkDecomp PRIVATE JSON_SPIRIT_MVALUE_ENABLED)
 endif()
 
+# ticpp
+FetchContent_Declare(
+    ticpp
+    GIT_REPOSITORY https://github.com/wxFormBuilder/ticpp.git
+    GIT_TAG master
+)
+FetchContent_MakeAvailable(ticpp)
+
 # hashlibpp
 FetchContent_Declare(
     hashlibpp
@@ -125,6 +136,7 @@ target_include_directories(NKFrameworkDecomp
         ${JPEG_INCLUDE_DIR}
         ${jsonspirit_SOURCE_DIR}
         ${PNG_PNG_INCLUDE_DIR}
+        ${ticpp_SOURCE_DIR}
 )
 
 target_link_libraries(NKFrameworkDecomp PRIVATE hashlibpp ${Boost_LIBRARIES} ${JPEG_LIBRARY} ${PNG_LIBRARY})

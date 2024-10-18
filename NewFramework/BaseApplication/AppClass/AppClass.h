@@ -1,5 +1,4 @@
-#ifndef APPCLASS_H
-#define APPCLASS_H
+#pragma once
 #include "NewFramework/BaseApplication/BasePointers.h"
 #include <cfloat>
 #include <string>
@@ -76,5 +75,3 @@ public:
 private:
     static int m_gameTime;
 };
-
-#endif // APPCLASS_H

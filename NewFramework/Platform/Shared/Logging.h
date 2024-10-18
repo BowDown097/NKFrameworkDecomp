@@ -1,5 +1,4 @@
-#ifndef LOGGING_H
-#define LOGGING_H
+#pragma once
 #include "LoggingComponent.h"
 #include <boost/current_function.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -43,5 +42,3 @@ private:
     std::list<ILoggingComponent*> m_components;
     boost::mutex* m_mutex;
 };
-
-#endif // LOGGING_H

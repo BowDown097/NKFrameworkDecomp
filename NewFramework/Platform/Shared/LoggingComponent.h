@@ -1,5 +1,4 @@
-#ifndef LOGGINGCOMPONENT_H
-#define LOGGINGCOMPONENT_H
+#pragma once
 #include <typeinfo>
 
 struct ILoggingComponent
@@ -8,5 +7,3 @@ struct ILoggingComponent
     virtual ~ILoggingComponent();
     virtual void Log(const char* message);
 };
-
-#endif // LOGGINGCOMPONENT_H

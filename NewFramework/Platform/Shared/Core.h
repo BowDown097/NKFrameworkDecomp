@@ -1,5 +1,4 @@
-#ifndef CORE_H
-#define CORE_H
+#pragma once
 #include <string>
 #include <vector>
 
@@ -51,5 +50,3 @@ public:
     static bool IsCurrentThread(THREAD_ID id);
     static std::string ThreadSafeStrError(int errnum);
 };
-
-#endif // CORE_H

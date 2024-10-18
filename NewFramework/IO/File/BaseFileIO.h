@@ -1,5 +1,4 @@
-#ifndef BASEFILEIO_H
-#define BASEFILEIO_H
+#pragma once
 #include "FilePolicy.h"
 #include "IFile.h"
 #include <map>
@@ -56,5 +55,3 @@ protected:
 private:
     std::string archivePassword; // 0x118
 };
-
-#endif // BASEFILEIO_H

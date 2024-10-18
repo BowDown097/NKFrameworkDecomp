@@ -1,5 +1,4 @@
-#ifndef IOS_FILE_H
-#define IOS_FILE_H
+#pragma once
 #include "NewFramework/IO/File/BaseFileIO.h"
 
 class CBaseFileIO::CFile : public IFile
@@ -25,5 +24,3 @@ public:
     size_t GetOffset() override { return offset; }
     size_t GetFileLength() override;
 };
-
-#endif // IOS_FILE_H

@@ -1,5 +1,4 @@
-#ifndef SANALYTICSINITIALISATION_H
-#define SANALYTICSINITIALISATION_H
+#pragma once
 #include "IAnalytics.h"
 #include "Uncategorized/Version.h"
 
@@ -12,5 +11,3 @@ struct SAnalyticsInitialisation
     SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
         : name(name), version(version), host(host) {}
 };
-
-#endif // SANALYTICSINITIALISATION_H

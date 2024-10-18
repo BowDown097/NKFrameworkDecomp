@@ -1,5 +1,4 @@
-#ifndef DGANALYTICSDATA_H
-#define DGANALYTICSDATA_H
+#pragma once
 #include <map>
 #include <string>
 
@@ -21,5 +20,3 @@ struct DGAnalyticsData
     DGAnalyticsData() : field_0(false), field_38(true) {}
     DGAnalyticsData(const std::string& field_20) : field_0(true), field_20(field_20), field_38(false) {}
 };
-
-#endif // DGANALYTICSDATA_H

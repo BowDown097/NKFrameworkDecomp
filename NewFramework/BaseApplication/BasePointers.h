@@ -1,5 +1,4 @@
-#ifndef BASEPOINTERS_H
-#define BASEPOINTERS_H
+#pragma once
 
 // TODO: figure out field_88, field_B8, and field_C8 (if that's even possible)
 class IBasePointers
@@ -37,5 +36,3 @@ public:
     void CopyFrom(const IBasePointers& other);
     void CopyTo(IBasePointers& other);
 };
-
-#endif // BASEPOINTERS_H

@@ -1,5 +1,4 @@
-#ifndef PNGINMEMORY_H
-#define PNGINMEMORY_H
+#pragma once
 #include "IFile.h"
 
 struct PNG_In_Memory : IFile
@@ -17,5 +16,3 @@ struct PNG_In_Memory : IFile
     size_t WriteBytes(uint8_t* const input, const size_t inputSz, eWriteSyncBehaviour) override;
     SFileIOResult WriteBytesWithResult(uint8_t* const, const size_t, eWriteSyncBehaviour) override;
 };
-
-#endif // PNGINMEMORY_H

@@ -1,5 +1,4 @@
-#ifndef FILEPOLICY_H
-#define FILEPOLICY_H
+#pragma once
 #include <string>
 #include <vector>
 
@@ -31,5 +30,3 @@ public:
     std::vector<SPolicyItem> GetPolicyItems() const { return policyItems; }
     void SetPolicyName(const std::string& policyName) { this->policyName = policyName; }
 };
-
-#endif // FILEPOLICY_H

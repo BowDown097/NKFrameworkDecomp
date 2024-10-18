@@ -1,5 +1,4 @@
-#ifndef IFILE_H
-#define IFILE_H
+#pragma once
 #include "FilePlatformData.h"
 #include <boost/make_shared.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -52,8 +51,6 @@ protected:
     std::string path; // 0x08
     size_t length{}; // 0x20
     size_t offset{}; // 0x28
-    eFileOpenMode openMode; // 0x30
+    eFileOpenMode openMode{}; // 0x30
     boost::shared_ptr<CFilePlatformData> platformData; // 0x38
 };
-
-#endif // IFILE_H

@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 // TODO: implement compress, decompress, calc_nkdatahash_v1, hex_string_to_string, hmac_sha1, and strip_weak_etag_marker

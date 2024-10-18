@@ -1,5 +1,4 @@
-#ifndef FILEPLATFORMDATA_H
-#define FILEPLATFORMDATA_H
+#pragma once
 #include <cstdio>
 
 class CFilePlatformData
@@ -7,5 +6,3 @@ class CFilePlatformData
 public:
     FILE* file;
 };
-
-#endif // FILEPLATFORMDATA_H

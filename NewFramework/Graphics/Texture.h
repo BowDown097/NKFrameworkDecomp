@@ -1,5 +1,4 @@
-#ifndef CTEXTURE_H
-#define CTEXTURE_H
+#pragma once
 #include "Uncategorized/ReferenceCounted.h"
 #include <climits>
 #include <cstdint>
@@ -49,7 +48,7 @@ public:
     ePixelFormat pixelFormat2 = ePixelFormat::RGBA8; // 0x7C
     void* field_80{}; // 0x80, unused outside of being read in SetPlatformData apparently?
 
-    ~CTexture();
+    ~CTexture() override;
     void ReadData(int startX, int startY, int width, int height, uint8_t* dataOut);
     void PatchData(const STextureRect& sourceRect, const uint8_t* sourceData,
                    uint32_t startX, uint32_t startY, uint32_t width, uint32_t height,
@@ -61,5 +60,3 @@ public:
     static std::string TextureTypeToString(const eTextureType& type);
     static eTextureType ParseTextureType(const std::string& type);
 };
-
-#endif // CTEXTURE_H

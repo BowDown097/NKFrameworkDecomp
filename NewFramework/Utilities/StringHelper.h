@@ -1,5 +1,4 @@
-#ifndef STRINGHELPER_H
-#define STRINGHELPER_H
+#pragma once
 #include <string>
 #include <vector>
 
@@ -10,5 +9,3 @@ namespace StringHelper
     std::string Format(std::string formatString, ...);
     std::string Replace(const std::string& string, const std::string& before, const std::string& after);
 }
-
-#endif // STRINGHELPER_H

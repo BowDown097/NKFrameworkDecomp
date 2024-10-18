@@ -1,5 +1,4 @@
-#ifndef DGANALYTICS_H
-#define DGANALYTICS_H
+#pragma once
 #include "SAnalyticsInitialisation.h"
 #include "Uncategorized/Version.h"
 
@@ -40,5 +39,3 @@ private:
     std::vector<SAnalyticsInitialisation> analyticsInitialisation; // 0x20
     AnalyticsEventGroups::CGroupSettingsContainer* groupSettingsContainer; // 0x38
 };
-
-#endif // DGANALYTICS_H

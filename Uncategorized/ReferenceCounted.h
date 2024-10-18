@@ -1,10 +1,7 @@
-#ifndef REFERENCECOUNTED_H
-#define REFERENCECOUNTED_H
+#pragma once
 
 class CReferenceCounted
 {
 public:
     virtual ~CReferenceCounted();
 };
-
-#endif // REFERENCECOUNTED_H

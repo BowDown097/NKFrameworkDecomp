@@ -1,5 +1,4 @@
-#ifndef JSON_READ_H
-#define JSON_READ_H
+#pragma once
 #include "JSON_PropertyException.h"
 #include <json_spirit/json_spirit_value.h>
 
@@ -126,5 +125,3 @@ private:
 template<> void JSON_PropertyReader::Adjust(json_spirit::mArray& a, json_spirit::mArray& b);
 template<> void JSON_PropertyReader::Adjust(json_spirit::mObject& a, json_spirit::mObject& b);
 template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit::mValue& b);
-
-#endif // JSON_READ_H

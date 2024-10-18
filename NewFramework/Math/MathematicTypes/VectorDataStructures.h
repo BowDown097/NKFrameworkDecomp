@@ -1,5 +1,4 @@
-#ifndef VECTORDATASTRUCTURES_H
-#define VECTORDATASTRUCTURES_H
+#pragma once
 #include <string>
 
 class CVec2
@@ -22,5 +21,3 @@ public:
     CVec2i(const CVec2& vec2);
     CVec2i(const CVec2* vec2);
 };
-
-#endif // VECTORDATASTRUCTURES_H

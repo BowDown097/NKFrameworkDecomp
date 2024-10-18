@@ -1,5 +1,4 @@
-#ifndef ANALYTICSEVENTGROUPS_H
-#define ANALYTICSEVENTGROUPS_H
+#pragma once
 #include <json_spirit/json_spirit_value.h>
 
 namespace AnalyticsEventGroups
@@ -38,5 +37,3 @@ namespace AnalyticsEventGroups
         std::vector<SGroupSettings> groupSettings;
     };
 }
-
-#endif // ANALYTICSEVENTGROUPS_H

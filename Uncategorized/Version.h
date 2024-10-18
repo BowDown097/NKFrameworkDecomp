@@ -1,5 +1,4 @@
-#ifndef VERSION_H
-#define VERSION_H
+#pragma once
 #include <cstdint>
 #include <string>
 
@@ -21,5 +20,3 @@ public:
     std::string ConstructStrVersionMajorMinor() const;
     bool IsEquivalent(const CVersion& version, bool checkMinor, bool checkPatch) const;
 };
-
-#endif // VERSION_H

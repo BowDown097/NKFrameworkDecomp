@@ -1,5 +1,4 @@
-#ifndef IANALYTICS_H
-#define IANALYTICS_H
+#pragma once
 #include "DGAnalyticsData.h"
 #include "DGAnalyticsEventGroups.h"
 
@@ -29,5 +28,3 @@ struct IAnalytics
     virtual unsigned int PassFilter(unsigned int in) { return (in & 2) >> 1; }
     virtual void SetDoNotTrack(int doNotTrack) { this->doNotTrack = doNotTrack; }
 };
-
-#endif // IANALYTICS_H
