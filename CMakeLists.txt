@@ -52,8 +52,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/IO/File/IFile.h
             NewFramework/IO/File/PNGInMemory.h
             NewFramework/Math/MathematicTypes/VectorDataStructures.h
+            NewFramework/Networking/NKAPI/Impl/NKMessages.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
-            NewFramework/Networking/NKAPI/NKMessage.h
             NewFramework/Networking/NKAPI/NKSignature.h
             NewFramework/Networking/Protocols/HTTP/HttpRequest.h
             NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
