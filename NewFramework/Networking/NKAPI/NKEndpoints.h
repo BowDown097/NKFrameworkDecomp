@@ -1,6 +1,6 @@
 #include "NewFramework/Networking/Protocols/HTTP/IHttpCallback.h"
 
-enum class eNKLinkServerCluster { ALAN_DEV, ROSS_DEV, STAGING, PROD };
+enum class eNKLinkServerCluster { ALAN_DEV, ROSS_DEV, STAGING, LIVE, NONE };
 enum class eNKPublicUrlChannel { STANDARD, PRIORITY };
 
 // TODO: implement every method that's not SendMessage, and also come up with field names for Endpoint
