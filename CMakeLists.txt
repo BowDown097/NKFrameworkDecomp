@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.5)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 add_library(NKFrameworkDecomp)
 
 target_sources(NKFrameworkDecomp
@@ -29,6 +33,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/StringHelper.cpp
+        Uncategorized/BehaviourTree.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
     PUBLIC
@@ -67,6 +72,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
             NewFramework/Utilities/StringHelper.h
+            Uncategorized/BehaviourTree.h
             Uncategorized/ReferenceCounted.h
             Uncategorized/SpriteInformation.h
             Uncategorized/StuffToRefactor.h
