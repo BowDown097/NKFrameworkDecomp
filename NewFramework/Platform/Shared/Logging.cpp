@@ -67,8 +67,8 @@ void CLogging::VPrintError(const char* file, const char* function, int line, con
 
     boost::unique_lock<boost::mutex> lock(*m_mutex);
 
-    static char text[MAX_TEXT_BUFFER];
-    vsnprintf(text, MAX_TEXT_BUFFER - 1, message, *args);
+    static char text[MAX_TEXT_BUFFER - 1];
+    vsnprintf(text, MAX_TEXT_BUFFER - 2, message, *args);
 
     size_t fileStrippedIndex = StripPath(file);
     static char final[MAX_TEXT_BUFFER];
