@@ -5,10 +5,6 @@
 
 #include <cmath>
 
-// some error messages contain line numbers, so I want to use them where I see them.
-// that way I can have a more accurate decompilation
-#define ENFORCE_LINE(expected) static_assert(__LINE__ == (expected), "This must be at line " #expected)
-
 CVec2::CVec2(float x, float y) : mX{x}, mY{y} {}
 CVec2::CVec2(const CVec2i& vec) : mX(static_cast<float>(vec.mX)), mY(static_cast<float>(vec.mY)) {}
 CVec2::CVec2(const CVec2i* vec) : mX(static_cast<float>(vec->mX)), mY(static_cast<float>(vec->mY)) {}
@@ -18,6 +14,10 @@ CVec2::CVec2(const std::string& s) {
 
 // Large empty space for other code.
 // I know there should be other code here, just don't know what it is
+
+
+
+
 
 
 

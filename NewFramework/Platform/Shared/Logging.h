@@ -22,6 +22,10 @@
 #define LOG_WARNING_1(message, ...) \
     CLogging::GetSingletonPtr()->PrintWarning(message, __VA_ARGS__)
 
+// some error messages contain line numbers, so I want to use them where I see them.
+// that way I can have a more accurate decompilation
+#define ENFORCE_LINE(expected) static_assert(__LINE__ == (expected), "This must be at line " #expected)
+
 class CLogging
 {
 public:

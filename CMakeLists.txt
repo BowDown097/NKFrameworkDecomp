@@ -18,6 +18,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Graphics/Management/PVR/PVRTextures.cpp
         NewFramework/Graphics/Management/TextureLoader.cpp
         NewFramework/Graphics/Management/TextureManager.cpp
+        NewFramework/Graphics/Objects/BasePositionableObject.cpp
         NewFramework/Graphics/Texture.cpp
         NewFramework/IO/File/BaseFileIO.cpp
         NewFramework/IO/File/FilePolicy.cpp
