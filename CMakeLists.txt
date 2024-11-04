@@ -23,6 +23,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/IO/File/FilePolicy.cpp
         NewFramework/IO/File/PNGInMemory.cpp
         NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
+        NewFramework/Math/Matrix.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
         NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
@@ -57,6 +58,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/IO/File/IFile.h
             NewFramework/IO/File/PNGInMemory.h
             NewFramework/Math/MathematicTypes/VectorDataStructures.h
+            NewFramework/Math/Maths.h
+            NewFramework/Math/Matrix.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKSignature.h
