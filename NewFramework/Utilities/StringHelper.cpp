@@ -3,10 +3,10 @@
 
 namespace StringHelper
 {
-    size_t Explode(const std::string& in, const std::string& sep, std::vector<std::string>* out)
+    void Explode(const std::string& in, const std::string& sep, std::vector<std::string>* out)
     {
         std::string inCopy = in;
-        size_t pos = std::string::npos;
+        size_t pos;
         std::string token;
 
         while ((pos = inCopy.find(sep)) != std::string::npos)
@@ -17,13 +17,11 @@ namespace StringHelper
         }
 
         out->push_back(inCopy);
-        return out->size();
     }
 
     std::string Join(const std::vector<std::string>& values, const std::string& separator)
     {
         std::string out;
-
         if (values.empty())
             return out;
 
@@ -45,8 +43,8 @@ namespace StringHelper
 
     std::string Format(std::string formatString, ...)
     {
-        static const char* sEncodingError = "Encoding error when calling StringHelper::Format()";
-        static const char* sEmptyFormatStringError = "Empty format string passed to StringHelper::Format()";
+        static std::string sEncodingError = "Encoding error when calling StringHelper::Format()";
+        static std::string sEmptyFormatStringError = "Empty format string passed to StringHelper::Format()";
 
         if (formatString.empty())
             return sEmptyFormatStringError;
@@ -66,7 +64,7 @@ namespace StringHelper
         int realRunChars = vsnprintf(out.data(), out.size() + 1, formatString.c_str(), va);
         va_end(va);
 
-        return realRunChars > 0 ? out : sEncodingError;
+        return realRunChars >= 0 ? out : sEncodingError;
     }
 
     std::string Replace(const std::string& string, const std::string& before, const std::string& after)
