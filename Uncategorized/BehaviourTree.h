@@ -9,7 +9,10 @@ namespace BehaviourTree
     enum class AState { Idle, Running, Success, Failure };
     enum class LoopCondition { None, LoopOnSuccess, LoopOnFailure, Looping };
 
-    struct IBlackboard {};
+    struct IBlackboard
+    {
+        virtual ~IBlackboard() = default;
+    };
 
     struct Action
     {
