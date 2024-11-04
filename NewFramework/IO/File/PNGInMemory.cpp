@@ -1,5 +1,7 @@
 #include "PNGInMemory.h"
 
+#include <cstring>
+
 #define CREATE_EMPTY_RESULT_METHOD(head) \
     IFile::SFileIOResult head \
     { \
@@ -16,7 +18,7 @@ CREATE_EMPTY_RESULT_METHOD(PNG_In_Memory::WriteBytesWithResult(uint8_t* const, c
 // new member for it. Kind of clever I suppose, but confusing at first.
 size_t PNG_In_Memory::ReadBytes(uint8_t* const result, const size_t resultSz)
 {
-    memcpy(result, path.data() + offset, resultSz);
+    std::memcpy(result, path.data() + offset, resultSz);
     offset += resultSz;
     return resultSz;
 }

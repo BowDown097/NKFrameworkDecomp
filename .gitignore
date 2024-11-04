@@ -73,3 +73,5 @@ Thumbs.db
 *.exe
 
 bin/
+/cmake-build-debug
+/.idea

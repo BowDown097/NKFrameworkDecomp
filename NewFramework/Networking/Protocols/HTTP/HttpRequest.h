@@ -1,7 +1,9 @@
 #pragma once
+
 #include <boost/shared_ptr.hpp>
 #include <curl/curl.h>
 #include <map>
+#include <string>
 
 enum CONTENT_TYPE { TYPE_URLENCODED, TYPE_ATOMXML, TYPE_JSON, TYPE_PLAIN };
 enum HTTP_METHOD { METHOD_GET, METHOD_POST, METHOD_HEAD, METHOD_UNKNOWN };
