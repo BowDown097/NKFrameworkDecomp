@@ -24,8 +24,11 @@ public:
     CBasePositionableObject() = default;
 
     void _AddChild(CBasePositionableObject* child, bool first);
+    void AddChild(CBasePositionableObject* child);
     void RemoveChild(CBasePositionableObject* child);
     void FlagDirty();
+    CVec3 GetAbsoluteXYZ();
+    void _SetParent(CBasePositionableObject* parent, bool addBefore);
 
     virtual ~CBasePositionableObject() = default;
     virtual void Draw(bool recursive);

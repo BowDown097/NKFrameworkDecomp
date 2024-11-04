@@ -33,14 +33,12 @@ void CBasePositionableObject::RemoveChild(CBasePositionableObject* child) {
 	child->unlink();
 }
 
-
 void CBasePositionableObject::FlagDirty() {
 	mDirtyFlag = true;
 	for (auto child : mChildren) {
 		child->FlagDirty();
 	}
 }
-
 
 void CBasePositionableObject::Draw(bool recursive) {
 	if (!mVisible) {
@@ -146,17 +144,14 @@ void CBasePositionableObject::SetZ(float z) {
 	FlagDirty();
 }
 
-
-
+void CBasePositionableObject::MoveXYZ(CVec3 vec) {
+	mLocation += vec;
+	FlagDirty();
+}
 
 void CBasePositionableObject::HitTest(CVec2 point, float) {
 	LOG_ERROR("Fallen into blank base");
 	ENFORCE_LINE(154);
-}
-
-void CBasePositionableObject::MoveXYZ(CVec3 vec) {
-	mLocation += vec;
-	FlagDirty();
 }
 
 void CBasePositionableObject::MoveXY(CVec2 vec) {
@@ -323,4 +318,33 @@ void CBasePositionableObject::BaseDrawChildren() {
 	for (auto child : mChildren) {
 		child->Draw(true);
 	}
+}
+
+CVec3 CBasePositionableObject::GetAbsoluteXYZ() {
+	UpdateTransform(false);
+	return mTransform * CVec3{};
+}
+
+void CBasePositionableObject::AddChild(CBasePositionableObject* child) {
+	_AddChild(child, false);
+}
+
+void CBasePositionableObject::_SetParent(CBasePositionableObject* parent, bool addBefore) {
+	if (mParent == parent) {
+		return;
+	}
+	if (mParent != nullptr) {
+		mParent->RemoveChild(this);
+	}
+	if (parent != nullptr) {
+		if (addBefore) {
+			parent->AddFirstChild(this);
+		} else {
+			parent->AddChild(this);
+		}
+		if (parent->mDefaultDirtyState != false) {
+			SetDefaultDirtyState(true);
+		}
+	}
+	FlagDirty();
 }
