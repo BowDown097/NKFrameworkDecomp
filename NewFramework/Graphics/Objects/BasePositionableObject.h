@@ -7,9 +7,12 @@
 #include <boost/intrusive/list.hpp>
 #include <boost/container/list.hpp>
 
+#include <array>
+
 struct _BasePositionableObjectDetail {
     struct SBasePositionableObjectListTag {};
 };
+enum struct SPRITE_ALIGNMENT : int32_t {};
 struct SGameTime;
 class CBasePositionableObject
     : public boost::intrusive::list_base_hook<
@@ -17,6 +20,7 @@ class CBasePositionableObject
         boost::intrusive::link_mode<boost::intrusive::link_mode_type::auto_unlink>, void>
 {
 public:
+    static size_t m_uUpdateTransforms;
     CBasePositionableObject() = default;
 
     void _AddChild(CBasePositionableObject* child, bool first);
@@ -28,44 +32,45 @@ public:
     virtual void Process(const SGameTime&);
     virtual void Process_r(const SGameTime&);
     virtual void HitTest(CVec2, float);
-    virtual void AddFirstChild();
-    virtual void AddChildBefore();
-    virtual void AddChildAfter();
+    virtual void AddFirstChild(CBasePositionableObject* child);
+    virtual void AddChildBefore(CBasePositionableObject* child, CBasePositionableObject* before);
+    virtual void AddChildAfter(CBasePositionableObject* child, CBasePositionableObject* after);
     virtual void DeleteChildren();
-    virtual void SetXYZ();
+    virtual void SetXYZ(CVec3 vec);
     virtual void SetXY(CVec2 vec);
     virtual void SetXY(float x, float y);
-    virtual void SetX();
-    virtual void SetY();
-    virtual void SetZ();
-    virtual void MoveXYZ();
-    virtual void MoveXY();
-    virtual void MoveX();
-    virtual void MoveY();
-    virtual void MoveZ();
+    virtual void SetX(float x);
+    virtual void SetY(float y);
+    virtual void SetZ(float z);
+    virtual void MoveXYZ(CVec3);
+    virtual void MoveXY(CVec2);
+    virtual void MoveX(float x);
+    virtual void MoveY(float y);
+    virtual void MoveZ(float z);
     virtual void SetScale(float x, float y);
     virtual void SetScale(CVec2 vec);
-    virtual void SetScaleX();
-    virtual void SetScaleY();
-    virtual void SetAngle();
-    virtual void SetWH();
-    virtual void SetH();
-    virtual void SetAlignmentX();
-    virtual void SetAlignmentY();
-    virtual void SetAlignmentXY();
-    virtual void GetXYZ();
-    virtual void GetXY();
-    virtual void GetX();
-    virtual void GetY();
-    virtual void GetZ();
-    virtual void GetWH();
-    virtual void GetW();
-    virtual void GetH();
+    virtual void SetScaleX(float x);
+    virtual void SetScaleY(float y);
+    virtual void SetAngle(float angle);
+    virtual void SetWH(CVec2 vec);
+    virtual void SetW(float w);
+    virtual void SetH(float h);
+    virtual void SetAlignmentX(SPRITE_ALIGNMENT);
+    virtual void SetAlignmentY(SPRITE_ALIGNMENT);
+    virtual void SetAlignmentXY(SPRITE_ALIGNMENT x, SPRITE_ALIGNMENT y);
+    virtual CVec3 GetXYZ();
+    virtual CVec2 GetXY();
+    virtual float GetX();
+    virtual float GetY();
+    virtual float GetZ();
+    virtual CVec2 GetWH();
+    virtual float GetW();
+    virtual float GetH();
     virtual void UpdateLocalTransform();
-    virtual void UpdateTransform();
+    virtual void UpdateTransform(bool cascadeUp);
     virtual void UpdateTransform_r();
     virtual void ForceUpdate();
-    virtual void SetScreenTransition();
+    virtual void SetScreenTransition(float, bool);
     virtual void SetDefaultDirtyState(bool state);
     virtual void _DeleteChildrenInternal();
     virtual void BaseDrawChildren();
@@ -78,7 +83,7 @@ public:
     CMatrix mTransform{};
     bool mDirtyFlag = false;
     bool mDefaultDirtyState = false;
-    CVec2 mAlignment{};
+    std::array<SPRITE_ALIGNMENT, 2> mAlignment{};
     CVec3 mLocation{};
     float mRotAngle{};
     CVec2 mScale{};

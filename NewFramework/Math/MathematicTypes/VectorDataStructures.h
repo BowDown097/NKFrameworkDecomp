@@ -62,6 +62,12 @@ public:
 	CVec3 operator*(float scalar) const {
 		return { mX * scalar, mY * scalar, mZ * scalar };
 	}
+	CVec3& operator+=(CVec3 other) {
+		mX += other.mX;
+		mY += other.mY;
+		mZ += other.mZ;
+		return *this;
+	}
 	CVec3& operator*=(float scalar) {
 		mX *= scalar;
 		mY *= scalar;
@@ -76,6 +82,10 @@ public:
 	[[nodiscard]] CVec3 Cross(const CVec3& other) const;
 	[[nodiscard]] float Length() const;
 	[[nodiscard]] CVec3 Normalize() const;
+
+	operator CVec2() const {
+		return { mX, mY };
+	}
 
 	[[nodiscard]] std::string ToString() const;
 
