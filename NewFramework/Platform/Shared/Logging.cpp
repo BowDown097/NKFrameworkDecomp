@@ -59,6 +59,7 @@ void CLogging::PrintError(const char* file, const char* function, int line, cons
     va_end(args);
 }
 
+#define MAX_TEXT_BUFFER 0x5000
 void CLogging::VPrintError(const char* file, const char* function, int line, const char* message, va_list* args)
 {
     if (!message)
@@ -66,11 +67,11 @@ void CLogging::VPrintError(const char* file, const char* function, int line, con
 
     boost::unique_lock<boost::mutex> lock(*m_mutex);
 
-    static char text[20479];
-    vsnprintf(text, sizeof(text) - 1, message, *args);
+    static char text[MAX_TEXT_BUFFER];
+    vsnprintf(text, MAX_TEXT_BUFFER - 1, message, *args);
 
     size_t fileStrippedIndex = StripPath(file);
-    static char final[20480];
+    static char final[MAX_TEXT_BUFFER];
     sprintf(final, ">> %s:%d %s %s", &file[fileStrippedIndex], line, function, text);
     SendToComponents(final);
 
@@ -91,6 +92,7 @@ void CLogging::PrintWarning(const char* message, ...)
     va_end(args);
 }
 
+#define LEN_TIMESTAMP 0x20
 void CLogging::VPrintWarning(const char* message, va_list* args)
 {
     if (!message)
@@ -99,7 +101,7 @@ void CLogging::VPrintWarning(const char* message, va_list* args)
     boost::unique_lock<boost::mutex> lock(*m_mutex);
 
     static size_t result = 0;
-    static char timestamp[32];
+    static char timestamp[LEN_TIMESTAMP];
     static time_t t = time(nullptr);
     size_t timestampSize;
 
@@ -107,7 +109,7 @@ void CLogging::VPrintWarning(const char* message, va_list* args)
     if (t != currentTime)
     {
         tm* local = localtime(&currentTime);
-        timestampSize = strftime(timestamp, sizeof(timestamp), "%d/%m/%y %H:%M:%S > ", local);
+        timestampSize = strftime(timestamp, LEN_TIMESTAMP, "%d/%m/%y %H:%M:%S > ", local);
         result = timestampSize;
         t = currentTime;
     }
@@ -116,25 +118,23 @@ void CLogging::VPrintWarning(const char* message, va_list* args)
         timestampSize = result;
     }
 
-    static char text[20479];
+    static char text[MAX_TEXT_BUFFER];
     size_t textSize;
     if (timestampSize > 0)
     {
         memcpy(text, timestamp, timestampSize);
-        if (timestampSize == 20480)
+        if (timestampSize == MAX_TEXT_BUFFER)
         {
-            lock.unlock();
             return;
         }
 
-        textSize = 20480 - timestampSize;
+        textSize = MAX_TEXT_BUFFER - timestampSize;
     }
     else
     {
-        textSize = 20480;
+        textSize = MAX_TEXT_BUFFER;
     }
 
     vsnprintf(&text[timestampSize], textSize, message, *args);
     SendToComponents(text);
-    lock.unlock();
 }
