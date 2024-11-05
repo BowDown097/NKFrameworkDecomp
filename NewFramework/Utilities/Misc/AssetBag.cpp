@@ -14,43 +14,38 @@ CAssetBag::CAssetBag(IBasePointers* basePointers, const std::string& source)
 
 bool CAssetBag::Ready() {
 	boost::unique_lock lock{mRecursiveMutex};
-	//TODO: Figure out what the fuck happens here
+	for (auto& [type, map] : mActiveAssets) {
+		for (auto& [name, state] : map) {
+			if (state == eAssetState::PENDING) {
+				return false;
+			}
+		}
+	}
+	for (auto& [type, map] : mSuspendedAssets) {
+		for (auto& [name, state] : map) {
+			if (state == eSuspendedState::SUSPENDED) {
+				return false;
+			}
+		}
+	}
 	return true;
 }
 
 void CAssetBag::Reset() {
 	boost::unique_lock lock{mRecursiveMutex};
-	//TODO: Figure out here too
-	// Looks like theres a bunch of loops and shit calling StopUsing and Resume... some kind
-	// of asset context switching mechanism? I have no clue!
+	for (auto& [type, map] : mActiveAssets) {
+		for (auto& [name, state] : map) {
+			StopUsing(type, name, false);
+		}
+	}
+	for (auto& [type, map] : mSuspendedAssets) {
+		for (auto& [name, state] : map) {
+			Resume(type, name);
+		}
+	}
 	mActiveAssets.clear();
 	mSuspendedAssets.clear();
 }
-
-void CAssetBag::Resume(eAssetType assetType, const std::string& assetName) {
-	boost::unique_lock lock{mRecursiveMutex};
-	auto& suspendedOfType = mSuspendedAssets[assetType];
-	if (suspendedOfType.find(assetName) == suspendedOfType.end()) {
-		return;
-	}
-
-	bool resumed = false;
-	switch(assetType) {
-		case eAssetType::TEXTURE:
-			resumed = m_pTextureManager->ResumeTexture(assetName);
-			break;
-		case eAssetType::FONT:
-			//TODO: Define this
-			//resumed = m_pFontManager->ResumeFont(assetName);
-			break;
-		default:
-			break;
-	};
-
-	suspendedOfType[assetName] = resumed ? eSuspendedState::ACTIVE : eSuspendedState::SUSPENDED;
-}
-
-
 
 
 
@@ -93,5 +88,51 @@ void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 			break;
 		default:
 			break;
+	}
+}
+
+void CAssetBag::Resume(eAssetType assetType, const std::string& assetName) {
+	boost::unique_lock lock{mRecursiveMutex};
+	auto& suspendedOfType = mSuspendedAssets[assetType];
+	if (suspendedOfType.find(assetName) == suspendedOfType.end()) {
+		return;
+	}
+
+	bool resumed = false;
+	switch(assetType) {
+		case eAssetType::TEXTURE:
+			resumed = m_pTextureManager->ResumeTexture(assetName);
+		break;
+		case eAssetType::FONT:
+			//TODO: Define this
+			//resumed = m_pFontManager->ResumeFont(assetName);
+			break;
+		default:
+			break;
+	};
+
+	suspendedOfType[assetName] = resumed ? eSuspendedState::ACTIVE : eSuspendedState::SUSPENDED;
+}
+
+void CAssetBag::StopUsing(const eAssetType& type, const std::string& assetName, bool erase) {
+	boost::unique_lock lock{mRecursiveMutex};
+
+	auto& activeOfType = mActiveAssets[type];
+	if (activeOfType.find(assetName) == activeOfType.end()) {
+		return;
+	}
+	switch(type) {
+		case eAssetType::TEXTURE:
+			m_pTextureManager->DecTextureRefCount(assetName, mAssetSource);
+		break;
+		case eAssetType::FONT:
+			//TODO: Define this
+			//m_pFontManager->DecFontRefCount(assetName);
+			break;
+		default:
+			break;
+	}
+	if (erase) {
+		activeOfType.erase(assetName);
 	}
 }

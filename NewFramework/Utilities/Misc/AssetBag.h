@@ -20,9 +20,9 @@ public:
     };
     enum struct eSuspendedState {
         INVALID,
-        ACTIVE,
+        SUSPENDED,
         UNKNOWN_STATE,
-        SUSPENDED
+        ACTIVE
     };
 
     explicit CAssetBag(IBasePointers* basePointers, const std::string& source);
@@ -30,17 +30,16 @@ public:
     bool Ready();
     void Reset();
     void Resume(eAssetType assetType, const std::string& assetName);
-    void StartUsing(const eAssetType& type, const std::string&);
+    void StartUsing(const eAssetType& type, const std::string& assetName);
+    void StopUsing(const eAssetType& type, const std::string& assetName, bool erase);
 
     virtual ~CAssetBag() = default;
 
     CTextureManager* m_pTextureManager = nullptr;
     CTextureLoader* m_pTextureLoader = nullptr;
-    // Another field here iirc
     CFontManager* m_pFontManager = nullptr;
     boost::unordered::unordered_map<eAssetType, boost::unordered_map<std::string, eAssetState>> mActiveAssets{};
-    boost::unordered::unordered_map<eAssetType, boost::unordered_map<std::string, eSuspendedState>> mSuspendedAssets{};
-    // Unknown fields here
     std::string mAssetSource{};
+    boost::unordered::unordered_map<eAssetType, boost::unordered_map<std::string, eSuspendedState>> mSuspendedAssets{};
     boost::recursive_mutex mRecursiveMutex{};
 };
