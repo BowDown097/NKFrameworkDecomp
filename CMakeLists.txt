@@ -12,6 +12,8 @@ target_sources(NKFrameworkDecomp
         NewFramework/Analytics/DGAnalyticsData.cpp
         NewFramework/Analytics/DGAnalyticsEventGroups.cpp
         NewFramework/BaseApplication/AppClass/AppClass.cpp
+        NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.cpp
+        NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
@@ -46,6 +48,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/Analytics/IAnalytics.h
             NewFramework/Analytics/SAnalyticsInitialisation.h
             NewFramework/BaseApplication/AppClass/AppClass.h
+            NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.h
+            NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
