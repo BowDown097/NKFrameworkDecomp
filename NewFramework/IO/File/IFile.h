@@ -1,7 +1,11 @@
 #pragma once
+
 #include "FilePlatformData.h"
+
 #include <boost/make_shared.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
+
+#include <string>
 
 enum class eFileOpenMode { Write, Read, ReadWriteNew, ReadWriteExisting, Append };
 

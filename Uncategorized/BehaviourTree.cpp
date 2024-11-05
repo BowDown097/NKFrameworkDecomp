@@ -299,7 +299,7 @@ namespace BehaviourTree
     void Parallel::CheckChildState(IBlackboard* blackboard)
     {
         auto checkState = [this](AState state, bool passOnOne) {
-            auto stateEqual = [](const Action* action, AState state) { return action->state == state; };
+            auto stateEqual = [state](const Action* action) -> bool { return action->state == state; };
             return passOnOne
                 ? std::any_of(actions->begin(), actions->end(), stateEqual)
                 : std::all_of(actions->begin(), actions->end(), stateEqual);
