@@ -33,7 +33,7 @@ public:
     void StartUsing(const eAssetType& type, const std::string& assetName);
     void StopUsing(const eAssetType& type, const std::string& assetName, bool erase);
 
-    virtual ~CAssetBag() = default;
+    virtual ~CAssetBag();
 
     CTextureManager* m_pTextureManager = nullptr;
     CTextureLoader* m_pTextureLoader = nullptr;

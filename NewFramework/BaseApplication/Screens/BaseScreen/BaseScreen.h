@@ -45,7 +45,9 @@ public:
     virtual void ApplicationWillResignActive();
     virtual void ApplicationWillTerminate();
     virtual void ApplicationDidBecomeActive();
+#ifdef PLATFORM_HAS_SELECT_BUTTON
     virtual void SelectButtonPressed();
+#endif
     virtual void BackButtonPressed();
     virtual void ScreenResized();
     virtual std::string ChildScreenClosed(std::string screenName, bool param_2);

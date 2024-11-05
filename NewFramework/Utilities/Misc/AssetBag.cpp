@@ -47,10 +47,10 @@ void CAssetBag::Reset() {
 	mSuspendedAssets.clear();
 }
 
-
-
-
-
+CAssetBag::~CAssetBag() {
+	Reset();
+	m_pTextureLoader->RemoveListener(this);
+}
 void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 	boost::unique_lock lock{mRecursiveMutex};
 	auto& activeOfType = mActiveAssets[type];

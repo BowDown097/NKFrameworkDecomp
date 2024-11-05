@@ -15,6 +15,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.cpp
         NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
+        NewFramework/BaseApplication/LegacyFeatures.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
         NewFramework/Graphics/Management/PVR/PVRTextures.cpp
@@ -52,6 +53,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.h
             NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
+            NewFramework/BaseApplication/LegacyFeatures.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
             NewFramework/Graphics/Management/PVR/PVRTextures.h

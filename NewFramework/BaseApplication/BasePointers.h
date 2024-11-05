@@ -1,10 +1,9 @@
 #pragma once
 
-// TODO: figure out field_0, field_90, field_C0, and field_D0 (if that's even possible)
+// TODO: figure out field_90, field_C0, and field_D0 (if that's even possible)
 class IBasePointers
 {
 public:
-    void* field_0{};
     class CTextureManager* textureManager{}; // 0x08
     class CTextureLoader* textureLoader{}; // 0x10
     class CCore* core{}; // 0x18
@@ -36,4 +35,6 @@ public:
     IBasePointers();
     void CopyFrom(const IBasePointers& other);
     void CopyTo(IBasePointers& other);
+
+	virtual ~IBasePointers() = default;
 };
