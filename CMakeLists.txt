@@ -36,6 +36,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
+        NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         Uncategorized/BehaviourTree.cpp
         Uncategorized/SpriteInformation.cpp

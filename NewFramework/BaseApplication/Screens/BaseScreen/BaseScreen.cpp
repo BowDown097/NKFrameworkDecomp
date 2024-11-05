@@ -10,7 +10,7 @@ void CBaseScreen::_PreloadAssets() {}
 void CBaseScreen::Init(IScreenData* screenData)
 {
     if(this->m_pAssetBag == nullptr) {
-        this->m_pAssetBag = boost::make_shared<CAssetBag>(this);
+        this->m_pAssetBag = boost::make_shared<CAssetBag>(this, mScreenName);
     }
     this->_PreloadAssets();
     this->mScreenState = eScreenState::INITIALIZED;
@@ -86,11 +86,11 @@ void CBaseScreen::ProcessUninit()
         this->mScreenState = eScreenState::DESTROYING;
     }
 }
-void CBaseScreen::Process(const SGameTime& pGameTime)
+void CBaseScreen::Process(const SGameTime& gameTime)
 {
 
 }
-void CBaseScreen::Input(const SGameTime& pGameTime)
+void CBaseScreen::Input(const SGameTime& gameTime)
 {
 
 }
@@ -128,7 +128,7 @@ void CBaseScreen::RemoveScreen(CBaseScreen* child)
 		++it;
 	}
 }
-void CBaseScreen::PrintTree(int param_1, std::stringstream outstream)
+void CBaseScreen::PrintTree(int param_1, std::stringstream outStream)
 {
     //TODO: Figure out this code (its mostly useless afaik so like meh)
 }

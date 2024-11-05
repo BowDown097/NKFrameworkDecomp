@@ -59,7 +59,7 @@ public:
     virtual bool AllAssetsLoaded();
     virtual void SetupPointers(CBaseScreen* child);
     virtual void RemoveScreen(CBaseScreen* child);
-    virtual void PrintTree(int param_1, std::stringstream outstream);
+    virtual void PrintTree(int param_1, std::stringstream outStream);
 
     void StartUsingAsset(CAssetBag::eAssetType& assetType, std::string& assetName);
 };

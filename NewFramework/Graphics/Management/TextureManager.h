@@ -71,8 +71,8 @@ public:
     void LoadTexture(const std::string&, eTextureLoadMethod);
     void UnloadTexture(const std::string&);
     void ReloadTextures();
-    unsigned int IncTextureRefCount(const std::string&, const std::string&);
-    unsigned int DecTextureRefCount(const std::string&, const std::string&);
+    int IncTextureRefCount(const std::string&, const std::string&);
+    int DecTextureRefCount(const std::string&, const std::string&);
     bool SuspendTexture(const std::string&);
     bool ResumeTexture(const std::string&);
     bool GetTextureAvailable(const std::string&);
