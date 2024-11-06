@@ -50,9 +50,19 @@ struct SNKFileClientBlackboard : SNKErrorBlackboard
     bool field_229; // 0x229
 };
 
-class NKSessionBlackboard : public SNKErrorBlackboard
+struct NKSessionBlackboard : SNKErrorBlackboard
 {
 public:
+    NKSessionImpl* sessionImpl; // 0x60
+    int appID; // 0x68
+    int skuID; // 0x6C
+    std::string privateKey; // 0x70
+    eNKLinkServerCluster serverCluster; // 0x88
+    std::vector<std::string> providers; // 0x90
+    boost::shared_ptr<C_NKLoginWebView> webView; // 0xA8
+    eNKServiceAction serviceAction; // 0xB8
+    eNKLoginService loginService; // 0xBC
+
     void LogMsg(std::string message) { messages.push_back(message); }
     void OutputFullLog() {}
 
@@ -63,15 +73,6 @@ public:
         : sessionImpl(sessionImpl), appID(appID), skuID(skuID), privateKey(privateKey), serverCluster(serverCluster),
           providers(providers), accessToken(accessToken), responseUser(responseUser) {}
 private:
-    NKSessionImpl* sessionImpl; // 0x60
-    int appID; // 0x68
-    int skuID; // 0x6C
-    std::string privateKey; // 0x70
-    eNKLinkServerCluster serverCluster; // 0x88
-    std::vector<std::string> providers; // 0x90
-    boost::shared_ptr<C_NKLoginWebView> webView; // 0xA8
-    eNKServiceAction serviceAction; // 0xB8
-    eNKLoginService loginService; // 0xBC
     bool field_C0 = true; // 0xC0
     NKAccessToken accessToken; // 0xC8
     NKResponseUser responseUser; // 0xE8

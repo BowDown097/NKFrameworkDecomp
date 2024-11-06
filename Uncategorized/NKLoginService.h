@@ -2,10 +2,15 @@
 #include <string>
 #include <vector>
 
-enum class eNKLoginService { Cache, Email, GameCenter, Facebook, GooglePlay, Steam, Apple };
-enum class eNKServiceAction { Login, Create, Link };
+enum class eNKLoginService { InBlackboard = -2, None = -1, Cache, Email, GameCenter, Facebook, GooglePlay, Steam, Apple };
+enum class eNKServiceAction { InBlackboard = -2, None = -1, Login, Create, Link };
 enum class eNKServiceAuthMethod { Email, Platform }; // Platform is i.e. Steam on PC, Google Play on Android
 class I_NKLoginServiceObserver;
+
+std::string GetServiceActionStringFromEnum(const eNKServiceAction& serviceAction);
+std::string GetLoginServiceStringFromEnum(const eNKLoginService& loginService);
+eNKLoginService GetLoginServiceEnumFromString(const std::string& str);
+eNKLoginService FindLoginServiceEnumInString(const std::string& str);
 
 class I_NKLoginService
 {

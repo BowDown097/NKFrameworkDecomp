@@ -1,3 +1,4 @@
+#pragma once
 #include "NewFramework/Networking/Protocols/HTTP/IHttpCallback.h"
 
 enum class eNKLinkServerCluster { ALAN_DEV, ROSS_DEV, STAGING, LIVE, NONE };

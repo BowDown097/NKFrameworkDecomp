@@ -36,6 +36,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/StringHelper.cpp
         Uncategorized/BehaviourTree.cpp
+        Uncategorized/NKLoginService.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
     PUBLIC
@@ -63,6 +64,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Math/Matrix.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
+            NewFramework/Networking/NKAPI/NKError.h
             NewFramework/Networking/NKAPI/NKSignature.h
             NewFramework/Networking/Protocols/HTTP/HttpRequest.h
             NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
@@ -77,6 +79,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
             NewFramework/Utilities/StringHelper.h
             Uncategorized/BehaviourTree.h
+            Uncategorized/Blackboards.h
+            Uncategorized/NKLoginService.h
             Uncategorized/ReferenceCounted.h
             Uncategorized/SpriteInformation.h
             Uncategorized/StuffToRefactor.h
