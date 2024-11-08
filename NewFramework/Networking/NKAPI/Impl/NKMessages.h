@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdint>
-#include <string>
-#include <vector>
+#include <json_spirit/json_spirit_value.h>
 
 struct NKMessageSession
 {
@@ -53,3 +52,16 @@ struct NKResponseUtilityTime
 {
     time_t time;
 };
+
+namespace NKJSON
+{
+    template<typename T>
+    const bool TryParse(T& out, const std::string& data);
+    template<typename T>
+    std::string Serialise(const T& val);
+
+    template<> std::string Serialise(const NKMessage& val);
+
+    void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
+    void Serialise(const NKMessage& val, json_spirit::mObject& obj);
+}
