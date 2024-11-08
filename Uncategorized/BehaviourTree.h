@@ -137,7 +137,7 @@ namespace BehaviourTree
 
     struct Decorator : Action
     {
-        Action* child; // 0x10
+        Action* child{}; // 0x10
 
         void Start(IBlackboard* blackboard) override;
         void Stop(IBlackboard* blackboard) override;
