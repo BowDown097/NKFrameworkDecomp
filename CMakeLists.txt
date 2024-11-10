@@ -32,6 +32,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Platform/Shared/Assert.cpp
         NewFramework/Platform/Shared/Core.cpp
         NewFramework/Platform/Shared/Logging.cpp
+        NewFramework/ThirdParty/easyzlib/easyzlib.c
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
@@ -74,6 +75,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Platform/Shared/Core.h
             NewFramework/Platform/Shared/Logging.h
             NewFramework/Platform/Shared/LoggingComponent.h
+            NewFramework/ThirdParty/easyzlib/easyzlib.h
             NewFramework/ThirdParty/libpng/load_png.h
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
