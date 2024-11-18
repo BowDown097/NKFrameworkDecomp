@@ -63,6 +63,11 @@ public:
     eNKServiceAction serviceAction; // 0xB8
     eNKLoginService loginService; // 0xBC
     bool field_C0 = true; // 0xC0
+    NKAccessToken accessToken; // 0xC8
+    NKResponseUser responseUser; // 0xE8
+    bool newUser{}; // 0x1A8
+    bool uiWasShown{}; // 0x1A9
+    eNKLoginService loginServiceFromToken; // 0x1AC
 
     void LogMsg(std::string message) { messages.push_back(message); }
     void OutputFullLog() {}
@@ -74,11 +79,6 @@ public:
         : sessionImpl(sessionImpl), appID(appID), skuID(skuID), privateKey(privateKey), serverCluster(serverCluster),
           providers(providers), accessToken(accessToken), responseUser(responseUser) {}
 private:
-    NKAccessToken accessToken; // 0xC8
-    NKResponseUser responseUser; // 0xE8
-    bool newUser{}; // 0x1A8
-    bool uiWasShown{}; // 0x1A9
-    eNKLoginService loginServiceFromToken; // 0x1AC
     std::vector<std::string> messages; // 0x1B0
 };
 

@@ -2,6 +2,22 @@
 #include "SAnalyticsInitialisation.h"
 #include "Uncategorized/Version.h"
 
+static const std::string nullString = "";
+static const std::string CANNOT_FIND_LINK = "ERR_USER_CANNOT_FIND_LINK";
+static const std::string sNKRoot = "LiNK";
+static const std::string sNKAccountLinked = "AccountLinked";
+static const std::string sNKSessionOpen = "SessionOpen";
+static const std::string sNKSessionOpened = "SessionOpened";
+static const std::string sNKSessionSwitch = "SessionSwitch";
+static const std::string sNKNewUser = "NewUser";
+static const std::string sNKExistingUser = "ExistingUser";
+static const std::string sNKError_HttpParse = "HTTP:Parse";
+static const std::string sNKError_HttpSecurity = "HTTP:Security";
+static const std::string sNKError_HttpLink = "HTTP:Link";
+static const std::string sNKError_HttpRequest = "HTTP:Request";
+static const std::string sNKError_HttpError = "HTTP:Error";
+static const std::string sNKError_HttpFileWrite = "HTTP:FileWrite";
+
 class DGAnalytics
 {
 public:
