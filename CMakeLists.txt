@@ -16,12 +16,15 @@ target_sources(NKFrameworkDecomp
         NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
         NewFramework/BaseApplication/LegacyFeatures.cpp
+        NewFramework/Graphics/Font/FontManager.cpp
+        NewFramework/Graphics/Font/Font.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
         NewFramework/Graphics/Management/PVR/PVRTextures.cpp
         NewFramework/Graphics/Management/TextureLoader.cpp
         NewFramework/Graphics/Management/TextureManager.cpp
         NewFramework/Graphics/Objects/BasePositionableObject.cpp
+        NewFramework/Graphics/Render/RenderSystem.cpp
         NewFramework/Graphics/Texture.cpp
         NewFramework/IO/File/BaseFileIO.cpp
         NewFramework/IO/File/FilePolicy.cpp
@@ -40,6 +43,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         Uncategorized/BehaviourTree.cpp
+        Uncategorized/RGBA.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
     PUBLIC
@@ -54,11 +58,14 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
             NewFramework/BaseApplication/LegacyFeatures.h
+            NewFramework/Graphics/Font/FontManager.h
+            NewFramework/Graphics/Font/Font.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
             NewFramework/Graphics/Management/PVR/PVRTextures.h
             NewFramework/Graphics/Management/TextureLoader.h
             NewFramework/Graphics/Management/TextureManager.h
+            NewFramework/Graphics/Render/RenderSystem.h
             NewFramework/Graphics/Texture.h
             NewFramework/IO/File/BaseFileIO.h
             NewFramework/IO/File/FilePlatformData.h
@@ -85,6 +92,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/StringHelper.h
             Uncategorized/BehaviourTree.h
             Uncategorized/ReferenceCounted.h
+            Uncategorized/RGBA.h
             Uncategorized/SpriteInformation.h
             Uncategorized/StuffToRefactor.h
             Uncategorized/Version.h
