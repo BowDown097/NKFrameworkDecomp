@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 add_library(NKFrameworkDecomp)
+
+set_target_properties(NKFrameworkDecomp
+    PROPERTIES
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED ON)
+
+set(TARGET_PLATFORM "steam" CACHE STRING "The platform that the game will be distributed to.")
+target_compile_definitions(NKFrameworkDecomp PUBLIC TARGET_PLATFORM="${TARGET_PLATFORM}")
 
 target_sources(NKFrameworkDecomp
     PRIVATE
@@ -12,6 +16,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Analytics/DGAnalyticsData.cpp
         NewFramework/Analytics/DGAnalyticsEventGroups.cpp
         NewFramework/BaseApplication/AppClass/AppClass.cpp
+        NewFramework/BaseApplication/AppClass/NKApplication.cpp
         NewFramework/BaseApplication/BasePointers.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
@@ -38,6 +43,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/StringHelper.cpp
         Uncategorized/BehaviourTree.cpp
+        Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
@@ -49,6 +55,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/Analytics/IAnalytics.h
             NewFramework/Analytics/SAnalyticsInitialisation.h
             NewFramework/BaseApplication/AppClass/AppClass.h
+            NewFramework/BaseApplication/AppClass/NKApplication.h
+            NewFramework/BaseApplication/AppClass/NKSDKApp.h
             NewFramework/BaseApplication/BasePointers.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
@@ -83,6 +91,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/StringHelper.h
             Uncategorized/BehaviourTree.h
             Uncategorized/Blackboards.h
+            Uncategorized/GlobalVariables.h
             Uncategorized/NKLoginService.h
             Uncategorized/ReferenceCounted.h
             Uncategorized/SpriteInformation.h
