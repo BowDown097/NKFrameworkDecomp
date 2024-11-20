@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum class NKErrorType { VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5 };
+enum class NKErrorType { VALUE0, VALUE1, VALUE2, VALUE3, VALUE4, VALUE5, VALUE6, VALUE7 };
 
 struct NKError
 {

@@ -1,7 +1,6 @@
 #pragma once
 #include <cstdint>
-#include <string>
-#include <vector>
+#include <json_spirit/json_spirit_value.h>
 
 struct NKMessageSession
 {
@@ -25,6 +24,25 @@ struct NKMessageAuth
     std::string device; // 0x18
     std::uint32_t appID; // 0x30
     std::uint32_t skuID; // 0x34
+};
+
+struct NKMessageErrorDetails
+{
+    std::string reason; // 0x00
+    std::string fix; // 0x18
+};
+
+struct NKMessageError
+{
+    std::string type; // 0x00
+    NKMessageErrorDetails details; // 0x18
+};
+
+struct NKMessageResponse
+{
+    NKMessageError error; // 0x00
+    std::string data; // 0x48
+    std::string sig; // 0x60
 };
 
 struct NKMessage
@@ -53,3 +71,21 @@ struct NKResponseUtilityTime
 {
     time_t time;
 };
+
+namespace NKJSON
+{
+    template<typename T>
+    const bool TryParse(T& out, const std::string& data);
+    template<typename T>
+    std::string Serialise(const T& val);
+
+    template<> std::string Serialise(const NKMessage& val);
+    template<> const bool TryParse(NKMessageResponse& out, const std::string& data);
+
+    void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
+    void Serialise(const NKMessage& val, json_spirit::mObject& obj);
+
+    const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKMessageResponse& out, const json_spirit::mObject& obj);
+}

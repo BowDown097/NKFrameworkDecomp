@@ -53,16 +53,6 @@ struct SNKFileClientBlackboard : SNKErrorBlackboard
 class NKSessionBlackboard : public SNKErrorBlackboard
 {
 public:
-    void LogMsg(std::string message) { messages.push_back(message); }
-    void OutputFullLog() {}
-
-    NKSessionBlackboard(NKSessionImpl* sessionImpl, const NKAccessToken& accessToken,
-                        const NKResponseUser& responseUser, const int& appID,
-                        const int& skuID, const std::string& privateKey,
-                        eNKLinkServerCluster serverCluster, std::vector<std::string> providers)
-        : sessionImpl(sessionImpl), appID(appID), skuID(skuID), privateKey(privateKey), serverCluster(serverCluster),
-          providers(providers), accessToken(accessToken), responseUser(responseUser) {}
-private:
     NKSessionImpl* sessionImpl; // 0x60
     int appID; // 0x68
     int skuID; // 0x6C
@@ -78,6 +68,17 @@ private:
     bool newUser{}; // 0x1A8
     bool uiWasShown{}; // 0x1A9
     eNKLoginService loginServiceFromToken; // 0x1AC
+
+    void LogMsg(std::string message) { messages.push_back(message); }
+    void OutputFullLog() {}
+
+    NKSessionBlackboard(NKSessionImpl* sessionImpl, const NKAccessToken& accessToken,
+                        const NKResponseUser& responseUser, const int& appID,
+                        const int& skuID, const std::string& privateKey,
+                        eNKLinkServerCluster serverCluster, std::vector<std::string> providers)
+        : sessionImpl(sessionImpl), appID(appID), skuID(skuID), privateKey(privateKey), serverCluster(serverCluster),
+          providers(providers), accessToken(accessToken), responseUser(responseUser) {}
+private:
     std::vector<std::string> messages; // 0x1B0
 };
 

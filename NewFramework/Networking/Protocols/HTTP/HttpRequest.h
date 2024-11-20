@@ -1,5 +1,4 @@
 #pragma once
-
 #include <boost/shared_ptr.hpp>
 #include <curl/curl.h>
 #include <map>
@@ -47,7 +46,7 @@ struct SHttpRequest
     std::string requestData; // 0x100
     boost::shared_ptr<CurlData> curl; // 0x118
 
-    std::string GetDownloadedDataStr();
-    std::string GetResponseHeaderBase64();
-    std::string GetErrorString();
+    std::string GetDownloadedDataStr() const;
+    std::string GetResponseHeaderBase64() const;
+    std::string GetErrorString() const;
 };

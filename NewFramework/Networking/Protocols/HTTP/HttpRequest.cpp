@@ -1,12 +1,12 @@
 #include "HttpRequest.h"
 #include "NewFramework/Utilities/Encoding.h"
 
-std::string SHttpRequest::GetDownloadedDataStr()
+std::string SHttpRequest::GetDownloadedDataStr() const
 {
     return std::string(responseData.begin(), responseData.end());
 }
 
-std::string SHttpRequest::GetResponseHeaderBase64()
+std::string SHttpRequest::GetResponseHeaderBase64() const
 {
     std::string headers;
     for (auto it = responseHeaders.begin(); it != responseHeaders.end(); ++it)
@@ -19,7 +19,7 @@ std::string SHttpRequest::GetResponseHeaderBase64()
         return "FAILED TO TRANSLATE HEADERS";
 }
 
-std::string SHttpRequest::GetErrorString()
+std::string SHttpRequest::GetErrorString() const
 {
     return curl_easy_strerror(curl->error);
 }

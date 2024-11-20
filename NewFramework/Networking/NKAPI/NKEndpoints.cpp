@@ -4,7 +4,7 @@
 
 namespace NKEndpoints
 {
-    int SendMessage(const std::string& endpoint, std::map<std::string, std::string>& headers,
+    int sendMessage(const std::string& endpoint, std::map<std::string, std::string>& headers,
                     const std::string& data, const std::string& callbackKey, HTTP_METHOD method,
                     IHttpCallback* cb, SHttpTimeoutOptions timeoutOptions)
     {
@@ -13,7 +13,7 @@ namespace NKEndpoints
 
         SHttpRequest req;
         req.callbackKey = callbackKey;
-        req.contentType = CONTENT_TYPE::TYPE_JSON;
+        req.contentType = TYPE_JSON;
         req.method = method;
         req.requestData = data;
         req.requestHeaders = headers;

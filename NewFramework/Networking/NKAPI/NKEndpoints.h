@@ -1,9 +1,10 @@
+#pragma once
 #include "NewFramework/Networking/Protocols/HTTP/IHttpCallback.h"
 
 enum class eNKLinkServerCluster { ALAN_DEV, ROSS_DEV, STAGING, LIVE, NONE };
 enum class eNKPublicUrlChannel { STANDARD, PRIORITY };
 
-// TODO: implement every method that's not SendMessage, and also come up with field names for Endpoint
+// TODO: implement every method that's not sendMessage, and also come up with field names for Endpoint
 namespace NKEndpoints
 {
     struct Endpoint
@@ -149,7 +150,7 @@ namespace NKEndpoints
     std::string GetUtilityEsCreate();
     std::string GetUtilityEsUpdate();
     std::string GetPaymentAppleAttribution();
-    int SendMessage(const std::string& endpoint, std::map<std::string, std::string>& headers,
+    int sendMessage(const std::string& endpoint, std::map<std::string, std::string>& headers,
                     const std::string& data, const std::string& callbackKey, HTTP_METHOD method,
                     IHttpCallback* cb, SHttpTimeoutOptions timeoutOptions);
 }

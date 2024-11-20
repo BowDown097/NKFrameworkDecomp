@@ -46,10 +46,9 @@ struct SpriteInformation
     RectStruct rect; // 0x00
     std::vector<CVec2> field_88; // 0x88
     std::vector<CVec2> field_A0; // 0xA0
-    std::string field_B8;
-    int field_D0;
-    float field_D4;
-    int field_D8;
+    std::string field_B8; // 0xB8
+    int field_D0; // 0xD0
+    float field_D4; // 0xD4
 
     void SetTexCoords(float, float, float, float, uint32_t, uint32_t);
     void SetGridOfTexCoords(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);

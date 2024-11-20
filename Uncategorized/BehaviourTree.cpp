@@ -40,6 +40,8 @@ namespace BehaviourTree
     Action* Decider::clone()
     {
         Decider* out = new Decider;
+        out->state = state;
+        out->lastState = lastState;
         out->pValue = pValue;
         return out;
     }
@@ -69,6 +71,8 @@ namespace BehaviourTree
     Action* Wait::clone()
     {
         Wait* out = new Wait;
+        out->state = state;
+        out->lastState = lastState;
         out->min = min;
         out->max = max;
         out->elapsed = elapsed;
