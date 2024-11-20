@@ -1,5 +1,6 @@
 #pragma once
 
+#include <NewFramework/Graphics/Font/FontDefinition.h>
 #include <Uncategorized/RGBA.h>
 
 #include <boost/smart_ptr/shared_ptr.hpp>
@@ -21,7 +22,7 @@ struct SLocalisedFontInfo {
 	bool mE = false;
 	bool mF = false;
 	CRGBA mColor{};
-	float mG = 0.0f;
+	float mAlpha = 0.0f;
 };
 
 class CFontManager {
@@ -46,5 +47,5 @@ public:
 	void UpdateFont(const SLocalisedFontInfo& fontInfo);
 
 	std::vector<boost::shared_ptr<IFontImporter>> mFontImporters{};
-	std::map<std::string, boost::shared_ptr<SFontDefinition>> mFontDefinitions{};
+	std::map<std::string, boost::shared_ptr<const SFontDefinition>> mFontDefinitions{};
 };

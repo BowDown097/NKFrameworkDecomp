@@ -20,7 +20,7 @@ public:
 	virtual ~CFont() = default;
 
 	int mUnknownA = -1;
-	boost::shared_ptr<SFontDefinition> mpDefinition = nullptr;
+	boost::shared_ptr<const SFontDefinition> mpDefinition = nullptr;
 	float mFontSize = 0.0f; // Unsure
 	std::string mName{};
 	bool mUnknownC = false;
