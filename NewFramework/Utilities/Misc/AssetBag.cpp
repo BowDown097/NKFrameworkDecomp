@@ -1,5 +1,6 @@
 #include "AssetBag.h"
 
+#include <NewFramework/Graphics/Font/FontManager.h>
 #include <NewFramework/Graphics/Management/TextureManager.h>
 #include <NewFramework/Platform/Shared/Logging.h>
 
@@ -47,10 +48,9 @@ void CAssetBag::Reset() {
 	mSuspendedAssets.clear();
 }
 
-CAssetBag::~CAssetBag() {
-	Reset();
-	m_pTextureLoader->RemoveListener(this);
-}
+
+
+
 void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 	boost::unique_lock lock{mRecursiveMutex};
 	auto& activeOfType = mActiveAssets[type];
@@ -59,7 +59,7 @@ void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 	}
 
 	switch(type) {
-		case eAssetType::TEXTURE:
+		case eAssetType::TEXTURE: {
 			if (2 < m_pTextureManager->IncTextureRefCount(name, mAssetSource)) {
 				LOG_ERROR("Texture not found? \"%s\"");
 				ENFORCE_LINE(65);
@@ -69,26 +69,32 @@ void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 				}
 			}
 			break;
+		}
 
 
 
 
-
-		case eAssetType::FONT:
-			//TODO: Implement
-			/*auto textureName = m_pFontManager->GetFontTextureName(name);
-			if (2 < m_pFontManager->IncFontRefCount(name)) {
-				LOG_ERROR("Font not found? \"%s\"");*/
+		
+		case eAssetType::FONT: {
+			auto textureName = m_pFontManager->GetFontTextureName(name);
+			if (2 < m_pFontManager->IncFontRefCount(name, mAssetSource)) {
+				LOG_ERROR("Font not found? \"%s\"");
 				ENFORCE_LINE(82);
-			/*} else {
+			} else {
 				if (m_pTextureManager->IsTextureLoaded(textureName)) {
 					activeOfType[name] = eAssetState::LOADED;
 				}
-			}*/
+			}
 			break;
+		}
 		default:
 			break;
 	}
+}
+
+CAssetBag::~CAssetBag() {
+	Reset();
+	m_pTextureLoader->RemoveListener(this);
 }
 
 void CAssetBag::Resume(eAssetType assetType, const std::string& assetName) {
@@ -104,8 +110,7 @@ void CAssetBag::Resume(eAssetType assetType, const std::string& assetName) {
 			resumed = m_pTextureManager->ResumeTexture(assetName);
 		break;
 		case eAssetType::FONT:
-			//TODO: Define this
-			//resumed = m_pFontManager->ResumeFont(assetName);
+			resumed = m_pFontManager->ResumeFont(assetName);
 			break;
 		default:
 			break;
@@ -126,8 +131,7 @@ void CAssetBag::StopUsing(const eAssetType& type, const std::string& assetName, 
 			m_pTextureManager->DecTextureRefCount(assetName, mAssetSource);
 		break;
 		case eAssetType::FONT:
-			//TODO: Define this
-			//m_pFontManager->DecFontRefCount(assetName);
+			m_pFontManager->DecFontRefCount(assetName, mAssetSource);
 			break;
 		default:
 			break;

@@ -41,7 +41,7 @@ public:
 	const boost::shared_ptr<const SFontDefinition> ImportFontDefinition(const std::string& fontName, const bool unknown);
 	int IncFontRefCount(const std::string& name, const std::string& source);
 	void PrintRefCountInfo() const;
-	void ResumeFont(const std::string& fontName);
+	bool ResumeFont(const std::string& fontName);
 	void SetCharacterFallbackEnabled(bool enabled);
 	void SuspendFont(const std::string& fontName);
 	void UpdateFont(const SLocalisedFontInfo& fontInfo);
