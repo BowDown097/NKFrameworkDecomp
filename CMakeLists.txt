@@ -140,10 +140,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(hashlibpp)
 
-# Target files
-target_sources(NKFrameworkDecomp PRIVATE ${SOURCE_FILES})
-set_target_properties(NKFrameworkDecomp PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
-
 target_include_directories(NKFrameworkDecomp
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
