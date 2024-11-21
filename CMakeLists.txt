@@ -17,13 +17,19 @@ target_sources(NKFrameworkDecomp
         NewFramework/Analytics/DGAnalyticsEventGroups.cpp
         NewFramework/BaseApplication/AppClass/AppClass.cpp
         NewFramework/BaseApplication/AppClass/NKApplication.cpp
+        NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.cpp
+        NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
+        NewFramework/BaseApplication/LegacyFeatures.cpp
+        NewFramework/Graphics/Font/FontManager.cpp
+        NewFramework/Graphics/Font/Font.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
         NewFramework/Graphics/Management/PVR/PVRTextures.cpp
         NewFramework/Graphics/Management/TextureLoader.cpp
         NewFramework/Graphics/Management/TextureManager.cpp
         NewFramework/Graphics/Objects/BasePositionableObject.cpp
+        NewFramework/Graphics/Render/RenderSystem.cpp
         NewFramework/Graphics/Texture.cpp
         NewFramework/IO/File/BaseFileIO.cpp
         NewFramework/IO/File/FilePolicy.cpp
@@ -41,9 +47,11 @@ target_sources(NKFrameworkDecomp
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
+        NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
         Uncategorized/BehaviourTree.cpp
+        Uncategorized/RGBA.cpp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
         Uncategorized/NKLoginWebview.cpp
@@ -59,12 +67,18 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/AppClass/AppClass.h
             NewFramework/BaseApplication/AppClass/NKApplication.h
             NewFramework/BaseApplication/AppClass/NKSDKApp.h
+            NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.h
+            NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
+            NewFramework/BaseApplication/LegacyFeatures.h
+            NewFramework/Graphics/Font/FontManager.h
+            NewFramework/Graphics/Font/Font.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
             NewFramework/Graphics/Management/PVR/PVRTextures.h
             NewFramework/Graphics/Management/TextureLoader.h
             NewFramework/Graphics/Management/TextureManager.h
+            NewFramework/Graphics/Render/RenderSystem.h
             NewFramework/Graphics/Texture.h
             NewFramework/IO/File/BaseFileIO.h
             NewFramework/IO/File/FilePlatformData.h
@@ -98,6 +112,7 @@ target_sources(NKFrameworkDecomp
             Uncategorized/NKLoginService.h
             Uncategorized/NKLoginWebview.h
             Uncategorized/ReferenceCounted.h
+            Uncategorized/RGBA.h
             Uncategorized/SpriteInformation.h
             Uncategorized/StuffToRefactor.h
             Uncategorized/Version.h
