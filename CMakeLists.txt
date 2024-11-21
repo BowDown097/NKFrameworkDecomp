@@ -42,9 +42,11 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/StringHelper.cpp
+        NewFramework/Utilities/URLParser.cpp
         Uncategorized/BehaviourTree.cpp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
+        Uncategorized/NKLoginWebview.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
     PUBLIC
@@ -89,10 +91,12 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
             NewFramework/Utilities/StringHelper.h
+            NewFramework/Utilities/URLParser.h
             Uncategorized/BehaviourTree.h
             Uncategorized/Blackboards.h
             Uncategorized/GlobalVariables.h
             Uncategorized/NKLoginService.h
+            Uncategorized/NKLoginWebview.h
             Uncategorized/ReferenceCounted.h
             Uncategorized/SpriteInformation.h
             Uncategorized/StuffToRefactor.h
