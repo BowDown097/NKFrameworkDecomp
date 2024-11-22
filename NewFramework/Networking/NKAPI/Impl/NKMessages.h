@@ -4,7 +4,7 @@
 
 struct NKMessageSession
 {
-    std::string token; // 0x00
+    std::string sessionID; // 0x00
     time_t expires; // 0x18
 };
 
@@ -15,7 +15,7 @@ struct NKAccessToken
 
     NKAccessToken();
     NKAccessToken(const NKMessageSession& session)
-        : token(session.token), expires(session.expires) {}
+        : token(session.sessionID), expires(session.expires) {}
 };
 
 struct NKMessageAuth
@@ -53,18 +53,39 @@ struct NKMessage
     std::string nonce; // 0x68
 };
 
+struct NKResponseLink
+{
+
+};
+
 struct NKResponseUser
 {
-    std::string field_0; // 0x00
-    std::string field_18; // 0x18
-    std::string field_30; // 0x30
-    void* field_48; // 0x48
-    std::string field_50; // 0x50
-    std::string field_68; // 0x68
-    char field_80[16]; // 0x80
-    void* field_90; // 0x90
-    std::vector<std::string> field_98; // 0x98
-    char field_B0[16]; // 0xB0
+    std::string nkapiID; // 0x00
+    std::string shortcode; // 0x18
+    std::string displayName; // 0x30
+    std::uint32_t clan; // 0x48
+    std::string country; // 0x50
+    std::string continent; // 0x68
+    std::uint32_t avatar; // 0x80
+    int field_84; // 0x84
+    bool online; // 0x88
+    int field_8C; // 0x8C
+    std::uint32_t onlineApp; // 0x90
+    std::vector<std::string> providersAvailable; // 0x98
+    std::uint32_t access; // 0xB0
+    int field_B4; // 0xB4
+    int age; // 0xB8
+};
+
+struct NKResponseLogin
+{
+    NKResponseUser user;
+    NKMessageSession session;
+};
+
+struct NKResponseCreate
+{
+    NKResponseUser user;
 };
 
 struct NKResponseUtilityTime
@@ -72,6 +93,8 @@ struct NKResponseUtilityTime
     time_t time;
 };
 
+// TODO: implement TryParse template methods (depends on CJSONWrapper)
+// and implement TryParse for NKResponseUser (depends on CProfanityFilter and unimplemented GetXXX methods)
 namespace NKJSON
 {
     template<typename T>
@@ -79,13 +102,21 @@ namespace NKJSON
     template<typename T>
     std::string Serialise(const T& val);
 
+    template<> const bool TryParse(NKResponseCreate& out, const std::string& data);
+    template<> const bool TryParse(NKResponseLink& out, const std::string& data);
+    template<> const bool TryParse(NKResponseLogin& out, const std::string& data);
     template<> std::string Serialise(const NKMessage& val);
     template<> const bool TryParse(NKMessageResponse& out, const std::string& data);
 
     void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
     void Serialise(const NKMessage& val, json_spirit::mObject& obj);
 
+    const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageResponse& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKMessageSession& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKResponseLogin& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKResponseCreate& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKResponseLink& out, const json_spirit::mObject& obj);
 }

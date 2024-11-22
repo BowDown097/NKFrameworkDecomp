@@ -109,6 +109,7 @@ target_sources(NKFrameworkDecomp
             Uncategorized/BehaviourTree.h
             Uncategorized/Blackboards.h
             Uncategorized/GlobalVariables.h
+            Uncategorized/NKLoginQuery.h
             Uncategorized/NKLoginService.h
             Uncategorized/NKLoginWebview.h
             Uncategorized/ReferenceCounted.h

@@ -136,3 +136,74 @@ const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& 
 
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKMessageSession& out, const json_spirit::mObject& obj)
+{
+    json_spirit::mObject::const_iterator sessionIDIt = obj.find("sessionID");
+    json_spirit::mObject::const_iterator expiresIt = obj.find("expires");
+
+    ASSERT_OBJECT_HAS_MEMBER(sessionIDIt, "object has no member called 'sessionID'", 4910);
+    ASSERT_OBJECT_HAS_MEMBER(expiresIt, "object has no member called 'expires'", 4911);
+
+    out.sessionID = sessionIDIt->second.get_str();
+    out.expires = sessionIDIt->second.get_uint64();
+
+    return true;
+}
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKResponseLogin& out, const json_spirit::mObject& obj)
+{
+    json_spirit::mObject::const_iterator sessionIt = obj.find("session");
+    ASSERT_OBJECT_HAS_MEMBER(sessionIt, "object has no member called 'session'", 4931);
+
+    if (!NKJSON::TryParse(out.session, sessionIt->second.get_obj())) {
+        return false;
+    }
+
+    json_spirit::mObject::const_iterator userIt = obj.find("user");
+    ASSERT_OBJECT_HAS_MEMBER(userIt, "object has no member called 'user'", 4938);
+
+    return NKJSON::TryParse(out.user, userIt->second.get_obj());
+}
+
+
+
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKResponseCreate& out, const json_spirit::mObject& obj)
+{
+    json_spirit::mObject::const_iterator userIt = obj.find("user");
+
+    if (userIt == obj.end())
+    {
+        std::string error = "object has no member called 'user'";
+        LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(4958);
+        throw std::runtime_error("object has no member called 'user'");
+    }
+
+    return NKJSON::TryParse(out.user, userIt->second.get_obj());
+}
+
+// this is a bit of a sus method. surely this has a bunch of code #define'd out?
+const bool NKJSON::TryParse(NKResponseLink& out, const json_spirit::mObject& obj)
+{
+    return true;
+}
