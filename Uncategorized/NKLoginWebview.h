@@ -12,7 +12,7 @@ struct I_NKLoginWebviewListener
     virtual void WebView_DidHide() {}
     virtual void WebView_LoginFailed() {}
     virtual void WebView_LoginSucceeded(const std::string& sessionToken, bool newUser, std::string url) {}
-    virtual void WebView_UpdateUser(const std::string& user) {}
+    virtual void WebView_UpdateUser(const std::string& data) {}
     virtual void WebView_ServiceActionRequested(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction) {}
     virtual void WebView_StartLogOut() {}
 };
@@ -42,7 +42,7 @@ public:
     virtual bool ShowWithQuery(const C_NKLoginQuery& query, uint16_t x, uint16_t y, uint16_t width, uint16_t height) = 0;
     virtual void Show() = 0;
     virtual void Hide() = 0;
-    virtual void Update(const float&) {}
+    virtual void Update(const float& elapsed) {}
     virtual void InjectJavascript(const std::string& code) = 0;
     virtual std::string WebviewRedirectDomain() { return "http:/"; }
 private:

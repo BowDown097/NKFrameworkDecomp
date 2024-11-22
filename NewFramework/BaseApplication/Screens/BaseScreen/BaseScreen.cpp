@@ -1,6 +1,6 @@
 #include "BaseScreen.h"
 
-#include "NewFramework/BaseApplication/LegacyFeatures.h"
+#include "NewFramework/BaseApplication/LegacyFeatures/LegacyFeatures.h"
 #include "NewFramework/Platform/Shared/Assert.h"
 
 #include <boost/smart_ptr/make_shared_object.hpp>
@@ -50,7 +50,7 @@ void CBaseScreen::SelectButtonPressed() {
 }
 #endif
 void CBaseScreen::BackButtonPressed() {
-	if (LegacyFeatures::bUseNewerBackButtonBehavior) {
+	if (LegacyFeatures::bUseNewerBackButtonbehaviour) {
 		return;
 	}
     for(auto* pChild : this->mChildren) {

@@ -17,10 +17,10 @@ target_sources(NKFrameworkDecomp
         NewFramework/Analytics/DGAnalyticsEventGroups.cpp
         NewFramework/BaseApplication/AppClass/AppClass.cpp
         NewFramework/BaseApplication/AppClass/NKApplication.cpp
+        NewFramework/BaseApplication/LegacyFeatures/LegacyFeatures.cpp
         NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.cpp
         NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
-        NewFramework/BaseApplication/LegacyFeatures.cpp
         NewFramework/Graphics/Font/FontManager.cpp
         NewFramework/Graphics/Font/Font.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
@@ -51,10 +51,10 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
         Uncategorized/BehaviourTree.cpp
-        Uncategorized/RGBA.cpp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
         Uncategorized/NKLoginWebview.cpp
+        Uncategorized/RGBA.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/Version.cpp
     PUBLIC
@@ -67,10 +67,10 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/AppClass/AppClass.h
             NewFramework/BaseApplication/AppClass/NKApplication.h
             NewFramework/BaseApplication/AppClass/NKSDKApp.h
+            NewFramework/BaseApplication/LegacyFeatures/LegacyFeatures.h
             NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.h
             NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
-            NewFramework/BaseApplication/LegacyFeatures.h
             NewFramework/Graphics/Font/FontManager.h
             NewFramework/Graphics/Font/Font.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
