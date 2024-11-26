@@ -1,28 +1,28 @@
 #include "FontManager.h"
 
+#include <NewFramework/Graphics/Texture.h>
+#include <NewFramework/IO/File/BaseFileIO.h>
+#include <NewFramework/IO/File/IFile.h>
 #include <NewFramework/Graphics/Font/Font.h>
 #include <NewFramework/Platform/Shared/Assert.h>
 #include <NewFramework/Platform/Shared/Logging.h>
 
 #include <boost/smart_ptr/make_shared_object.hpp>
 
+IFile* FindFontFile (CBaseFileIO* fileIO, eTextureSize maxSize, const std::string& directory, const std::string& fontName) {
+	for (int i = static_cast<int>(maxSize); i > static_cast<int>(eTextureSize::Unknown); i--) {
+		auto path = CTexture::TextureSizeToString(static_cast<eTextureSize>(i));
+		path = directory + path;
+		path += "/";
+		path += fontName;
+		path += ".fnt";
+		if (fileIO->FileExists(path, fileIO->assetPolicy)) {
+			return fileIO->OpenFile(path, fileIO->assetPolicy, eFileOpenMode::Read);
+		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return nullptr;
+}
 
 
 
