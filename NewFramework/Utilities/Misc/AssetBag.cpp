@@ -74,7 +74,7 @@ void CAssetBag::StartUsing(const eAssetType& type, const std::string& name) {
 
 
 
-		
+
 		case eAssetType::FONT: {
 			auto textureName = m_pFontManager->GetFontTextureName(name);
 			if (2 < m_pFontManager->IncFontRefCount(name, mAssetSource)) {
