@@ -51,11 +51,13 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
         Uncategorized/BehaviourTree.cpp
+        Uncategorized/Encryption.cpp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
         Uncategorized/NKLoginWebview.cpp
         Uncategorized/RGBA.cpp
         Uncategorized/SpriteInformation.cpp
+        Uncategorized/StephenEncryption.cpp
         Uncategorized/Version.cpp
     PUBLIC
         FILE_SET HEADERS FILES
@@ -108,6 +110,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/URLParser.h
             Uncategorized/BehaviourTree.h
             Uncategorized/Blackboards.h
+            Uncategorized/Encryption.h
             Uncategorized/GlobalVariables.h
             Uncategorized/NKLoginQuery.h
             Uncategorized/NKLoginService.h
@@ -115,6 +118,7 @@ target_sources(NKFrameworkDecomp
             Uncategorized/ReferenceCounted.h
             Uncategorized/RGBA.h
             Uncategorized/SpriteInformation.h
+            Uncategorized/StephenEncryption.h
             Uncategorized/StuffToRefactor.h
             Uncategorized/Version.h
 )
