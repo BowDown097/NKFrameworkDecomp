@@ -316,15 +316,15 @@
 
 
 const boost::shared_ptr<CFont> CFontManager::AddFont(const SLocalisedFontInfo& fontInfo) {
-	auto definition = ImportFontDefinition(fontInfo.mB, fontInfo.mD);
+	auto definition = ImportFontDefinition(fontInfo.mFontFile, fontInfo.mD);
 	if (definition == nullptr) {
-		LOG_ERROR("Failed to import font definition \'%s\' for font \'%s\'", fontInfo.mB.c_str(), fontInfo.mA.c_str());
+		LOG_ERROR("Failed to import font definition \'%s\' for font \'%s\'", fontInfo.mFontFile.c_str(), fontInfo.mFontName.c_str());
 		ENFORCE_LINE(0x142);
 		return nullptr;
 	}
 
 	//TODO: The arguments passed here are shitty guesses
-	auto result = boost::make_shared<CFont>(fontInfo.mB, fontInfo.mC, definition, fontInfo.mD, fontInfo.mColor, fontInfo.mAlpha);
-	mFontDefinitions[fontInfo.mA] = definition;
+	auto result = boost::make_shared<CFont>(fontInfo.mFontName, fontInfo.mC, definition, fontInfo.mD, fontInfo.mColor, fontInfo.mAlpha);
+	mFontDefinitions[fontInfo.mFontName] = definition;
 	return result;
 }

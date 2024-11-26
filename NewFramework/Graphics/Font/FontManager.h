@@ -15,8 +15,8 @@ class CTextureManager;
 
 class IFontImporter {};
 struct SLocalisedFontInfo {
-	std::string mA{};
-	std::string mB{};
+	std::string mFontName{};
+	std::string mFontFile{};
 	float mC = 0.0f;
 	bool mD = false;
 	bool mE = false;
