@@ -32,7 +32,7 @@ int A_NKApplication::GetVersionCode()
     return app->version.versionCode;
 }
 
-CAgeGate* A_NKApplication::GetAgeGate()
+int A_NKApplication::GetAgeGate()
 {
     return app->GetAgeGate();
 }

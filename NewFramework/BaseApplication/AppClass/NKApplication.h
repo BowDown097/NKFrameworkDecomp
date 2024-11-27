@@ -13,7 +13,7 @@ public:
     float GetViewScale() override;
     std::string GetLanguageCode() override;
     int GetVersionCode() override;
-    CAgeGate* GetAgeGate() override;
+    int GetAgeGate() override;
 private:
     CApp* app;
 };

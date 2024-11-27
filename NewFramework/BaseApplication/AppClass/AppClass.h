@@ -42,7 +42,7 @@ public:
     bool field_16D{}; // 0x16D
 
     bool NotesEnabled();
-    class CAgeGate* GetAgeGate();
+    int GetAgeGate();
     void SetRequiredDLCState(eRequiredDLCState);
     class CStoreInterface* CreateStore();
     void LoadRendering();
