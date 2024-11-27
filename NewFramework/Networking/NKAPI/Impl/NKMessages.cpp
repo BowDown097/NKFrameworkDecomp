@@ -40,6 +40,25 @@ void NKJSON::Serialise(const NKMessage& val, json_spirit::mObject& obj)
     obj["nonce"] = val.nonce;
 }
 
+const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj)
+{
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj)
+{
+    json_spirit::mObject::const_iterator userIt = obj.find("user");
+
+    if (userIt == obj.end())
+    {
+        std::string error = "object has no member called 'user'";
+        LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(1680);
+        throw std::runtime_error("object has no member called 'reason'");
+    }
+
+    return NKJSON::TryParse(out.user, obj);
+}
+
 const bool NKJSON::TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj)
 {
     json_spirit::mObject::const_iterator reasonIt = obj.find("reason");

@@ -38,6 +38,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Math/Matrix.cpp
         NewFramework/Networking/NKAPI/Impl/NKMessages.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
+        NewFramework/Networking/NKAPI/NKError.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
         NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
         NewFramework/Platform/Shared/Assert.cpp

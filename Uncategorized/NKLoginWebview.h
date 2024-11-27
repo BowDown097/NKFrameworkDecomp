@@ -12,7 +12,7 @@ struct I_NKLoginWebviewListener
     virtual void WebView_DidHide() {}
     virtual void WebView_LoginFailed() {}
     virtual void WebView_LoginSucceeded(const std::string& sessionToken, bool newUser, std::string url) {}
-    virtual void WebView_UpdateUser(const std::string& data) {}
+    virtual void WebView_UpdateUser(const std::string& sessionToken) {}
     virtual void WebView_ServiceActionRequested(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction) {}
     virtual void WebView_StartLogOut() {}
 };
@@ -31,7 +31,7 @@ public:
     void ManualClose();
     void LoginFailed();
     void LoginSucceeded(const std::string& sessionToken, bool newUser, std::string url);
-    void UpdateUser(const std::string& data);
+    void UpdateUser(const std::string& sessionToken);
     void ServiceActionRequested(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction);
     void LogOut();
     void DidLoad();

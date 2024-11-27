@@ -93,11 +93,11 @@ void C_NKLoginWebView::LoginSucceeded(const std::string& sessionToken, bool newU
     FinishIteratingListeners();
 }
 
-void C_NKLoginWebView::UpdateUser(const std::string& data)
+void C_NKLoginWebView::UpdateUser(const std::string& sessionToken)
 {
     StartIteratingListeners();
     for (I_NKLoginWebviewListener* listener : listeners)
-        listener->WebView_UpdateUser(data);
+        listener->WebView_UpdateUser(sessionToken);
     FinishIteratingListeners();
 }
 

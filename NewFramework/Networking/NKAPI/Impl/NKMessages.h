@@ -77,6 +77,11 @@ struct NKResponseUser
     int age; // 0xB8
 };
 
+struct NKResponseUserCurrent
+{
+    NKResponseUser user;
+};
+
 struct NKResponseLogin
 {
     NKResponseUser user;
@@ -107,11 +112,13 @@ namespace NKJSON
     template<> const bool TryParse(NKResponseLogin& out, const std::string& data);
     template<> std::string Serialise(const NKMessage& val);
     template<> const bool TryParse(NKMessageResponse& out, const std::string& data);
+    template<> const bool TryParse(NKResponseUserCurrent& out, const std::string& data);
 
     void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
     void Serialise(const NKMessage& val, json_spirit::mObject& obj);
 
     const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageResponse& out, const json_spirit::mObject& obj);
