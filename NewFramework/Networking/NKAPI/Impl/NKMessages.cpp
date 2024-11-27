@@ -21,6 +21,13 @@ template<> std::string NKJSON::Serialise(const NKMessage& val)
     return json_spirit::write(obj);
 }
 
+template<> std::string NKJSON::Serialise(const NKResponseLogin& val)
+{
+    json_spirit::mObject obj;
+    Serialise(val, obj);
+    return json_spirit::write(obj);
+}
+
 void NKJSON::Serialise(const NKMessageAuth& val, json_spirit::mObject& obj)
 {
     obj["session"] = val.session;
@@ -38,6 +45,44 @@ void NKJSON::Serialise(const NKMessage& val, json_spirit::mObject& obj)
     obj["sig"] = val.sig;
     obj["data"] = val.data;
     obj["nonce"] = val.nonce;
+}
+
+void NKJSON::Serialise(const NKMessageSession& val, json_spirit::mObject& obj)
+{
+    obj["sessionID"] = val.sessionID;
+    obj["expires"] = val.expires;
+}
+
+void NKJSON::Serialise(const NKResponseLogin& val, json_spirit::mObject& obj)
+{
+    json_spirit::mObject sessionObj;
+    Serialise(val.session, sessionObj);
+    obj["session"] = sessionObj;
+
+    json_spirit::mObject userObj;
+    Serialise(val.user, userObj);
+    obj["user"] = sessionObj;
+}
+
+void NKJSON::Serialise(const NKResponseUser& val, json_spirit::mObject& obj)
+{
+    obj["nkapiID"] = val.nkapiID;
+    obj["shortcode"] = val.shortcode;
+    obj["displayName"] = val.displayName;
+    obj["clan"] = val.clan;
+    obj["country"] = val.country;
+    obj["continent"] = val.continent;
+    obj["avatar"] = val.avatar;
+    obj["online"] = val.online;
+    obj["onlineApp"] = val.onlineApp;
+    obj["age"] = val.age;
+
+    json_spirit::mArray providersAvailable;
+    for (int i = 0; i < val.providersAvailable.size(); ++i)
+        providersAvailable.push_back(val.providersAvailable[i]);
+
+    obj["providersAvailable"] = providersAvailable;
+    obj["access"] = val.access;
 }
 
 const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj)

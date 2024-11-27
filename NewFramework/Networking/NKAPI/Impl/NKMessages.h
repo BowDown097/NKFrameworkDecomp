@@ -113,9 +113,13 @@ namespace NKJSON
     template<> std::string Serialise(const NKMessage& val);
     template<> const bool TryParse(NKMessageResponse& out, const std::string& data);
     template<> const bool TryParse(NKResponseUserCurrent& out, const std::string& data);
+    template<> std::string Serialise(const NKResponseLogin& val);
 
     void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
     void Serialise(const NKMessage& val, json_spirit::mObject& obj);
+    void Serialise(const NKMessageSession& val, json_spirit::mObject& obj);
+    void Serialise(const NKResponseLogin& val, json_spirit::mObject& obj);
+    void Serialise(const NKResponseUser& val, json_spirit::mObject& obj);
 
     const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj);
     const bool TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj);
