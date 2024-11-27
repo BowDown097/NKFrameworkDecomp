@@ -1,8 +1,7 @@
 #pragma once
 #include "Uncategorized/BehaviourTree.h"
 
-class BA_CheckErrorType : public BehaviourTree::Leaf
-{
+class BA_CheckErrorType : public BehaviourTree::Leaf {
 public:
     static BA_CheckErrorType* Create(const std::string& errorType);
     std::string DebugString() override;

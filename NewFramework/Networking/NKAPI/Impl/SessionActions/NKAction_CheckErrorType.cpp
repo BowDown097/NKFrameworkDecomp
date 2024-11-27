@@ -1,18 +1,15 @@
 #include "NKAction_CheckErrorType.h"
 #include "Uncategorized/Blackboards.h"
 
-BA_CheckErrorType* BA_CheckErrorType::Create(const std::string& errorType)
-{
+BA_CheckErrorType* BA_CheckErrorType::Create(const std::string& errorType) {
     return new BA_CheckErrorType(errorType);
 }
 
-std::string BA_CheckErrorType::DebugString()
-{
+std::string BA_CheckErrorType::DebugString() {
     return errorType;
 }
 
-void BA_CheckErrorType::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_CheckErrorType::Start(BehaviourTree::IBlackboard* blackboard) {
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
     state = sessionBlackboard->error.typeStr == errorType ? BehaviourTree::AState::Success : BehaviourTree::AState::Failure;
 
@@ -21,11 +18,6 @@ void BA_CheckErrorType::Start(BehaviourTree::IBlackboard* blackboard)
     sessionBlackboard->LogMsg(message);
 }
 
-BehaviourTree::Action* BA_CheckErrorType::clone()
-{
-    BA_CheckErrorType* out = new BA_CheckErrorType;
-    out->state = state;
-    out->lastState = lastState;
-    out->errorType = errorType;
-    return out;
+BehaviourTree::Action* BA_CheckErrorType::clone() {
+    return new BA_CheckErrorType(*this);
 }

@@ -6,34 +6,28 @@
 #include "NewFramework/Platform/Shared/Core.h"
 #include "Uncategorized/Blackboards.h"
 
-eNKServiceAction BA_ServiceAction::GetAction() const
-{
+eNKServiceAction BA_ServiceAction::GetAction() const {
     return serviceAction == eNKServiceAction::InBlackboard ? blackboard->serviceAction : serviceAction;
 }
 
-eNKLoginService BA_ServiceAction::GetService() const
-{
+eNKLoginService BA_ServiceAction::GetService() const {
     return loginServiceType == eNKLoginService::InBlackboard ? blackboard->loginService : loginServiceType;
 }
 
-std::string BA_ServiceAction::DebugString()
-{
+std::string BA_ServiceAction::DebugString() {
     return GetLoginServiceStringFromEnum(loginServiceType) + " : " + GetServiceActionStringFromEnum(serviceAction);
 }
 
-std::string BA_ServiceAction::HttpCallbackKey()
-{
+std::string BA_ServiceAction::HttpCallbackKey() {
     return "NK-" + GetServiceActionStringFromEnum(GetAction()) +
            "-" + GetLoginServiceStringFromEnum(loginService->GetServiceType());
 }
 
-std::map<std::string, std::string> BA_ServiceAction::ConstructHeader()
-{
+std::map<std::string, std::string> BA_ServiceAction::ConstructHeader() {
     return {};
 }
 
-NKMessage BA_ServiceAction::ConstructMessage()
-{
+NKMessage BA_ServiceAction::ConstructMessage() {
     NKMessage out;
     out.auth.session = blackboard->accessToken.token;
     out.auth.device = DGAnalytics::Instance()->GetNonLiNKID();
@@ -47,48 +41,46 @@ NKMessage BA_ServiceAction::ConstructMessage()
     return out;
 }
 
-std::string BA_ServiceAction::ConstructUrl()
-{
+std::string BA_ServiceAction::ConstructUrl() {
     return NKEndpoints::GetBase(blackboard->serverCluster) + loginService->UrlExtension_For(serviceAction);
 }
 
-void BA_ServiceAction::ParseResponse(const NKMessageResponse& response)
-{
-    switch (GetAction())
-    {
-    case eNKServiceAction::Link:
-    {
-        NKResponseLink responseLink;
-        if (!NKJSON::TryParse<NKResponseLink>(responseLink, response.data))
-            throw std::runtime_error("Failed to parse NKResponseLink");
+void BA_ServiceAction::ParseResponse(const NKMessageResponse& response) {
+    switch (GetAction()) {
+        case eNKServiceAction::Link: {
+            NKResponseLink responseLink;
+            if (!NKJSON::TryParse<NKResponseLink>(responseLink, response.data)) {
+                throw std::runtime_error("Failed to parse NKResponseLink");
+            }
 
-        DGAnalyticsData data("NKAccountLinked");
-        data << "loginService" << GetLoginServiceStringFromEnum(GetService());
-        DGAnalytics::Instance()->SendDataEvent(data, true, AnalyticsEventGroups::Group::Framework, 2);
-        break;
-    }
-    case eNKServiceAction::Login:
-    {
-        NKResponseLogin responseLogin;
-        if (!NKJSON::TryParse<NKResponseLogin>(responseLogin, response.data))
-            throw std::runtime_error("Failed to parse NKResponseLogin");
+            DGAnalyticsData data("NKAccountLinked");
+            data << "loginService" << GetLoginServiceStringFromEnum(GetService());
+            DGAnalytics::Instance()->SendDataEvent(data, true, AnalyticsEventGroups::Group::Framework, 2);
+            break;
+        }
+        case eNKServiceAction::Login: {
+            NKResponseLogin responseLogin;
+            if (!NKJSON::TryParse<NKResponseLogin>(responseLogin, response.data)) {
+                throw std::runtime_error("Failed to parse NKResponseLogin");
+            }
 
-        blackboard->accessToken = NKAccessToken(responseLogin.session);
-        blackboard->responseUser = responseLogin.user;
-        blackboard->loginServiceFromToken = GetService();
-        break;
-    }
-    case eNKServiceAction::Create:
-    {
-        NKResponseCreate responseCreate;
-        if (!NKJSON::TryParse<NKResponseCreate>(responseCreate, response.data))
-            throw std::runtime_error("Failed to parse NKResponseCreate");
+            blackboard->accessToken = NKAccessToken(responseLogin.session);
+            blackboard->responseUser = responseLogin.user;
+            blackboard->loginServiceFromToken = GetService();
+            break;
+        }
+        case eNKServiceAction::Create: {
+            NKResponseCreate responseCreate;
+            if (!NKJSON::TryParse<NKResponseCreate>(responseCreate, response.data)) {
+                throw std::runtime_error("Failed to parse NKResponseCreate");
+            }
 
-        blackboard->responseUser = responseCreate.user;
-        blackboard->newUser = true;
-        break;
-    }
-    default: break;
+            blackboard->responseUser = responseCreate.user;
+            blackboard->newUser = true;
+            break;
+        }
+        default:
+            break;
     }
 
     blackboard->LogMsg(GetLoginServiceStringFromEnum(GetService()) + " " +
@@ -96,23 +88,21 @@ void BA_ServiceAction::ParseResponse(const NKMessageResponse& response)
                        "succeeded.");
 }
 
-void BA_ServiceAction::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_ServiceAction::Start(BehaviourTree::IBlackboard* blackboard) {
     BA_HttpRequestAction::Start(blackboard);
+
     loginService = this->blackboard->sessionImpl->GetLoginService(GetService());
     this->blackboard->LogMsg("Trying to " + GetServiceActionStringFromEnum(GetAction()) +
                              " " + GetLoginServiceStringFromEnum(GetService()) + " account..");
 
-    if (!loginService)
-    {
+    if (!loginService) {
         std::string fix = "The App isn't set up to use " + GetLoginServiceStringFromEnum(GetService());
         this->blackboard->error = NKError(NKErrorType::VALUE7, "Developer Error", "", fix);
         state = BehaviourTree::AState::Failure;
         return;
     }
 
-    if (loginService->IsUserAuthenticated())
-    {
+    if (loginService->IsUserAuthenticated()) {
         SendHttpRequest();
         return;
     }
@@ -121,20 +111,10 @@ void BA_ServiceAction::Start(BehaviourTree::IBlackboard* blackboard)
     state = BehaviourTree::AState::Failure;
 }
 
-BehaviourTree::Action* BA_ServiceAction::clone()
-{
-    BA_ServiceAction* out = new BA_ServiceAction;
-    out->state = state;
-    out->lastState = lastState;
-    out->blackboard = blackboard;
-    out->callback = callback;
-    out->loginService = loginService;
-    out->serviceAction = serviceAction;
-    out->loginServiceType = loginServiceType;
-    return out;
+BehaviourTree::Action* BA_ServiceAction::clone() {
+    return new BA_ServiceAction(*this);
 }
 
-BA_ServiceAction* BA_ServiceAction::Create(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction)
-{
+BA_ServiceAction* BA_ServiceAction::Create(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction) {
     return new BA_ServiceAction(loginServiceType, serviceAction);
 }

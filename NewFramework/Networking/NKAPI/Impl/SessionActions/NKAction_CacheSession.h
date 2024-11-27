@@ -3,8 +3,7 @@
 
 class CBaseFileIO;
 
-class BA_CacheSession : public BehaviourTree::Leaf
-{
+class BA_CacheSession : public BehaviourTree::Leaf {
 public:
     static BA_CacheSession* Create(CBaseFileIO* fileIO);
     void Start(BehaviourTree::IBlackboard* blackboard) override;

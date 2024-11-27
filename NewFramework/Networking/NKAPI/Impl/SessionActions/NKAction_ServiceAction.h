@@ -2,8 +2,7 @@
 #include "NKAction_SessionHttpRequest.h"
 #include "Uncategorized/NKLoginService.h"
 
-class BA_ServiceAction : public BA_HttpRequestAction
-{
+class BA_ServiceAction : public BA_HttpRequestAction {
 public:
     eNKServiceAction GetAction() const;
     eNKLoginService GetService() const;

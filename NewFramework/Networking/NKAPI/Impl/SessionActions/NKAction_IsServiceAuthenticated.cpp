@@ -2,31 +2,23 @@
 #include "NewFramework/Networking/NKAPI/Impl/NKSessionImpl.h"
 #include "Uncategorized/Blackboards.h"
 
-BA_IsServiceAuthenticated* BA_IsServiceAuthenticated::Create(const eNKLoginService& loginServiceType)
-{
+BA_IsServiceAuthenticated* BA_IsServiceAuthenticated::Create(const eNKLoginService& loginServiceType) {
     return new BA_IsServiceAuthenticated(loginServiceType);
 }
 
-std::string BA_IsServiceAuthenticated::DebugString()
-{
+std::string BA_IsServiceAuthenticated::DebugString() {
     return GetLoginServiceStringFromEnum(loginServiceType);
 }
 
-void BA_IsServiceAuthenticated::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_IsServiceAuthenticated::Start(BehaviourTree::IBlackboard* blackboard) {
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
-
-    eNKLoginService localLoginServiceType = loginServiceType;
-    if (localLoginServiceType == eNKLoginService::InBlackboard)
-        localLoginServiceType = sessionBlackboard->loginService;
-
+    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::InBlackboard
+        ? loginServiceType : sessionBlackboard->loginService;
     loginService = sessionBlackboard->sessionImpl->GetLoginService(localLoginServiceType);
-    if (loginService)
-    {
+
+    if (loginService) {
         state = loginService->IsUserAuthenticated() ? BehaviourTree::AState::Success : BehaviourTree::AState::Failure;
-    }
-    else
-    {
+    } else {
         state = BehaviourTree::AState::Failure;
         std::string fix = "The App isn't set up to use " + GetLoginServiceStringFromEnum(localLoginServiceType);
         sessionBlackboard->error = NKError(NKErrorType::VALUE7, "Developer Error", "", fix);
@@ -37,12 +29,6 @@ void BA_IsServiceAuthenticated::Start(BehaviourTree::IBlackboard* blackboard)
     sessionBlackboard->LogMsg(message);
 }
 
-BehaviourTree::Action* BA_IsServiceAuthenticated::clone()
-{
-    BA_IsServiceAuthenticated* out = new BA_IsServiceAuthenticated;
-    out->state = state;
-    out->lastState = lastState;
-    out->loginServiceType = loginServiceType;
-    out->loginService = loginService;
-    return out;
+BehaviourTree::Action* BA_IsServiceAuthenticated::clone() {
+    return new BA_IsServiceAuthenticated(*this);
 }

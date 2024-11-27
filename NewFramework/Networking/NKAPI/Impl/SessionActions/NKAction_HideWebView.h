@@ -4,8 +4,7 @@
 
 class NKSessionBlackboard;
 
-class BA_HideWebView : public BehaviourTree::Leaf, protected I_NKLoginWebviewListener
-{
+class BA_HideWebView : public BehaviourTree::Leaf, protected I_NKLoginWebviewListener {
 public:
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     void Update(BehaviourTree::IBlackboard* blackboard, const float& elapsed) override;

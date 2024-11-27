@@ -5,25 +5,21 @@
 #include "Uncategorized/Blackboards.h"
 #include "Uncategorized/StephenEncryption.h"
 
-BA_CacheSession* BA_CacheSession::Create(CBaseFileIO* fileIO)
-{
+BA_CacheSession* BA_CacheSession::Create(CBaseFileIO* fileIO) {
     return new BA_CacheSession(fileIO);
 }
 
-void BA_CacheSession::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_CacheSession::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
 
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
     sessionBlackboard->LogMsg("Caching session token for future use..");
 
     state = BehaviourTree::AState::Failure;
-    if (fileIO)
-    {
+    if (fileIO) {
         std::string sessionCachePath = NKEndpoints::GetSessionCacheFilePath(sessionBlackboard->serverCluster);
         IFile* sessionCacheFile = fileIO->OpenFile(sessionCachePath, fileIO->documentPolicy, eFileOpenMode::ReadWriteNew);
-        if (sessionCacheFile)
-        {
+        if (sessionCacheFile) {
             NKResponseLogin responseLogin;
             responseLogin.session.sessionID = sessionBlackboard->accessToken.token;
             responseLogin.session.expires = sessionBlackboard->accessToken.expires;
@@ -47,11 +43,6 @@ void BA_CacheSession::Start(BehaviourTree::IBlackboard* blackboard)
     sessionBlackboard->LogMsg(state == BehaviourTree::AState::Success ? "Success" : "Failure");
 }
 
-BehaviourTree::Action* BA_CacheSession::clone()
-{
-    BA_CacheSession* out = new BA_CacheSession;
-    out->state = state;
-    out->lastState = lastState;
-    out->fileIO = fileIO;
-    return out;
+BehaviourTree::Action* BA_CacheSession::clone() {
+    return new BA_CacheSession(*this);
 }

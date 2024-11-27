@@ -4,8 +4,7 @@
 
 class NKSessionBlackboard;
 
-class BA_AuthenticateService : public BehaviourTree::Leaf, public I_NKLoginServiceObserver
-{
+class BA_AuthenticateService : public BehaviourTree::Leaf, public I_NKLoginServiceObserver {
 public:
     static BA_AuthenticateService* Create(const eNKLoginService& loginServiceType, const eNKServiceAuthMethod& authMethod);
     std::string DebugString() override;

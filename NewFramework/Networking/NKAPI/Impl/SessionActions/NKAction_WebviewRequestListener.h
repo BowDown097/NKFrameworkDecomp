@@ -4,8 +4,7 @@
 
 class NKSessionBlackboard;
 
-class BA_WebviewRequestListener : public BehaviourTree::Leaf, protected I_NKLoginWebviewListener
-{
+class BA_WebviewRequestListener : public BehaviourTree::Leaf, protected I_NKLoginWebviewListener {
 public:
     static BA_WebviewRequestListener* Create();
     void Start(BehaviourTree::IBlackboard* blackboard) override;

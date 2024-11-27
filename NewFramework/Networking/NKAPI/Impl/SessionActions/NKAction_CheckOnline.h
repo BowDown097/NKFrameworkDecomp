@@ -3,8 +3,7 @@
 
 struct I_NKSDKApp;
 
-class BA_CheckOnline : public BehaviourTree::Leaf
-{
+class BA_CheckOnline : public BehaviourTree::Leaf {
 public:
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     BehaviourTree::Action* clone() override;

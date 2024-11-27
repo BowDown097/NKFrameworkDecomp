@@ -2,8 +2,7 @@
 #include "Uncategorized/BehaviourTree.h"
 #include "Uncategorized/NKLoginService.h"
 
-class BA_IsServiceAuthenticated : public BehaviourTree::Leaf
-{
+class BA_IsServiceAuthenticated : public BehaviourTree::Leaf {
 public:
     static BA_IsServiceAuthenticated* Create(const eNKLoginService& loginServiceType);
     std::string DebugString() override;

@@ -1,8 +1,7 @@
 #pragma once
 #include "Uncategorized/BehaviourTree.h"
 
-class BA_WebViewErrorToolTip : public BehaviourTree::Leaf
-{
+class BA_WebViewErrorToolTip : public BehaviourTree::Leaf {
 public:
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     BehaviourTree::Action* clone() override;

@@ -1,13 +1,11 @@
 #include "NKAction_WebviewRequestListener.h"
 #include "Uncategorized/Blackboards.h"
 
-BA_WebviewRequestListener* BA_WebviewRequestListener::Create()
-{
+BA_WebviewRequestListener* BA_WebviewRequestListener::Create() {
     return new BA_WebviewRequestListener;
 }
 
-void BA_WebviewRequestListener::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_WebviewRequestListener::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
 
     this->blackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
@@ -16,8 +14,7 @@ void BA_WebviewRequestListener::Start(BehaviourTree::IBlackboard* blackboard)
     this->blackboard->serviceAction = eNKServiceAction::None;
     this->blackboard->loginService = eNKLoginService::None;
 
-    if (!this->blackboard->webView)
-    {
+    if (!this->blackboard->webView) {
         std::string errorInfo = "No webview to listen to?";
         this->blackboard->error = NKError(NKErrorType::VALUE7, "Webview Request Listener Error", "", errorInfo);
         this->blackboard->LogMsg(errorInfo);
@@ -31,15 +28,18 @@ void BA_WebviewRequestListener::Start(BehaviourTree::IBlackboard* blackboard)
 void BA_WebviewRequestListener::Stop(BehaviourTree::IBlackboard* blackboard)
 {
     BehaviourTree::Action::Stop(blackboard);
-    if (this->blackboard && this->blackboard->webView)
+
+    if (this->blackboard && this->blackboard->webView) {
         this->blackboard->webView->RemoveListener(this);
+    }
 }
 
 void BA_WebviewRequestListener::WebView_ServiceActionRequested(
     const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction)
 {
-    if (state != BehaviourTree::AState::Running)
+    if (state != BehaviourTree::AState::Running) {
         return;
+    }
 
     this->blackboard->LogMsg("Webview Listener: " + GetLoginServiceStringFromEnum(loginServiceType) +
                              " " + GetServiceActionStringFromEnum(serviceAction) + " requested.");
@@ -49,11 +49,6 @@ void BA_WebviewRequestListener::WebView_ServiceActionRequested(
     state = BehaviourTree::AState::Success;
 }
 
-BehaviourTree::Action* BA_WebviewRequestListener::clone()
-{
-    BA_WebviewRequestListener* out = new BA_WebviewRequestListener;
-    out->state = state;
-    out->lastState = lastState;
-    out->blackboard = blackboard;
-    return out;
+BehaviourTree::Action* BA_WebviewRequestListener::clone() {
+    return new BA_WebviewRequestListener(*this);
 }

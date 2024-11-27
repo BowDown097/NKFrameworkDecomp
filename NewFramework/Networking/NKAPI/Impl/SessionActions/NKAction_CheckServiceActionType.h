@@ -2,8 +2,7 @@
 #include "Uncategorized/BehaviourTree.h"
 #include "Uncategorized/NKLoginService.h"
 
-class BA_CheckServiceActionType : public BehaviourTree::Leaf
-{
+class BA_CheckServiceActionType : public BehaviourTree::Leaf {
 public:
     static BA_CheckServiceActionType* Create(const eNKServiceAction& serviceAction);
     std::string DebugString() override;

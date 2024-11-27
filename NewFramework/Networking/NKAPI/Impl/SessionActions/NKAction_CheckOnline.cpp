@@ -2,8 +2,7 @@
 #include "NewFramework/BaseApplication/AppClass/NKSDKApp.h"
 #include "Uncategorized/Blackboards.h"
 
-void BA_CheckOnline::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_CheckOnline::Start(BehaviourTree::IBlackboard* blackboard) {
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
     state = appInterface && appInterface->IsOnline() ? BehaviourTree::AState::Success : BehaviourTree::AState::Failure;
 
@@ -12,16 +11,10 @@ void BA_CheckOnline::Start(BehaviourTree::IBlackboard* blackboard)
     sessionBlackboard->LogMsg(message);
 }
 
-BehaviourTree::Action* BA_CheckOnline::clone()
-{
-    BA_CheckOnline* out = new BA_CheckOnline;
-    out->state = state;
-    out->lastState = lastState;
-    out->appInterface = appInterface;
-    return out;
+BehaviourTree::Action* BA_CheckOnline::clone() {
+    return new BA_CheckOnline(*this);
 }
 
-BA_CheckOnline* BA_CheckOnline::Create(I_NKSDKApp* appInterface)
-{
+BA_CheckOnline* BA_CheckOnline::Create(I_NKSDKApp* appInterface) {
     return new BA_CheckOnline(appInterface);
 }

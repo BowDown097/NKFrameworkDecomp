@@ -5,20 +5,17 @@
 #include "NewFramework/Utilities/StringHelper.h"
 #include "Uncategorized/Blackboards.h"
 
-void BA_HttpRequestAction::Start(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_HttpRequestAction::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
     this->blackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
 }
 
-void BA_HttpRequestAction::Stop(BehaviourTree::IBlackboard* blackboard)
-{
+void BA_HttpRequestAction::Stop(BehaviourTree::IBlackboard* blackboard) {
     BehaviourTree::Action::Stop(blackboard);
     callback.reset();
 }
 
-void BA_HttpRequestAction::SendHttpRequest()
-{
+void BA_HttpRequestAction::SendHttpRequest() {
     NKMessage message = ConstructMessage();
     std::map<std::string, std::string> headers = ConstructHeader();
     std::string url = ConstructUrl();
@@ -27,10 +24,12 @@ void BA_HttpRequestAction::SendHttpRequest()
 
     std::shared_ptr<HttpCallbackFunctor> functor = std::make_shared<HttpCallbackFunctor>();
     functor->httpCallback = [this](const SHttpRequest& req) {
-        if (req.field_B8 == 4)
+        if (req.field_B8 == 4) {
             HttpComplete(req);
-        else
+        }
+        else {
             HttpFailed(req);
+        }
     };
     functor->field_40 = functor;
     callback = functor->field_40;
@@ -43,28 +42,29 @@ void BA_HttpRequestAction::SendHttpRequest()
     opts.timeout = 15;
 
     int result = NKEndpoints::sendMessage(url, headers, messageData, callbackKey, method, nullptr, opts);
-    if (result != 0)
+    if (result != 0) {
         return;
+    }
 
     blackboard->LogMsg("Failed sending message to " + url);
     blackboard->error = NKError(NKErrorType::VALUE2, "Http Request Error", "", "Couldn't send Http request");
     state = BehaviourTree::AState::Failure;
 }
 
-void BA_HttpRequestAction::HttpComplete(const SHttpRequest& req)
-{
-    if (state != BehaviourTree::AState::Running)
+void BA_HttpRequestAction::HttpComplete(const SHttpRequest& req) {
+    if (state != BehaviourTree::AState::Running) {
         return;
+    }
 
     std::string callbackKey = HttpCallbackKey();
-    if (callbackKey != req.callbackKey)
+    if (callbackKey != req.callbackKey) {
         return;
+    }
 
     std::string downloadedData = req.GetDownloadedDataStr();
     NKMessageResponse messageResponse;
 
-    if (!NKJSON::TryParse<NKMessageResponse>(messageResponse, downloadedData))
-    {
+    if (!NKJSON::TryParse<NKMessageResponse>(messageResponse, downloadedData)) {
         std::string message = "HttpRequest: Couldn't parse response (Callback Key: " + req.callbackKey;
         message += ")";
         blackboard->LogMsg(message);
@@ -80,10 +80,8 @@ void BA_HttpRequestAction::HttpComplete(const SHttpRequest& req)
         return;
     }
 
-    if (messageResponse.error.type.empty())
-    {
-        if (!NKSignature::Verify("", blackboard->privateKey, messageResponse.data, messageResponse.sig))
-        {
+    if (messageResponse.error.type.empty()) {
+        if (!NKSignature::Verify("", blackboard->privateKey, messageResponse.data, messageResponse.sig)) {
             std::string message = "HttpRequest: Couldn't verify response signature (Callback Key: " + req.callbackKey;
             message += ", Signature: ";
             message += messageResponse.sig;
@@ -123,33 +121,28 @@ void BA_HttpRequestAction::HttpComplete(const SHttpRequest& req)
 
     blackboard->error = NKError(NKErrorType::VALUE3, "", "", "");
     blackboard->error.typeStr = messageResponse.error.type;
-    if (!messageResponse.error.details.reason.empty())
-        blackboard->error.reason = messageResponse.error.details.reason;
-    if (!messageResponse.error.details.fix.empty())
-        blackboard->error.fix = messageResponse.error.details.fix;
+    blackboard->error.reason = messageResponse.error.details.reason;
+    blackboard->error.fix = messageResponse.error.details.fix;
 
     state = BehaviourTree::AState::Failure;
 }
 
-void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
-{
-    if (state != BehaviourTree::AState::Running)
+void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req) {
+    if (state != BehaviourTree::AState::Running) {
         return;
+    }
 
     std::string errorString = req.GetErrorString();
     blackboard->LogMsg("HttpRequest Failed: Error = " + errorString);
     blackboard->error = NKError(NKErrorType::VALUE2, "Http Error", "", errorString, req.statusCode);
 
-    if (req.statusCode < 500)
-    {
-        if ((unsigned int)(req.error - 1) < 3)
-        {
+    if (req.statusCode < 500) {
+        if ((unsigned int)(req.error) < 4) {
             state = BehaviourTree::AState::Failure;
             return;
         }
 
-        if (req.error)
-        {
+        if (req.error) {
             DGAnalyticsData analyticsData("NKNetworkingError");
             analyticsData.AddPair("type", sNKError_HttpError);
             analyticsData.AddPair("info", req.GetErrorString());
@@ -157,9 +150,7 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
             DGAnalytics::Instance()->SendDataEvent(analyticsData, true, AnalyticsEventGroups::Group::Framework, 2);
             state = BehaviourTree::AState::Failure;
             return;
-        }
-        else
-        {
+        } else {
             DGAnalyticsData analyticsData("NKNetworkingError");
             analyticsData.AddPair("type", sNKError_HttpRequest);
             analyticsData.AddPair("info", StringHelper::Format("%d", req.statusCode));
@@ -174,8 +165,7 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
     std::string downloadedData = req.GetDownloadedDataStr();
     NKMessageResponse messageResponse;
 
-    if (NKJSON::TryParse<NKMessageResponse>(messageResponse, downloadedData) && messageResponse.error.type.empty())
-    {
+    if (NKJSON::TryParse<NKMessageResponse>(messageResponse, downloadedData) && messageResponse.error.type.empty()) {
         DGAnalyticsData analyticsData("NKNetworkingError");
         analyticsData.AddPair("type", sNKError_HttpLink);
         analyticsData.AddPair("info", StringHelper::Format("%d", req.statusCode));
@@ -185,10 +175,8 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
         return;
     }
 
-    if (!messageResponse.error.type.empty())
-    {
-        if (messageResponse.error.type == CANNOT_FIND_LINK)
-        {
+    if (!messageResponse.error.type.empty()) {
+        if (messageResponse.error.type == CANNOT_FIND_LINK) {
             std::string message = "HttpRequest: Server reported an error: \n\t Type: " + messageResponse.error.type;
             message += "\n\t Reason: " + messageResponse.error.details.reason;
             message += "\n\t Fix: " + messageResponse.error.details.fix;
@@ -206,13 +194,10 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
         blackboard->error.typeStr = messageResponse.error.type;
     }
 
-    if (!messageResponse.error.details.reason.empty())
-        blackboard->error.reason = messageResponse.error.details.reason;
-    if (!messageResponse.error.details.fix.empty())
-        blackboard->error.fix = messageResponse.error.details.fix;
+    blackboard->error.reason = messageResponse.error.details.reason;
+    blackboard->error.fix = messageResponse.error.details.fix;
 
-    if (messageResponse.error.type.empty())
-    {
+    if (messageResponse.error.type.empty()) {
         blackboard->LogMsg("HttpRequest: Couldn't parse response (Callback Key: " + req.callbackKey + ")");
 
         DGAnalyticsData analyticsData("NKNetworkingError");
@@ -221,8 +206,7 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req)
         analyticsData.AddPair("url", req.url);
         DGAnalytics::Instance()->SendDataEvent(analyticsData, true, AnalyticsEventGroups::Group::Framework, 2);
     }
-    else
-    {
+    else {
         std::string message = "HttpRequest: Server reported an error: \n\t Type: " + messageResponse.error.type;
         message += "\n\t Reason: " + messageResponse.error.details.reason;
         message += "\n\t Fix: " + messageResponse.error.details.fix;

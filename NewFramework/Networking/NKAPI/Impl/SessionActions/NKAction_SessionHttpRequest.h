@@ -7,8 +7,7 @@ struct NKMessage;
 struct NKMessageResponse;
 class NKSessionBlackboard;
 
-class BA_HttpRequestAction : public BehaviourTree::Leaf
-{
+class BA_HttpRequestAction : public BehaviourTree::Leaf {
 public:
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     void Stop(BehaviourTree::IBlackboard* blackboard) override;

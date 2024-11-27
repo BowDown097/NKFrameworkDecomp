@@ -35,7 +35,7 @@ namespace BehaviourTree
     template<typename T>
     struct Conditional : Leaf
     {
-        T condition;
+        T condition; // 0x10
 
         void Start(IBlackboard* blackboard) override
         {
@@ -52,7 +52,7 @@ namespace BehaviourTree
 
     struct Decider : Leaf
     {
-        float pValue;
+        float pValue; // 0x10
 
         std::string DebugString() override;
         void Start(IBlackboard* blackboard) override;
@@ -62,16 +62,16 @@ namespace BehaviourTree
     class Wait : public Leaf
     {
     public:
-        float min;
-        float max;
+        float min; // 0x10
+        float max; // 0x14
 
         std::string DebugString() override;
         void Start(IBlackboard* blackboard) override;
         void Update(IBlackboard* blackboard, const float& elapsed) override;
         Action* clone() override;
     private:
-        float elapsed;
-        float timeout;
+        float elapsed; // 0x18
+        float timeout; // 0x1C
     };
 
     class Composite : public Action
