@@ -37,6 +37,21 @@ target_sources(NKFrameworkDecomp
         NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
         NewFramework/Math/Matrix.cpp
         NewFramework/Networking/NKAPI/Impl/NKMessages.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckLoginServiceType.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckOnline.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckServiceActionType.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_HideWebView.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_IsServiceAuthenticated.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ReportErrorCallback.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ServiceAction.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SessionHttpRequest.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ShowWebView.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
@@ -94,6 +109,21 @@ target_sources(NKFrameworkDecomp
             NewFramework/Math/Maths.h
             NewFramework/Math/Matrix.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckLoginServiceType.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckOnline.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckServiceActionType.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_HideWebView.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_IsServiceAuthenticated.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ReportErrorCallback.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ServiceAction.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SessionHttpRequest.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ShowWebView.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKError.h
             NewFramework/Networking/NKAPI/NKSignature.h
