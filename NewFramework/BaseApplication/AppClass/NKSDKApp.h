@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 
+class CAgeGate;
+
 struct I_NKSDKApp
 {
     virtual ~I_NKSDKApp() = default;
@@ -10,5 +12,5 @@ struct I_NKSDKApp
     virtual float GetViewScale() = 0;
     virtual std::string GetLanguageCode() = 0;
     virtual int GetVersionCode() = 0;
-    virtual int GetAgeGate() = 0;
+    virtual CAgeGate* GetAgeGate() = 0;
 };
