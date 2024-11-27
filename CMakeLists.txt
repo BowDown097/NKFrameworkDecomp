@@ -40,6 +40,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
+        NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.cpp
         NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
         NewFramework/Platform/Shared/Assert.cpp
         NewFramework/Platform/Shared/Core.cpp
@@ -51,6 +52,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
+        NewFramework/Utilities/Utilities.cpp
         Uncategorized/BehaviourTree.cpp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
@@ -93,6 +95,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKError.h
             NewFramework/Networking/NKAPI/NKSignature.h
+            NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.h
             NewFramework/Networking/Protocols/HTTP/HttpRequest.h
             NewFramework/Networking/Protocols/HTTP/IHttpCallback.h
             NewFramework/Networking/Protocols/HTTP/IHttpRequestManager.h
@@ -107,6 +110,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
             NewFramework/Utilities/StringHelper.h
             NewFramework/Utilities/URLParser.h
+            NewFramework/Utilities/Utilities.h
             Uncategorized/BehaviourTree.h
             Uncategorized/Blackboards.h
             Uncategorized/GlobalVariables.h
