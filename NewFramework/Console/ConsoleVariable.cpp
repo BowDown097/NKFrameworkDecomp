@@ -1,4 +1,5 @@
 #include "ConsoleVariable.h"
+#include <cstring>
 #include <xmmintrin.h>
 
 ConsoleVariable::ConsoleVariable(const char* name, const char* description, const char* defaultValue)
@@ -13,8 +14,22 @@ void cvar::set(ConsoleVariable* variable, const std::string& value) {
     }
 
     variable->stringValue = value;
-    variable->floatValue = std::atof(variable->stringValue.c_str());
-    variable->intValue = std::atoi(variable->stringValue.c_str());
+    variable->floatValue = atof(variable->stringValue.c_str());
+    variable->intValue = atoi(variable->stringValue.c_str());
+}
+
+ConsoleVariable* cvar::get_list() {
+    return g_cvar_head;
+}
+
+ConsoleVariable* cvar::get(const std::string& name) {
+    ConsoleVariable* result = g_cvar_head;
+
+    while (result && result->name != name) {
+        result = result->head;
+    }
+
+    return result;
 }
 
 void cvar::set_integer(ConsoleVariable* variable, int value) {

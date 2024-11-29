@@ -14,8 +14,10 @@ struct ConsoleVariable {
 
 namespace cvar {
     void set(ConsoleVariable* variable, const std::string& value);
+    ConsoleVariable* get_list();
+    ConsoleVariable* get(const std::string& name);
     void set_integer(ConsoleVariable* variable, int value);
     void set_value(ConsoleVariable* variable, float value);
 }
 
-ConsoleVariable* g_cvar_head{};
+extern ConsoleVariable* g_cvar_head;
