@@ -21,6 +21,6 @@ public:
     virtual void ParseResponse(const NKMessageResponse& response) = 0;
     virtual HTTP_METHOD GetHTTPMethod() { return METHOD_POST; }
 protected:
-    NKSessionBlackboard* blackboard; // 0x10
+    NKSessionBlackboard* blackboard{}; // 0x10
     std::shared_ptr<HttpCallbackFunctor> callback; // 0x18
 };

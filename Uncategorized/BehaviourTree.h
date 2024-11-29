@@ -88,6 +88,13 @@ namespace BehaviourTree
         void Stop(IBlackboard* blackboard) override;
         void Update(IBlackboard* blackboard, const float& elapsed) override;
         void CheckLoop(IBlackboard* blackboard);
+
+        // speculative: avoids repeating code
+        inline void AddAction(Action* action)
+        {
+            if (actions)
+                actions->push_back(action);
+        }
     protected:
         int childIndex; // 0x18
         LoopCondition loopCondition; // 0x1C
@@ -174,8 +181,8 @@ namespace BehaviourTree
     struct Loop : Decorator
     {
         LoopCondition loopCondition; // 0x18
-        int count; // 0x1C
-        int index; // 0x20
+        int count = -1; // 0x1C
+        int index{}; // 0x20
 
         std::string DebugString() override;
         void CheckChildState(IBlackboard* blackboard) override;

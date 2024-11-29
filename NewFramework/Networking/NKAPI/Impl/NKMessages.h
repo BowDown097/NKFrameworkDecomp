@@ -13,9 +13,12 @@ struct NKAccessToken
     std::string token; // 0x00
     time_t expires; // 0x18
 
-    NKAccessToken();
+    NKAccessToken() = default;
     NKAccessToken(const NKMessageSession& session)
         : token(session.sessionID), expires(session.expires) {}
+
+    // speculative: avoids repeating code
+    inline bool IsValid() const { return !token.empty() && expires; }
 };
 
 struct NKMessageAuth

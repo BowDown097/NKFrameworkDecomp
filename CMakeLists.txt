@@ -43,11 +43,15 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckLoginServiceType.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckOnline.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckServiceActionType.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ClearSession.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_GetUser.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_HideWebView.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_IsServiceAuthenticated.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_OpenSessionUsingToken.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ReportErrorCallback.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ServiceAction.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SessionHttpRequest.cpp
+        NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SetError.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ShowWebView.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.cpp
@@ -115,11 +119,15 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckLoginServiceType.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckOnline.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckServiceActionType.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ClearSession.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_GetUser.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_HideWebView.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_IsServiceAuthenticated.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_OpenSessionUsingToken.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ReportErrorCallback.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ServiceAction.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SessionHttpRequest.h
+            NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_SetError.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_ShowWebView.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.h
@@ -140,6 +148,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
             NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
+            NewFramework/Utilities/Misc/AssetBag.h
             NewFramework/Utilities/StringHelper.h
             NewFramework/Utilities/URLParser.h
             NewFramework/Utilities/Utilities.h

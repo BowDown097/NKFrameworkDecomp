@@ -160,7 +160,7 @@ bool C_NKLoginWebView::UrlRequested(const std::string& url)
             "$.api.app.setCurrentProviders( [ %s ] );",
             providerData.c_str()));
 
-        if (!accessToken.token.empty() && accessToken.expires > 0)
+        if (accessToken.IsValid())
         {
             InjectJavascript(StringHelper::Format(
                 "$.api.app.userDetailsBackup(\"%s\", \"%s\");",

@@ -20,11 +20,11 @@ void BA_AuthenticateService::Start(BehaviourTree::IBlackboard* blackboard) {
     loginService = this->blackboard->sessionImpl->GetLoginService(localLoginServiceType);
 
     std::string message = "Authenticating " + GetLoginServiceStringFromEnum(localLoginServiceType) + ".. (Can show UI : ";
-    message += authMethod == eNKServiceAuthMethod::Platform ? "True" : "False";
+    message += authMethod == eNKServiceAuthMethod::Email ? "True" : "False";
     message += ")";
     this->blackboard->LogMsg(message);
 
-    if (authMethod == eNKServiceAuthMethod::Platform) {
+    if (authMethod == eNKServiceAuthMethod::Email) {
         this->blackboard->field_C0 = false;
     }
 

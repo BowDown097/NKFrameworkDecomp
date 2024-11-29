@@ -4,7 +4,7 @@
 
 enum class eNKLoginService { InBlackboard = -2, None = -1, Cache, Email, GameCenter, Facebook, GooglePlay, Steam, Apple };
 enum class eNKServiceAction { InBlackboard = -2, None = -1, Login, Create, Link };
-enum class eNKServiceAuthMethod { Email, Platform }; // Platform is i.e. Steam on PC, Google Play on Android
+enum class eNKServiceAuthMethod { Platform, Email }; // Platform is i.e. Steam on PC, Google Play on Android
 enum class eNKServiceLoginResult { Success, Failure };
 
 std::string GetServiceActionStringFromEnum(const eNKServiceAction& serviceAction);
