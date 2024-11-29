@@ -21,6 +21,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.cpp
         NewFramework/BaseApplication/Screens/ScreenData.cpp
         NewFramework/BaseApplication/BasePointers.cpp
+        NewFramework/Console/ConsoleVariable.cpp
         NewFramework/Graphics/Font/FontManager.cpp
         NewFramework/Graphics/Font/Font.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
@@ -95,6 +96,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/Screens/BaseScreen/BaseScreen.h
             NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
+            NewFramework/Console/ConsoleVariable.h
             NewFramework/Graphics/Font/FontManager.h
             NewFramework/Graphics/Font/Font.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
