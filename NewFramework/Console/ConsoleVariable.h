@@ -19,5 +19,3 @@ namespace cvar {
     void set_integer(ConsoleVariable* variable, int value);
     void set_value(ConsoleVariable* variable, float value);
 }
-
-extern ConsoleVariable* g_cvar_head;

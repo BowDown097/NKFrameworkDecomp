@@ -1,6 +1,6 @@
 #include "ConsoleVariable.h"
-#include <cstring>
-#include <xmmintrin.h>
+
+ConsoleVariable* g_cvar_head{};
 
 ConsoleVariable::ConsoleVariable(const char* name, const char* description, const char* defaultValue)
     : name(name), description(description), head(g_cvar_head) {
