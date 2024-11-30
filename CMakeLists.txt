@@ -38,6 +38,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
         NewFramework/Math/Matrix.cpp
         NewFramework/Networking/NKAPI/Impl/NKMessages.cpp
+        NewFramework/Networking/NKAPI/Impl/NKSessionImpl.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.cpp
@@ -59,6 +60,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
+        NewFramework/Networking/NKAPI/NKSession.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
         NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.cpp
         NewFramework/Networking/Protocols/HTTP/HttpRequest.cpp
@@ -115,6 +117,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Math/Maths.h
             NewFramework/Math/Matrix.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
+            NewFramework/Networking/NKAPI/Impl/NKSessionImpl.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.h
@@ -136,6 +139,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKError.h
+            NewFramework/Networking/NKAPI/NKManager.h
+            NewFramework/Networking/NKAPI/NKSession.h
             NewFramework/Networking/NKAPI/NKSignature.h
             NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.h
             NewFramework/Networking/Protocols/HTTP/HttpRequest.h
