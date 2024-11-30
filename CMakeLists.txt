@@ -80,6 +80,7 @@ target_sources(NKFrameworkDecomp
         Uncategorized/GlobalVariables.cpp
         Uncategorized/NKLoginService.cpp
         Uncategorized/NKLoginWebview.cpp
+        Uncategorized/NKRequestFactory.cpp
         Uncategorized/RGBA.cpp
         Uncategorized/SpriteInformation.cpp
         Uncategorized/StephenEncryption.cpp
@@ -166,6 +167,7 @@ target_sources(NKFrameworkDecomp
             Uncategorized/NKLoginQuery.h
             Uncategorized/NKLoginService.h
             Uncategorized/NKLoginWebview.h
+            Uncategorized/NKRequestFactory.h
             Uncategorized/ReferenceCounted.h
             Uncategorized/RGBA.h
             Uncategorized/SpriteInformation.h
