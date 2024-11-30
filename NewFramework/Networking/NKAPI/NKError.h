@@ -13,8 +13,8 @@ struct NKError
 
     NKError() = default;
     NKError(const NKErrorType& type, const std::string& reason,
-            const std::string& typeStr, const std::string& fix, int field_50 = -1)
-        : type(type), typeStr(typeStr), reason(reason), fix(fix), code(field_50) {}
+            const std::string& typeStr, const std::string& fix, int code = -1)
+        : type(type), typeStr(typeStr), reason(reason), fix(fix), code(code) {}
 
     bool IsValid() const;
 };

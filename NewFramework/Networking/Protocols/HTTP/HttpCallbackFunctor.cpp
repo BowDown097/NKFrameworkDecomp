@@ -3,11 +3,11 @@
 void HttpCallbackFunctor::HttpComplete(const SHttpRequest& req)
 {
     httpCallback(req);
-    field_40.reset();
+    field_38.reset();
 }
 
 void HttpCallbackFunctor::HttpFailed(const SHttpRequest& req)
 {
     httpCallback(req);
-    field_40.reset();
+    field_38.reset();
 }

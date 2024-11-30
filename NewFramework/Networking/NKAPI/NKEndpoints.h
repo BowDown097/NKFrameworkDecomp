@@ -9,8 +9,8 @@ namespace NKEndpoints
 {
     struct Endpoint
     {
-        std::string field_00;
-        bool field_18;
+        std::string field_0; // 0x00
+        bool field_18; // 0x18
     };
 
     std::string GetBase(eNKLinkServerCluster cluster);

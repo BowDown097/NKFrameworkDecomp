@@ -31,8 +31,8 @@ void BA_HttpRequestAction::SendHttpRequest() {
             HttpFailed(req);
         }
     };
-    functor->field_40 = functor;
-    callback = functor->field_40;
+    functor->field_38 = functor;
+    callback = functor->field_38;
 
     std::string callbackKey = HttpCallbackKey();
     SHttpTimeoutOptions opts;
@@ -137,7 +137,7 @@ void BA_HttpRequestAction::HttpFailed(const SHttpRequest& req) {
     blackboard->error = NKError(NKErrorType::VALUE2, "Http Error", "", errorString, req.statusCode);
 
     if (req.statusCode < 500) {
-        if ((unsigned int)(req.error) < 4) {
+        if ((unsigned int)(req.error - 1) < 3) {
             state = BehaviourTree::AState::Failure;
             return;
         }
