@@ -31,8 +31,8 @@ void BA_HttpRequestAction::SendHttpRequest() {
             HttpFailed(req);
         }
     };
-    functor->field_38 = functor;
-    callback = functor->field_38;
+    functor->field_40 = functor;
+    callback = functor->field_40;
 
     std::string callbackKey = HttpCallbackKey();
     SHttpTimeoutOptions opts;

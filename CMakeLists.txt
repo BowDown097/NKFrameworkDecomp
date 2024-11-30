@@ -58,8 +58,10 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.cpp
+        NewFramework/Networking/NKAPI/Modules/NKModule.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
+        NewFramework/Networking/NKAPI/NKModules.cpp
         NewFramework/Networking/NKAPI/NKSession.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
         NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.cpp
@@ -138,9 +140,11 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_StoreStateCallback.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.h
+            NewFramework/Networking/NKAPI/Modules/NKModule.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKError.h
             NewFramework/Networking/NKAPI/NKManager.h
+            NewFramework/Networking/NKAPI/NKModules.h
             NewFramework/Networking/NKAPI/NKSession.h
             NewFramework/Networking/NKAPI/NKSignature.h
             NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.h
