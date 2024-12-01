@@ -72,7 +72,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/ThirdParty/easyzlib/easyzlib.c
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
-        NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.cpp
+        NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
@@ -158,8 +158,8 @@ target_sources(NKFrameworkDecomp
             NewFramework/ThirdParty/easyzlib/easyzlib.h
             NewFramework/ThirdParty/libpng/load_png.h
             NewFramework/Utilities/Encoding.h
-            NewFramework/Utilities/Json/Json_PropertyReader/JSON_PropertyException.h
-            NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h
+            NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h
+            NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.h
             NewFramework/Utilities/Misc/AssetBag.h
             NewFramework/Utilities/StringHelper.h
             NewFramework/Utilities/URLParser.h
@@ -204,9 +204,9 @@ FetchContent_Declare(
 )
 
 set(BUILD_STATIC_LIBRARIES ON)
-set(JSON_SPIRIT_MVALUE_ENABLED ON CACHE BOOL "Build with support for ascii map types")
-set(JSON_SPIRIT_DEMOS OFF CACHE BOOL "Enable building demos")
-set(JSON_SPIRIT_TESTS OFF CACHE BOOL "Enable building tests")
+set(JSON_SPIRIT_MVALUE_ENABLED ON CACHE BOOL "")
+set(JSON_SPIRIT_DEMOS OFF CACHE BOOL "")
+set(JSON_SPIRIT_TESTS OFF CACHE BOOL "")
 
 FetchContent_MakeAvailable(jsonspirit)
 

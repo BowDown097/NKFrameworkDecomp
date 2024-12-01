@@ -18,6 +18,7 @@ public:
     {
         Success = 0,
         Failed = 1,
+        OpenFailed = 2,
         SanityCheckFailed = 3,
         IOFailed = 5,
         IOIncomplete = 6,
@@ -29,10 +30,9 @@ public:
 
     struct SFileIOResult
     {
-        eFileIOStatus status = eFileIOStatus::Failed; // 0x00
-        int field_4; // 0x04
-        size_t bytesTransferred = 0; // 0x08
-        size_t bytesAttempted = 0; // 0x10
+        eFileIOStatus status{}; // 0x00
+        size_t bytesTransferred{}; // 0x08
+        size_t bytesAttempted{}; // 0x10
         std::string info; // 0x18
     };
 

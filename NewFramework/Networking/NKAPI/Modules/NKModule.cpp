@@ -31,14 +31,14 @@ void NKModule::Request(NKEndpoints::Endpoint endpoint, std::string data, HTTP_ME
                        long timeout, int retries, long lowSpeedTime) {
     std::shared_ptr<HttpCallbackFunctor> functor = std::make_shared<HttpCallbackFunctor>();
     functor->httpCallback = [this](const SHttpRequest& req) { ProcessResponse(req); };
+    functor->field_40 = functor;
 
     int requestNumber = endpoint.isFullUrl
         ? NKRequestFactory::GenerateRequestFullURL(endpoint.path, data, method, functor.get(), timeout, lowSpeedTime)
         : NKRequestFactory::GenerateRequestPartialURL(endpoint.path, data, method, functor.get(), timeout, lowSpeedTime);
 
     RequestContext ctx;
-    ctx.endpoint.path = endpoint.path;
-    ctx.endpoint.isFullUrl = endpoint.isFullUrl;
+    ctx.endpoint = endpoint;
     ctx.data = data;
     ctx.method = HTTP_METHOD::METHOD_POST;
     ctx.moduleCallback = moduleCb;
@@ -59,8 +59,8 @@ void NKModule::Request(std::string path, std::string data, HTTP_METHOD method,
 void NKModule::ProcessResponse(const SHttpRequest& req) {
     RequestContext ctx = map[req.field_A8];
     map.erase(req.field_A8);
-
-    if (!NKAssert(ctx.functor != nullptr, "Expected valid HTTP functor when processing response")) { // line 63
+    ENFORCE_LINE(62); // following assert is supposed to be on line 63
+    if (!NKAssert(ctx.functor != nullptr, "Expected valid HTTP functor when processing response")) {
         return;
     }
 

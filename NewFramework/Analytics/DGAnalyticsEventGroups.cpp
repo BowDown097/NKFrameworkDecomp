@@ -1,6 +1,6 @@
 #include "DGAnalyticsEventGroups.h"
 #include "NewFramework/Platform/Shared/Logging.h"
-#include "NewFramework/Utilities/Json/Json_PropertyReader/JSON_Read.h"
+#include "NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.h"
 
 AnalyticsEventGroups::CGroupSettingsContainer::CGroupSettingsContainer()
 {

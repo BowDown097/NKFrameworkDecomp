@@ -37,6 +37,7 @@ void BA_CacheSession::Start(BehaviourTree::IBlackboard* blackboard) {
             sessionCacheFile->Close(IFile::eWriteSyncBehaviour::Sync);
 
             state = BehaviourTree::AState::Success;
+            delete sessionCacheFile;
         }
     }
 
