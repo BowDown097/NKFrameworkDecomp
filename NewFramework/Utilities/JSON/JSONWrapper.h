@@ -24,5 +24,5 @@ public:
     bool ParseJSONData(uint8_t* data, size_t size, Json::Value& out, bool noErrorOnFail);
 private:
     CBaseFileIO* fileIO;
-    bool field_8{};
+    bool ensureEncrypted{};
 };

@@ -52,7 +52,7 @@ std::pair<std::string, bool> CJSONWrapper::DecryptIfEncrypted(uint8_t* data, siz
             }
         }
     }
-    if (field_8) {
+    if (ensureEncrypted) {
         return std::make_pair(std::string(), false);
     }
     return std::make_pair(std::string(reinterpret_cast<char*>(data), size), true);
