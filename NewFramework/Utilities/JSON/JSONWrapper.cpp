@@ -8,6 +8,7 @@
 template<typename T> IFile::SFileIOResult CJSONWrapper::WriteWithResult(
     T obj, std::string filePath, eEncryptionType encryption, IFile::eWriteSyncBehaviour writeSyncBehaviour) {
     IFile::SFileIOResult result;
+    result.status = IFile::eFileIOStatus::Success;
     IFile* file = fileIO->OpenFile(filePath, fileIO->documentPolicy, eFileOpenMode::ReadWriteNew);
     if (!file) {
         result.info = StringHelper::Format("Failed to open file (%s) for writing", filePath.c_str());
@@ -16,8 +17,7 @@ template<typename T> IFile::SFileIOResult CJSONWrapper::WriteWithResult(
     }
     std::string objData = json_spirit::write(obj);
     if (encryption == eEncryptionType::StephenEncryption) {
-        int crc = GetCRCFromData(objData.c_str(), objData.size());
-        std::string dgdataHeader = StringHelper::Format("DGDATA%08x", crc);
+        std::string dgdataHeader = StringHelper::Format("DGDATA%08x", GetCRCFromData(objData.c_str(), objData.size()));
         CStephenEncryption stephenEncryption;
         stephenEncryption.EncryptStream(reinterpret_cast<uint8_t*>(objData.data()), objData.size());
         objData = dgdataHeader + objData;

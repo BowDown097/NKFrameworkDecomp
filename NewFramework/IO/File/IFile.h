@@ -30,7 +30,7 @@ public:
 
     struct SFileIOResult
     {
-        eFileIOStatus status{}; // 0x00
+        eFileIOStatus status = eFileIOStatus::Failed; // 0x00
         size_t bytesTransferred{}; // 0x08
         size_t bytesAttempted{}; // 0x10
         std::string info; // 0x18
