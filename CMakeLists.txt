@@ -73,6 +73,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.cpp
+        NewFramework/Utilities/JSON/JSONWrapper.cpp
         NewFramework/Utilities/Misc/AssetBag.cpp
         NewFramework/Utilities/StringHelper.cpp
         NewFramework/Utilities/URLParser.cpp
@@ -160,6 +161,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.h
+            NewFramework/Utilities/JSON/JSONWrapper.h
             NewFramework/Utilities/Misc/AssetBag.h
             NewFramework/Utilities/StringHelper.h
             NewFramework/Utilities/URLParser.h
@@ -191,12 +193,41 @@ if(APPLE)
 endif()
 
 # Packages
+include(FetchContent)
 find_package(Boost REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 
+# jsoncpp
+set(HAS_JSONCPP False)
+
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(JSONCPP QUIET jsoncpp)
+    if(JSONCPP_FOUND)
+        set(HAS_JSONCPP True)
+        target_include_directories(NKFrameworkDecomp PRIVATE ${JSONCPP_INCLUDE_DIRS})
+        target_link_libraries(NKFrameworkDecomp PRIVATE ${JSONCPP_LIBRARIES})
+    endif()
+endif()
+
+if(NOT HAS_JSONCPP)
+    FetchContent_Declare(
+        jsoncpp
+        GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
+        GIT_TAG 1.9.6)
+
+    set(JSONCPP_WITH_TESTS OFF CACHE BOOL "")
+    set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "")
+    set(JSONCPP_WITH_STRICT_ISO OFF CACHE BOOL "")
+    set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "")
+    set(JSONCPP_WITH_CMAKE_PACKAGE OFF CACHE BOOL "")
+
+    FetchContent_MakeAvailable(jsoncpp)
+    target_link_libraries(NKFrameworkDecomp PRIVATE jsoncpp_static)
+endif()
+
 # jsonspirit
-include(FetchContent)
 FetchContent_Declare(
     jsonspirit
     GIT_REPOSITORY https://github.com/png85/json_spirit.git

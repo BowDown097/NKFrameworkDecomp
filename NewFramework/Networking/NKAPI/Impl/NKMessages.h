@@ -101,8 +101,7 @@ struct NKResponseUtilityTime
     time_t time;
 };
 
-// TODO: implement TryParse template methods (depends on CJSONWrapper)
-// and implement TryParse for NKResponseUser (depends on CProfanityFilter and unimplemented GetXXX methods)
+// TODO: implement TryParse for NKResponseUser (depends on CProfanityFilter and unimplemented GetXXX methods)
 namespace NKJSON
 {
     template<typename T>

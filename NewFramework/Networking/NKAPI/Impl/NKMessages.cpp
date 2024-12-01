@@ -1,5 +1,6 @@
 #include "NKMessages.h"
 #include "NewFramework/Platform/Shared/Logging.h"
+#include "NewFramework/Utilities/JSON/JSONWrapper.h"
 #include <json_spirit/json_spirit_writer.h>
 
 // remove this undef stuff when the time comes
@@ -14,11 +15,76 @@ LOG_ERROR("%s", errorStr.c_str()); ENFORCE_LINE(line);\
 throw std::runtime_error(error); \
 }
 
+template<> const bool NKJSON::TryParse(NKResponseCreate& out, const std::string& data)
+{
+    if (data.empty())
+        return false;
+
+    json_spirit::mValue value;
+    CJSONWrapper wrapper(nullptr);
+    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+        return false;
+
+    return NKJSON::TryParse(out, value.get_obj());
+}
+
+template<> const bool NKJSON::TryParse(NKResponseLink& out, const std::string& data)
+{
+    if (data.empty())
+        return false;
+
+    json_spirit::mValue value;
+    CJSONWrapper wrapper(nullptr);
+    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+        return false;
+
+    return NKJSON::TryParse(out, value.get_obj());
+}
+
+template<> const bool NKJSON::TryParse(NKResponseLogin& out, const std::string& data)
+{
+    if (data.empty())
+        return false;
+
+    json_spirit::mValue value;
+    CJSONWrapper wrapper(nullptr);
+    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+        return false;
+
+    return NKJSON::TryParse(out, value.get_obj());
+}
+
 template<> std::string NKJSON::Serialise(const NKMessage& val)
 {
     json_spirit::mObject obj;
     Serialise(val, obj);
     return json_spirit::write(obj);
+}
+
+template<> const bool NKJSON::TryParse(NKMessageResponse& out, const std::string& data)
+{
+    if (data.empty())
+        return false;
+
+    json_spirit::mValue value;
+    CJSONWrapper wrapper(nullptr);
+    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+        return false;
+
+    return NKJSON::TryParse(out, value.get_obj());
+}
+
+template<> const bool NKJSON::TryParse(NKResponseUserCurrent& out, const std::string& data)
+{
+    if (data.empty())
+        return false;
+
+    json_spirit::mValue value;
+    CJSONWrapper wrapper(nullptr);
+    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+        return false;
+
+    return NKJSON::TryParse(out, value.get_obj());
 }
 
 template<> std::string NKJSON::Serialise(const NKResponseLogin& val)
