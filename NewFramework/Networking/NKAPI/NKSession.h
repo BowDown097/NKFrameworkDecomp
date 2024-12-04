@@ -5,6 +5,8 @@ class NKSession {
 public:
     static NKSession* GetActiveSession();
     NKSession();
+    static void CleanUp();
+    ~NKSession();
     const NKAccessToken& GetAccessToken() const;
     const NKResponseUser& GetUserDetails() const;
     void EnableLogging(bool enabled) const;
@@ -34,8 +36,5 @@ public:
     const NKError& GetLastError() const;
 private:
     inline static NKSession* s_ActiveSession;
-
-    NKSessionImpl impl;
-
-    static void CleanUp();
+    NKSessionImpl* impl;
 };
