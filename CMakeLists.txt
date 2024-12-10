@@ -72,6 +72,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/ThirdParty/easyzlib/easyzlib.c
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
+        NewFramework/Utilities/HashHelper.cpp
         NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.cpp
         NewFramework/Utilities/JSON/JSONWrapper.cpp
         NewFramework/Utilities/Misc/AssetBag.cpp
@@ -159,6 +160,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/ThirdParty/easyzlib/easyzlib.h
             NewFramework/ThirdParty/libpng/load_png.h
             NewFramework/Utilities/Encoding.h
+            NewFramework/Utilities/HashHelper.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_Read.h
             NewFramework/Utilities/JSON/JSONWrapper.h
