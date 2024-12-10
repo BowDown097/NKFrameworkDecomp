@@ -1,97 +1,22 @@
 #include "NKMessages.h"
 #include "NewFramework/Platform/Shared/Logging.h"
-#include "NewFramework/Utilities/JSON/JSONWrapper.h"
-#include <json_spirit/json_spirit_writer.h>
+#include "NewFramework/Utilities/HashHelper.h"
 
 // remove this undef stuff when the time comes
 #undef ENFORCE_LINE
 #define ENFORCE_LINE(expected)
 
-#define ASSERT_OBJECT_HAS_MEMBER(it, error, line) \
+#define ASSERT_OBJECT_HAS_MEMBER(it, member, line) \
 if (it == obj.end()) \
 { \
-std::string errorStr = error; \
+std::string errorStr = "object has no member called '" member "'"; \
 LOG_ERROR("%s", errorStr.c_str()); ENFORCE_LINE(line);\
-throw std::runtime_error(error); \
+throw std::runtime_error("object has no member called '" member "'"); \
 }
 
-template<> const bool NKJSON::TryParse(NKResponseCreate& out, const std::string& data)
+uint64_t NKResponseUser::GetCreationTimeStamp() const
 {
-    if (data.empty())
-        return false;
-
-    json_spirit::mValue value;
-    CJSONWrapper wrapper(nullptr);
-    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-        return false;
-
-    return NKJSON::TryParse(out, value.get_obj());
-}
-
-template<> const bool NKJSON::TryParse(NKResponseLink& out, const std::string& data)
-{
-    if (data.empty())
-        return false;
-
-    json_spirit::mValue value;
-    CJSONWrapper wrapper(nullptr);
-    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-        return false;
-
-    return NKJSON::TryParse(out, value.get_obj());
-}
-
-template<> const bool NKJSON::TryParse(NKResponseLogin& out, const std::string& data)
-{
-    if (data.empty())
-        return false;
-
-    json_spirit::mValue value;
-    CJSONWrapper wrapper(nullptr);
-    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-        return false;
-
-    return NKJSON::TryParse(out, value.get_obj());
-}
-
-template<> std::string NKJSON::Serialise(const NKMessage& val)
-{
-    json_spirit::mObject obj;
-    Serialise(val, obj);
-    return json_spirit::write(obj);
-}
-
-template<> const bool NKJSON::TryParse(NKMessageResponse& out, const std::string& data)
-{
-    if (data.empty())
-        return false;
-
-    json_spirit::mValue value;
-    CJSONWrapper wrapper(nullptr);
-    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-        return false;
-
-    return NKJSON::TryParse(out, value.get_obj());
-}
-
-template<> const bool NKJSON::TryParse(NKResponseUserCurrent& out, const std::string& data)
-{
-    if (data.empty())
-        return false;
-
-    json_spirit::mValue value;
-    CJSONWrapper wrapper(nullptr);
-    if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-        return false;
-
-    return NKJSON::TryParse(out, value.get_obj());
-}
-
-template<> std::string NKJSON::Serialise(const NKResponseLogin& val)
-{
-    json_spirit::mObject obj;
-    Serialise(val, obj);
-    return json_spirit::write(obj);
+    return nkapiID.size() >= 8 ? HashHelper::HexStringToValue(nkapiID.substr(0, 8)) : 0;
 }
 
 void NKJSON::Serialise(const NKMessageAuth& val, json_spirit::mObject& obj)
@@ -151,6 +76,60 @@ void NKJSON::Serialise(const NKResponseUser& val, json_spirit::mObject& obj)
     obj["access"] = val.access;
 }
 
+void NKJSON::Serialise(const NKMessageStorageSaveOptions& val, json_spirit::mObject& obj)
+{
+    obj["isPublic"] = val.isPublic;
+    obj["compress"] = val.compress;
+    obj["decode"] = val.decode;
+    obj["reducedRedundancy"] = val.reducedRedundancy;
+    obj["expiresIn"] = val.expiresIn;
+    obj["render"] = val.render;
+    obj["contentType"] = val.contentType;
+    obj["stephen"] = val.stephen;
+}
+
+void NKJSON::Serialise(const NKMessageStorageSave& val, json_spirit::mObject& obj)
+{
+    obj["filename"] = val.filename;
+    obj["data"] = val.data;
+
+    json_spirit::mObject optionsObj;
+    Serialise(val.options, optionsObj);
+    obj["options"] = optionsObj;
+}
+
+void NKJSON::Serialise(const NKMessageStorageSaveBufferOptions& val, json_spirit::mObject& obj)
+{
+    obj["isPublic"] = val.isPublic;
+    obj["compress"] = val.compress;
+    obj["decode"] = val.decode;
+    obj["reducedRedundancy"] = val.reducedRedundancy;
+    obj["expiresIn"] = val.expiresIn;
+    obj["render"] = val.render;
+    obj["contentType"] = val.contentType;
+    obj["stephen"] = val.stephen;
+}
+
+void NKJSON::Serialise(const NKMessageStorageSaveBuffer& val, json_spirit::mObject& obj)
+{
+    obj["filename"] = val.filename;
+    obj["data"] = val.data;
+
+    json_spirit::mObject optionsObj;
+    Serialise(val.options, optionsObj);
+    obj["options"] = optionsObj;
+
+    obj["storageEngine"] = val.storageEngine;
+    obj["maximumBufferDuration"] = val.maximumBufferDuration;
+}
+
+void NKJSON::Serialise(const NKMessageStorageLoad& val, json_spirit::mObject& obj)
+{
+    obj["filename"] = val.filename;
+    obj["owner"] = val.owner;
+    obj["includeBody"] = val.includeBody;
+}
+
 const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj)
 {
     return true;
@@ -158,7 +137,7 @@ const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj
 
 const bool NKJSON::TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator userIt = obj.find("user");
+    auto userIt = obj.find("user");
 
     if (userIt == obj.end())
     {
@@ -167,12 +146,12 @@ const bool NKJSON::TryParse(NKResponseUserCurrent& out, const json_spirit::mObje
         throw std::runtime_error("object has no member called 'reason'");
     }
 
-    return NKJSON::TryParse(out.user, obj);
+    return TryParse(out.user, obj);
 }
 
 const bool NKJSON::TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator reasonIt = obj.find("reason");
+    auto reasonIt = obj.find("reason");
 
     if (reasonIt == obj.end())
     {
@@ -183,7 +162,7 @@ const bool NKJSON::TryParse(NKMessageErrorDetails& out, const json_spirit::mObje
 
     out.reason = reasonIt->second.get_str();
 
-    json_spirit::mObject::const_iterator fixIt = obj.find("fix");
+    auto fixIt = obj.find("fix");
 
     if (fixIt == obj.end())
     {
@@ -202,7 +181,7 @@ const bool NKJSON::TryParse(NKMessageErrorDetails& out, const json_spirit::mObje
 
 const bool NKJSON::TryParse(NKMessageError& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator typeIt = obj.find("type");
+    auto typeIt = obj.find("type");
 
     if (typeIt == obj.end())
     {
@@ -213,7 +192,7 @@ const bool NKJSON::TryParse(NKMessageError& out, const json_spirit::mObject& obj
 
     out.type = typeIt->second.get_str();
 
-    json_spirit::mObject::const_iterator detailsIt = obj.find("details");
+    auto detailsIt = obj.find("details");
 
     if (detailsIt == obj.end())
     {
@@ -235,7 +214,7 @@ const bool NKJSON::TryParse(NKMessageError& out, const json_spirit::mObject& obj
 
 const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator errorIt = obj.find("error");
+    auto errorIt = obj.find("error");
 
     if (errorIt == obj.end())
     {
@@ -244,7 +223,7 @@ const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& 
         throw std::runtime_error("object has no member called 'error'");
     }
 
-    if (errorIt->second.type() != json_spirit::Value_type::null_type)
+    if (!errorIt->second.is_null())
     {
         const json_spirit::mObject& errorObj = errorIt->second.get_obj();
         TryParse(out.error, errorObj);
@@ -255,11 +234,11 @@ const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& 
         return true;
     }
 
-    json_spirit::mObject::const_iterator dataIt = obj.find("data");
-    json_spirit::mObject::const_iterator sigIt = obj.find("sig");
+    auto dataIt = obj.find("data");
+    auto sigIt = obj.find("sig");
 
-    ASSERT_OBJECT_HAS_MEMBER(dataIt, "object has no member called 'data'", 4887);
-    ASSERT_OBJECT_HAS_MEMBER(sigIt, "object has no member called 'sig'", 4888);
+    ASSERT_OBJECT_HAS_MEMBER(dataIt, "data", 4887);
+    ASSERT_OBJECT_HAS_MEMBER(sigIt, "sig", 4888);
 
     out.data = dataIt->second.get_str();
     out.sig = sigIt->second.get_str();
@@ -278,11 +257,11 @@ const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& 
 
 const bool NKJSON::TryParse(NKMessageSession& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator sessionIDIt = obj.find("sessionID");
-    json_spirit::mObject::const_iterator expiresIt = obj.find("expires");
+    auto sessionIDIt = obj.find("sessionID");
+    auto expiresIt = obj.find("expires");
 
-    ASSERT_OBJECT_HAS_MEMBER(sessionIDIt, "object has no member called 'sessionID'", 4910);
-    ASSERT_OBJECT_HAS_MEMBER(expiresIt, "object has no member called 'expires'", 4911);
+    ASSERT_OBJECT_HAS_MEMBER(sessionIDIt, "sessionID", 4910);
+    ASSERT_OBJECT_HAS_MEMBER(expiresIt, "expires", 4911);
 
     out.sessionID = sessionIDIt->second.get_str();
     out.expires = sessionIDIt->second.get_uint64();
@@ -297,17 +276,17 @@ const bool NKJSON::TryParse(NKMessageSession& out, const json_spirit::mObject& o
 
 const bool NKJSON::TryParse(NKResponseLogin& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator sessionIt = obj.find("session");
-    ASSERT_OBJECT_HAS_MEMBER(sessionIt, "object has no member called 'session'", 4931);
+    auto sessionIt = obj.find("session");
+    ASSERT_OBJECT_HAS_MEMBER(sessionIt, "session", 4931);
 
-    if (!NKJSON::TryParse(out.session, sessionIt->second.get_obj())) {
+    if (!TryParse(out.session, sessionIt->second.get_obj())) {
         return false;
     }
 
-    json_spirit::mObject::const_iterator userIt = obj.find("user");
-    ASSERT_OBJECT_HAS_MEMBER(userIt, "object has no member called 'user'", 4938);
+    auto userIt = obj.find("user");
+    ASSERT_OBJECT_HAS_MEMBER(userIt, "user", 4938);
 
-    return NKJSON::TryParse(out.user, userIt->second.get_obj());
+    return TryParse(out.user, userIt->second.get_obj());
 }
 
 
@@ -320,7 +299,7 @@ const bool NKJSON::TryParse(NKResponseLogin& out, const json_spirit::mObject& ob
 
 const bool NKJSON::TryParse(NKResponseCreate& out, const json_spirit::mObject& obj)
 {
-    json_spirit::mObject::const_iterator userIt = obj.find("user");
+    auto userIt = obj.find("user");
 
     if (userIt == obj.end())
     {
@@ -329,11 +308,110 @@ const bool NKJSON::TryParse(NKResponseCreate& out, const json_spirit::mObject& o
         throw std::runtime_error("object has no member called 'user'");
     }
 
-    return NKJSON::TryParse(out.user, userIt->second.get_obj());
+    return TryParse(out.user, userIt->second.get_obj());
 }
 
 // this is a bit of a sus method. surely this has a bunch of code #define'd out?
 const bool NKJSON::TryParse(NKResponseLink& out, const json_spirit::mObject& obj)
 {
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKMessageResponseFileStorage& out, const json_spirit::mObject& obj)
+{
+    auto filenameIt = obj.find("filename");
+    ASSERT_OBJECT_HAS_MEMBER(filenameIt, "filename", 4993);
+    out.filename = filenameIt->second.get_str();
+
+    auto successIt = obj.find("success");
+    ASSERT_OBJECT_HAS_MEMBER(successIt, "success", 4997);
+    out.success = successIt->second.get_bool();
+    if (!out.success)
+        return true;
+
+    auto dataIt = obj.find("data");
+    ASSERT_OBJECT_HAS_MEMBER(dataIt, "data", 5003);
+    out.data = !dataIt->second.is_null() ? dataIt->second.get_str() : "";
+
+    auto urlIt = obj.find("url");
+    ASSERT_OBJECT_HAS_MEMBER(urlIt, "url", 5007);
+    out.url = !urlIt->second.is_null() ? urlIt->second.get_str() : "";
+
+    auto etagIt = obj.find("etag");
+    ASSERT_OBJECT_HAS_MEMBER(etagIt, "etag", 5011);
+    out.etag = !etagIt->second.is_null() ? etagIt->second.get_str() : "";
+
+    auto storageOptionsIt = obj.find("storageOptions");
+    ASSERT_OBJECT_HAS_MEMBER(storageOptionsIt, "storageOptions", 5015);
+    return TryParse(out.storageOptions, storageOptionsIt->second.get_obj());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj)
+{
+    auto storageIt = obj.find("storage");
+    ASSERT_OBJECT_HAS_MEMBER(storageIt, "storage", 5034);
+    return TryParse(out.storage, storageIt->second.get_obj());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+const bool NKJSON::TryParse(NKEndpointFileOptions& out, const json_spirit::mObject& obj)
+{
+    auto isPublicIt = obj.find("isPublic");
+    ASSERT_OBJECT_HAS_MEMBER(isPublicIt, "isPublic", 5052);
+    out.isPublic = isPublicIt->second.get_bool();
+
+    auto compressIt = obj.find("compress");
+    ASSERT_OBJECT_HAS_MEMBER(compressIt, "compress", 5056);
+    out.compress = compressIt->second.get_bool();
+
+    auto decodeIt = obj.find("decode");
+    ASSERT_OBJECT_HAS_MEMBER(decodeIt, "decode", 5060);
+    out.decode = decodeIt->second.get_bool();
+
+    auto reducedRedundancyIt = obj.find("reducedRedundancy");
+    ASSERT_OBJECT_HAS_MEMBER(reducedRedundancyIt, "reducedRedundancy", 5064);
+    out.reducedRedundancy = reducedRedundancyIt->second.get_bool();
+
     return true;
 }
