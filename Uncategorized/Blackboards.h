@@ -18,28 +18,21 @@ struct SNKErrorBlackboard : BehaviourTree::IBlackboard
 struct SNKFileClientBlackboard : SNKErrorBlackboard
 {
     NKFileClientImpl* fileClientImpl; // 0x60
-    int field_68; // 0x68
+    int field_68{}; // 0x68
     std::string url; // 0x70
     std::string field_88; // 0x88
-    std::string userDetails; // 0xA0
+    std::string nkapiID; // 0xA0
     std::string fileName; // 0xB8
     std::string savePath; // 0xD0
     std::string field_E8; // 0xE8
     clock_t start; // 0x100
     std::vector<char> data; // 0x108
-    std::string field_120; // 0x120
-    std::string field_138; // 0x138
-    bool field_150; // 0x150
-    std::string field_158; // 0x158
-    std::string field_170; // 0x170
-    void* field_188; // 0x188
-    void* field_190; // 0x190
-    void* field_198; // 0x198
+    NKMessageResponseFile file; // 0x120
     int field_1A0; // 0x1A0
-    int filePermissions; // 0x1A4
+    eNKFileClientFilePermissions filePermissions; // 0x1A4
     SHttpTimeoutOptions timeoutOptions{}; // 0x1A8
-    bool field_1C8; // 0x1C8
-    bool field_1C9; // 0x1C9
+    bool field_1C8{}; // 0x1C8
+    bool field_1C9{}; // 0x1C9
     NKAccessToken accessToken; // 0x1D0
     int appID; // 0x1F0
     int skuID; // 0x1F4
@@ -82,10 +75,10 @@ private:
     std::vector<std::string> messages; // 0x1B0
 };
 
-struct SNKManagerBlackboard
+struct SNKManagerBlackboard : SNKErrorBlackboard
 {
     std::string field_60; // 0x60
-    void* field_78; // 0x78
+    bool field_78; // 0x78
     std::string field_80; // 0x80
     std::string field_98; // 0x98
 };

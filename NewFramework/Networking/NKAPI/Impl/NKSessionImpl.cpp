@@ -168,7 +168,7 @@ void NKSessionImpl::Open(bool needSession, bool a3, bool a6) {
     sequence2->AddAction(storeStateCb);
 
     auto openRequest = boost::make_shared<NKSessionImpl::SSessionOpenRequest>();
-    openRequest->action = boost::shared_ptr<BehaviourTree::Composite>(sequence2);
+    openRequest->action = boost::shared_ptr<BehaviourTree::Action>(sequence2);
 
     tasks.push_back(openRequest);
 }
@@ -337,7 +337,7 @@ void NKSessionImpl::LoginUsingService(const eNKLoginService& loginServiceType, b
     sequence4->AddAction(storeStateCb);
 
     auto openRequest = boost::make_shared<NKSessionImpl::SSessionOpenRequest>();
-    openRequest->action = boost::shared_ptr<BehaviourTree::Composite>(sequence4);
+    openRequest->action = boost::shared_ptr<BehaviourTree::Action>(sequence4);
 
     tasks.push_back(openRequest);
 }
@@ -379,7 +379,7 @@ void NKSessionImpl::LinkService(const eNKLoginService& loginServiceType, bool au
     masterSequence->AddAction(storeStateCb);
 
     auto linkRequest = boost::make_shared<NKSessionImpl::SSessionLinkRequest>();
-    linkRequest->action = boost::shared_ptr<BehaviourTree::Composite>(masterSequence);
+    linkRequest->action = boost::shared_ptr<BehaviourTree::Action>(masterSequence);
 
     tasks.push_back(linkRequest);
 }
@@ -501,7 +501,7 @@ void NKSessionImpl::ShowUI() {
     sequence->AddAction(storeStateCb);
 
     auto showUIRequest = boost::make_shared<NKSessionImpl::SSessionShowUIRequest>();
-    showUIRequest->action = boost::shared_ptr<BehaviourTree::Composite>(sequence);
+    showUIRequest->action = boost::shared_ptr<BehaviourTree::Action>(sequence);
 
     tasks.push_back(showUIRequest);
 }

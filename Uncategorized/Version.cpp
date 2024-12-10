@@ -27,12 +27,9 @@ CVersion::CVersion(int versionCode)
 void CVersion::SetVersion(int versionCode)
 {
     this->versionCode = versionCode;
-    major = (0x68db8badLL * versionCode < 0) + ((0x68db8badLL * versionCode) >> 44);
-
-    int a = -10000 * major + versionCode;
-    minor = a / 100;
-    patch = a % 100;
-
+    major = versionCode / 10000;
+    minor = (versionCode % 10000) / 100;
+    patch = versionCode % 100;
     versionString = ConstructStrVersion();
 }
 
@@ -41,7 +38,7 @@ std::string CVersion::ConstructStrVersionMajorMinor() const
     return StringHelper::Format("%d.%d", major, minor);
 }
 
-bool CVersion::IsEquivalent(const CVersion& version, bool checkMinor, bool checkPatch) const
+bool CVersion::IsEquivalent(const CVersion& version, bool checkPatch, bool checkMinor) const
 {
     return major == version.major &&
            (!checkMinor || minor == version.minor) &&

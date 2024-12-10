@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+enum class eNKFileClientFilePermissions { Public };
 enum class eNKLoginService { InBlackboard = -2, None = -1, Cache, Email, GameCenter, Facebook, GooglePlay, Steam, Apple };
 enum class eNKServiceAction { InBlackboard = -2, None = -1, Login, Create, Link };
 enum class eNKServiceAuthMethod { Platform, Email }; // Platform is i.e. Steam on PC, Google Play on Android

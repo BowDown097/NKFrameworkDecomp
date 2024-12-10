@@ -18,5 +18,5 @@ public:
     CVersion(int versionCode);
     void SetVersion(int versionCode);
     std::string ConstructStrVersionMajorMinor() const;
-    bool IsEquivalent(const CVersion& version, bool checkMinor, bool checkPatch) const;
+    bool IsEquivalent(const CVersion& version, bool checkPatch, bool checkMinor) const;
 };

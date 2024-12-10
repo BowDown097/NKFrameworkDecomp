@@ -37,7 +37,7 @@ struct SHttpRequest
     void* field_88{}; // 0x88
     std::map<std::string, std::string> requestHeaders; // 0x90
     int field_A8{}; // 0xA8
-    void* field_B0{}; // 0xB0
+    clock_t start{}; // 0xB0
     int field_B8{}; // 0xB8
     long statusCode{}; // 0xC0
     int error{}; // 0xC8

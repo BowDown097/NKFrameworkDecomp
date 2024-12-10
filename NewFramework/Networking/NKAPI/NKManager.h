@@ -18,6 +18,13 @@ public:
     NKResponseUtilityTime serverTime; // 0x38
     time_t localTime; // 0x40
     time_t constructTime = time(nullptr); // 0x48
+    bool serverTimeAvailable{}; // 0x50
+    bool serverTimeUpdating{}; // 0x51
+    std::uint32_t updateRetries; // 0x54
+    NKSession* session{}; // 0x58
+    NKCrossPromo* crossPromo{}; // 0x60
+    NKModules* modules{}; // 0x68
+    SNKManagerBlackboard* blackboard{}; // 0x70
 
     static NKManager* GetManager();
     void Initialise(const int& appID, const int& skuID, const std::string& privateKey,
@@ -43,12 +50,5 @@ public:
 private:
     inline static NKManager* s_Manager;
 
-    bool serverTimeAvailable{}; // 0x50
-    bool serverTimeUpdating{}; // 0x51
-    std::uint32_t updateRetries; // 0x54
-    NKSession* session{}; // 0x58
-    NKCrossPromo* crossPromo{}; // 0x60
-    NKModules* modules{}; // 0x68
-    SNKManagerBlackboard* blackboard{}; // 0x70
     std::string field_78; // 0x78
 };
