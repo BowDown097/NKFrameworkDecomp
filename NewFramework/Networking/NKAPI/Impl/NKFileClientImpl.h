@@ -14,6 +14,8 @@ struct NKError;
 struct SHttpTimeoutOptions;
 struct SNKFileClientBlackboard;
 
+// not 100% sure about this struct. the disassembly of the methods that use it in this class is really weird,
+// and unfortunately afaik those are the only usages of this struct. but this is the best fit i think.
 struct NKResponseRenderOptions {
     int field_0; // 0x00
 };
