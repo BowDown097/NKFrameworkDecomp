@@ -37,6 +37,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/IO/File/PNGInMemory.cpp
         NewFramework/Math/MathematicTypes/VectorDataStructures.cpp
         NewFramework/Math/Matrix.cpp
+        NewFramework/Networking/NKAPI/Impl/NKFileClientImpl.cpp
         NewFramework/Networking/NKAPI/Impl/NKMessages.cpp
         NewFramework/Networking/NKAPI/Impl/NKSessionImpl.cpp
         NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_AppendFileSavePath.cpp
@@ -126,6 +127,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Math/MathematicTypes/VectorDataStructures.h
             NewFramework/Math/Maths.h
             NewFramework/Math/Matrix.h
+            NewFramework/Networking/NKAPI/Impl/NKFileClientImpl.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
             NewFramework/Networking/NKAPI/Impl/NKSessionImpl.h
             NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_AppendFileSavePath.h
