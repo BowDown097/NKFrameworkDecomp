@@ -39,6 +39,11 @@ target_sources(NKFrameworkDecomp
         NewFramework/Math/Matrix.cpp
         NewFramework/Networking/NKAPI/Impl/NKMessages.cpp
         NewFramework/Networking/NKAPI/Impl/NKSessionImpl.cpp
+        NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_AppendFileSavePath.cpp
+        NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_DownloadFile.cpp
+        NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_FileConflict.cpp
+        NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_FileWebRequest.cpp
+        NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_UploadFile.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.cpp
@@ -123,6 +128,11 @@ target_sources(NKFrameworkDecomp
             NewFramework/Math/Matrix.h
             NewFramework/Networking/NKAPI/Impl/NKMessages.h
             NewFramework/Networking/NKAPI/Impl/NKSessionImpl.h
+            NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_AppendFileSavePath.h
+            NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_DownloadFile.h
+            NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_FileConflict.h
+            NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_FileWebRequest.h
+            NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_UploadFile.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_AuthenticateService.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CacheSession.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_CheckErrorType.h
