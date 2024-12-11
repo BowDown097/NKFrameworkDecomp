@@ -7,8 +7,11 @@
 #include <boost/smart_ptr/weak_ptr.hpp>
 
 class C_NKLoginWebView;
+enum class NKConflictResolutionType;
 class NKFileClientImpl;
 class NKSessionImpl;
+
+enum class FileClientCallbackAction { Download, Upload, CheckConflicts }; // speculative name
 
 struct SNKErrorBlackboard : BehaviourTree::IBlackboard
 {
@@ -18,21 +21,21 @@ struct SNKErrorBlackboard : BehaviourTree::IBlackboard
 struct SNKFileClientBlackboard : SNKErrorBlackboard
 {
     NKFileClientImpl* fileClientImpl; // 0x60
-    int field_68{}; // 0x68
+    FileClientCallbackAction callbackAction{}; // 0x68
     std::string url; // 0x70
-    std::string field_88; // 0x88
+    std::string appIDStr; // 0x88
     std::string nkapiID; // 0xA0
     std::string fileName; // 0xB8
     std::string savePath; // 0xD0
-    std::string field_E8; // 0xE8
+    std::string postfix; // 0xE8
     clock_t start; // 0x100
     std::vector<char> data; // 0x108
     NKMessageResponseFile file; // 0x120
-    int field_1A0; // 0x1A0
+    NKConflictResolutionType conflictResolutionType; // 0x1A0
     eNKFileClientFilePermissions filePermissions; // 0x1A4
     SHttpTimeoutOptions timeoutOptions{}; // 0x1A8
     bool field_1C8{}; // 0x1C8
-    bool field_1C9{}; // 0x1C9
+    bool stephen{}; // 0x1C9
     NKAccessToken accessToken; // 0x1D0
     int appID; // 0x1F0
     int skuID; // 0x1F4

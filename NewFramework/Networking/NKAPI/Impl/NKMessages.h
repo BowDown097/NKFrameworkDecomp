@@ -70,7 +70,7 @@ struct NKMessageResponseFile
 {
     NKMessageResponseFileStorage storage; // 0x00
     void* field_70; // 0x70
-    bool field_78{}; // 0x78
+    bool upToDate{}; // 0x78
 };
 
 struct NKMessage
