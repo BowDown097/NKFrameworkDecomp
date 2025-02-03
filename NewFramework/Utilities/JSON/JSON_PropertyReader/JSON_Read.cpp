@@ -2,10 +2,10 @@
 
 void JSON_PropertyReader::Unload()
 {
-    delete sourceArray;
-    delete otherSourceArray;
-    delete sourceObject;
-    delete otherSourceObject;
+    sourceArray = nullptr;
+    otherSourceArray = nullptr;
+    sourceObject = nullptr;
+    otherSourceObject = nullptr;
 }
 
 void JSON_PropertyReader::ObjectErrorCheck(std::string propertyName)

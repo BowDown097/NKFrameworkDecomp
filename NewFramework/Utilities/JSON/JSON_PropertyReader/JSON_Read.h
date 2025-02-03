@@ -29,10 +29,15 @@ bool GetValueFromObject(const json_spirit::mObject* obj, T& out, std::string pro
 class JSON_PropertyReader
 {
 public:
-    json_spirit::mObject* sourceObject{}; // 0x00
-    json_spirit::mObject* otherSourceObject{}; // 0x08
-    json_spirit::mArray* sourceArray{}; // 0x10
-    json_spirit::mArray* otherSourceArray{}; // 0x18
+    const json_spirit::mObject* sourceObject{}; // 0x00
+    const json_spirit::mObject* otherSourceObject{}; // 0x08
+    const json_spirit::mArray* sourceArray{}; // 0x10
+    const json_spirit::mArray* otherSourceArray{}; // 0x18
+
+    JSON_PropertyReader() // Unload() is called every time one is constructed in disassembly. assuming it's part of ctor
+    {
+        Unload();
+    }
 
     template<typename T>
     bool ReadIfExists(T& out, int index)
@@ -78,7 +83,8 @@ public:
     void Unload();
 private:
     bool reading{}; // 0x20
-    double field_24 = 1.0; // 0x24
+    float field_24 = 1.0; // 0x24
+    float field_28 = 1.0; // 0x28
 
     template<typename T>
     void ReadFromObject(T& out, std::string propertyName)

@@ -20,7 +20,7 @@ struct NKResponseRenderOptions {
     int field_0; // 0x00
 };
 
-using NKFileClientCallback_t = boost::function4<void, const bool, const std::string&, const std::string&, const NKError*>;
+using NKFileClientCallback_t = boost::function4<void, bool, const std::string&, const std::string&, const NKError*>;
 
 class NKFileClientImpl {
 public:
