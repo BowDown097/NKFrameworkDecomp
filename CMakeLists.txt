@@ -173,6 +173,10 @@ target_sources(NKFrameworkDecomp
             NewFramework/Platform/Shared/LoggingComponent.h
             NewFramework/ThirdParty/easyzlib/easyzlib.h
             NewFramework/ThirdParty/libpng/load_png.h
+            NewFramework/ThirdParty/utfcpp/utf8.h
+            NewFramework/ThirdParty/utfcpp/utf8/checked.h
+            NewFramework/ThirdParty/utfcpp/utf8/core.h
+            NewFramework/ThirdParty/utfcpp/utf8/unchecked.h
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/HashHelper.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h
