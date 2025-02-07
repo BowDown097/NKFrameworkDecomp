@@ -63,7 +63,7 @@ public:
 
         bool readingTemp = reading;
         reading = false;
-        Read(out, propertyName);
+        Read<T>(out, propertyName);
         reading = readingTemp;
         return true;
     }
@@ -74,8 +74,8 @@ public:
         ReadFromArray(out, index);
     }
 
-    template<typename T>
-    void Read(T& out, std::string propertyName)
+    template<typename T, typename U = T>
+    void Read(U& out, std::string propertyName)
     {
         ReadFromObject(out, propertyName);
     }
@@ -131,3 +131,4 @@ private:
 template<> void JSON_PropertyReader::Adjust(json_spirit::mArray& a, json_spirit::mArray& b);
 template<> void JSON_PropertyReader::Adjust(json_spirit::mObject& a, json_spirit::mObject& b);
 template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit::mValue& b);
+template<> void JSON_PropertyReader::Read<std::string>(std::vector<std::string>& out, std::string propertyName);

@@ -36,11 +36,6 @@ void JSON_PropertyReader::ArrayErrorCheck(int index)
         throw JSON_PropertyException(sstream.str().c_str(), "Specified array index out of bounds");
 }
 
-// the implementation for Adjust is correct pretty sure, but...
-// i have a feeling it's just inlining a TON of json_spirit's code,
-// but i did a little look through and couldn't find anything that looks similar.
-// but this explicit specialization stuff definitely doesn't look right.
-
 template<> void JSON_PropertyReader::Adjust(json_spirit::mArray& a, json_spirit::mArray& b)
 {
     for (const json_spirit::mValue& value : b)
@@ -84,4 +79,15 @@ template<> void JSON_PropertyReader::Adjust(json_spirit::mValue& a, json_spirit:
     case json_spirit::Value_type::null_type:
         break;
     }
+}
+
+template<> void JSON_PropertyReader::Read<std::string>(std::vector<std::string>& out, std::string propertyName)
+{
+    json_spirit::mArray arr;
+    ReadFromObject(arr, propertyName);
+
+    out.clear();
+
+    for (const json_spirit::mValue& value : arr)
+        out.push_back(value.get_str());
 }
