@@ -1,8 +1,11 @@
 #pragma once
 #include "Impl/NKFileClientImpl.h"
+#include "NewFramework/Networking/Protocols/HTTP/HttpRequest.h"
 
 class NKFileClient {
 public:
+    static NKFileClient s_Instance;
+
     std::string GetCachedFileEtag(const std::string& name) const;
     std::string GetCachedFileDataHash(const std::string& name) const;
     std::vector<std::string> GetCachedFileNames() const;
@@ -24,9 +27,9 @@ public:
     const bool Download(
         const std::string& url,
         NKFileClientCallback_t callback,
-        SHttpTimeoutOptions timeoutOpts,
-        bool a4,
-        bool stephen);
+        SHttpTimeoutOptions timeoutOpts = {},
+        bool a4 = false,
+        bool stephen = false);
     const bool Download(
         const std::string& url,
         SHttpTimeoutOptions timeoutOpts,

@@ -1,6 +1,8 @@
 #include "NKFileClient.h"
 #include "NKSession.h"
 
+NKFileClient NKFileClient::s_Instance;
+
 std::string NKFileClient::GetCachedFileEtag(const std::string& name) const {
     return impl->GetCachedFileEtag(name);
 }

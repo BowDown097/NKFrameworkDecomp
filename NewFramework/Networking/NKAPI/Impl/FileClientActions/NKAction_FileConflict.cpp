@@ -21,9 +21,9 @@ void BA_ConflictedFileCallback::Start(BehaviourTree::IBlackboard* blackboard) {
 
         std::string mineFile = this->blackboard->fileName + s_sMinePostfix;
         std::string blackboardFile = this->blackboard->fileName + this->blackboard->postfix;
-        auto resolveCallback = boost::bind(&BA_ConflictedFileCallback::ResolveCallback, this, boost::placeholders::_1);
 
-        callback(this->blackboard->savePath, mineFile, blackboardFile, resolveCallback);
+        callback(this->blackboard->savePath, mineFile, blackboardFile,
+            boost::bind(&BA_ConflictedFileCallback::ResolveCallback, this, boost::placeholders::_1));
     } else {
         this->blackboard->error = NKError(NKErrorType::VALUE7, "BA_ConflictedFileCallback::m_Callback should not be null", "", "");
         state = BehaviourTree::AState::Failure;

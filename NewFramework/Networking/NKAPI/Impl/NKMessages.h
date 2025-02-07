@@ -178,28 +178,6 @@ struct NKResponseUtilityTime
 // TODO: implement TryParse for NKResponseUser (depends on CProfanityFilter and unimplemented GetXXX methods)
 namespace NKJSON
 {
-    template<typename T>
-    const bool TryParse(T& out, const std::string& data)
-    {
-        if (data.empty())
-            return false;
-
-        json_spirit::mValue value;
-        CJSONWrapper wrapper(nullptr);
-        if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
-            return false;
-
-        return TryParse(out, value.get_obj());
-    }
-
-    template<typename T>
-    std::string Serialise(const T& val)
-    {
-        json_spirit::mObject obj;
-        Serialise(val, obj);
-        return json_spirit::write(obj);
-    }
-
     void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
     void Serialise(const NKMessage& val, json_spirit::mObject& obj);
     void Serialise(const NKMessageSession& val, json_spirit::mObject& obj);
@@ -223,4 +201,26 @@ namespace NKJSON
     const bool TryParse(NKMessageResponseFileStorage& out, const json_spirit::mObject& obj);
     const bool TryParse(NKEndpointFileOptions& out, const json_spirit::mObject& obj);
     const bool TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj);
+
+    template<typename T>
+    const bool TryParse(T& out, const std::string& data)
+    {
+        if (data.empty())
+            return false;
+
+        json_spirit::mValue value;
+        CJSONWrapper wrapper(nullptr);
+        if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+            return false;
+
+        return TryParse(out, value.get_obj());
+    }
+
+    template<typename T>
+    std::string Serialise(const T& val)
+    {
+        json_spirit::mObject obj;
+        Serialise(val, obj);
+        return json_spirit::write(obj);
+    }
 }

@@ -95,6 +95,10 @@ namespace StringHelper
         return realRunChars >= 0 ? out : sEncodingError;
     }
 
+    // appears to be unimplemented. maybe remnant of old framework revision
+    void Parse(const char*, ...) {}
+    void Parse(std::string, ...) {}
+
     std::string Replace(const std::string& in, const std::string& before, const std::string& after)
     {
         std::string out = in;

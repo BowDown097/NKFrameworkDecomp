@@ -20,8 +20,8 @@ namespace StringHelper
     void ExplodeInts(const std::string& in, char sep, std::vector<int>& out);
     void ExplodeFloats(const std::string& in, char sep, std::vector<float>& out);
     std::string Format(std::string formatString, ...);
-    void Parse(const char*, ...) {} // appears to be unimplemented. maybe remnant of old framework revision
-    void Parse(std::string, ...) {} // see above comment
+    void Parse(const char*, ...);
+    void Parse(std::string, ...);
     std::string Replace(const std::string& in, const std::string& before, const std::string& after);
     bool IsNewline(unsigned int c);
     bool IsTab(unsigned int c);
