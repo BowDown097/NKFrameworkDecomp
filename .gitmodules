@@ -1,0 +1,15 @@
+[submodule "NewFramework/ThirdParty/hashlib++"]
+	path = NewFramework/ThirdParty/hashlib++
+	url = https://github.com/ErrorFlexXx/hashlibpp
+[submodule "NewFramework/ThirdParty/json_spirit"]
+	path = NewFramework/ThirdParty/json_spirit
+	url = https://github.com/png85/json_spirit
+[submodule "NewFramework/ThirdParty/jsoncpp"]
+	path = NewFramework/ThirdParty/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp
+[submodule "NewFramework/ThirdParty/libjpeg"]
+	path = NewFramework/ThirdParty/libjpeg
+	url = https://github.com/stohrendorf/libjpeg-cmake
+[submodule "NewFramework/ThirdParty/TinyXML++"]
+	path = NewFramework/ThirdParty/TinyXML++
+	url = https://github.com/wxFormBuilder/ticpp

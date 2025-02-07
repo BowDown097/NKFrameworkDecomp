@@ -1,6 +1,6 @@
 #include "Encoding.h"
-#include "NewFramework/ThirdParty/easyzlib/easyzlib.h"
 #include <cassert>
+#include <easyzlib.h>
 #include <hl_md5wrapper.h>
 #include <hl_sha1wrapper.h>
 #include <limits>

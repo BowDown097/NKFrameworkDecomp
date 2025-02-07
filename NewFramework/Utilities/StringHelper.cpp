@@ -1,7 +1,7 @@
 #include "StringHelper.h"
-#include "NewFramework/ThirdParty/utfcpp/utf8/checked.h"
 #include <boost/algorithm/string/case_conv.hpp>
 #include <cstdarg>
+#include <utf8.h>
 
 namespace StringHelper
 {

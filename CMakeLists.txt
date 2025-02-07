@@ -5,11 +5,13 @@ add_library(NKFrameworkDecomp)
 set_target_properties(NKFrameworkDecomp
     PROPERTIES
         CXX_STANDARD 17
-        CXX_STANDARD_REQUIRED ON)
+        CXX_STANDARD_REQUIRED ON
+)
 
 set(TARGET_PLATFORM "steam" CACHE STRING "The platform that the game will be distributed to.")
 target_compile_definitions(NKFrameworkDecomp PUBLIC TARGET_PLATFORM="${TARGET_PLATFORM}")
 
+# Sources
 target_sources(NKFrameworkDecomp
     PRIVATE
         NewFramework/Analytics/DGAnalytics.cpp
@@ -77,7 +79,6 @@ target_sources(NKFrameworkDecomp
         NewFramework/Platform/Shared/Assert.cpp
         NewFramework/Platform/Shared/Core.cpp
         NewFramework/Platform/Shared/Logging.cpp
-        NewFramework/ThirdParty/easyzlib/easyzlib.c
         NewFramework/ThirdParty/libpng/load_png.cpp
         NewFramework/Utilities/Encoding.cpp
         NewFramework/Utilities/HashHelper.cpp
@@ -173,12 +174,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Platform/Shared/Core.h
             NewFramework/Platform/Shared/Logging.h
             NewFramework/Platform/Shared/LoggingComponent.h
-            NewFramework/ThirdParty/easyzlib/easyzlib.h
             NewFramework/ThirdParty/libpng/load_png.h
-            NewFramework/ThirdParty/utfcpp/utf8.h
-            NewFramework/ThirdParty/utfcpp/utf8/checked.h
-            NewFramework/ThirdParty/utfcpp/utf8/core.h
-            NewFramework/ThirdParty/utfcpp/utf8/unchecked.h
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/HashHelper.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h
@@ -214,88 +210,70 @@ if(APPLE)
     target_sources(NKFrameworkDecomp PRIVATE NewFramework/Platform/OSX/OSXCore.mm)
 endif()
 
-# Packages
-include(FetchContent)
+# Libraries
+
+## Boost
 find_package(Boost REQUIRED)
-find_package(JPEG REQUIRED)
-find_package(PNG REQUIRED)
+target_include_directories(NKFrameworkDecomp PUBLIC ${Boost_INCLUDE_DIRS})
+target_link_libraries(NKFrameworkDecomp PUBLIC ${Boost_LIBRARIES})
 
-# jsoncpp
-set(HAS_JSONCPP False)
+## easyzlib
+add_subdirectory(NewFramework/ThirdParty/easyzlib)
+target_link_libraries(NKFrameworkDecomp PUBLIC easyzlib)
 
-find_package(PkgConfig QUIET)
-if(PkgConfig_FOUND)
-    pkg_check_modules(JSONCPP QUIET jsoncpp)
-    if(JSONCPP_FOUND)
-        set(HAS_JSONCPP True)
-        target_include_directories(NKFrameworkDecomp PRIVATE ${JSONCPP_INCLUDE_DIRS})
-        target_link_libraries(NKFrameworkDecomp PRIVATE ${JSONCPP_LIBRARIES})
-    endif()
-endif()
+## hashlibpp
+add_subdirectory(NewFramework/ThirdParty/hashlib++)
+target_link_libraries(NKFrameworkDecomp PUBLIC hashlibpp)
 
-if(NOT HAS_JSONCPP)
-    FetchContent_Declare(
-        jsoncpp
-        GIT_REPOSITORY https://github.com/open-source-parsers/jsoncpp.git
-        GIT_TAG 1.9.6)
+## libjpeg
+add_subdirectory(NewFramework/ThirdParty/libjpeg)
+target_include_directories(NKFrameworkDecomp PUBLIC NewFramework/ThirdParty/libjpeg)
+target_link_libraries(NKFrameworkDecomp PUBLIC libjpeg)
 
-    set(JSONCPP_WITH_TESTS OFF CACHE BOOL "")
-    set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "")
-    set(JSONCPP_WITH_STRICT_ISO OFF CACHE BOOL "")
-    set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "")
-    set(JSONCPP_WITH_CMAKE_PACKAGE OFF CACHE BOOL "")
+## libpng
+set(PNG_SHARED OFF CACHE BOOL "")
+set(PNG_TESTS OFF CACHE BOOL "")
 
-    FetchContent_MakeAvailable(jsoncpp)
-    target_link_libraries(NKFrameworkDecomp PRIVATE jsoncpp_static)
-endif()
+add_subdirectory(NewFramework/ThirdParty/libpng)
+target_include_directories(NKFrameworkDecomp PUBLIC NewFramework/ThirdParty/libpng)
+target_link_libraries(NKFrameworkDecomp PUBLIC png16_static)
 
-# jsonspirit
-FetchContent_Declare(
-    jsonspirit
-    GIT_REPOSITORY https://github.com/png85/json_spirit.git
-    GIT_TAG master
-)
-
-set(BUILD_STATIC_LIBRARIES ON)
+## json_spirit
+set(BUILD_STATIC_LIBRARIES ON CACHE BOOL "")
 set(JSON_SPIRIT_MVALUE_ENABLED ON CACHE BOOL "")
 set(JSON_SPIRIT_DEMOS OFF CACHE BOOL "")
 set(JSON_SPIRIT_TESTS OFF CACHE BOOL "")
 
-FetchContent_MakeAvailable(jsonspirit)
+add_subdirectory(NewFramework/ThirdParty/json_spirit)
+target_include_directories(NKFrameworkDecomp PUBLIC NewFramework/ThirdParty/json_spirit)
+target_link_libraries(NKFrameworkDecomp PUBLIC json_spirit)
 
 if(JSON_SPIRIT_MVALUE_ENABLED)
     target_compile_definitions(NKFrameworkDecomp PRIVATE JSON_SPIRIT_MVALUE_ENABLED)
 endif()
 
-# ticpp
-FetchContent_Declare(
-    ticpp
-    GIT_REPOSITORY https://github.com/wxFormBuilder/ticpp.git
-    GIT_TAG master
-)
-FetchContent_MakeAvailable(ticpp)
+## jsoncpp
+set(JSONCPP_WITH_TESTS OFF CACHE BOOL "")
+set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF CACHE BOOL "")
+set(JSONCPP_WITH_STRICT_ISO OFF CACHE BOOL "")
+set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF CACHE BOOL "")
+set(JSONCPP_WITH_CMAKE_PACKAGE OFF CACHE BOOL "")
 
-# hashlibpp
-FetchContent_Declare(
-    hashlibpp
-    GIT_REPOSITORY https://github.com/ErrorFlexXx/hashlibpp.git
-    GIT_TAG master
-)
-FetchContent_MakeAvailable(hashlibpp)
+add_subdirectory(NewFramework/ThirdParty/jsoncpp)
+target_link_libraries(NKFrameworkDecomp PUBLIC jsoncpp_lib_static)
 
-target_include_directories(NKFrameworkDecomp
-    PUBLIC
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-        $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
-    PRIVATE
-        ${Boost_INCLUDE_DIRS}
-        ${JPEG_INCLUDE_DIR}
-        ${jsonspirit_SOURCE_DIR}
-        ${PNG_PNG_INCLUDE_DIR}
-        ${ticpp_SOURCE_DIR}
-)
+## TinyXML++
+add_subdirectory(NewFramework/ThirdParty/TinyXML++)
+target_link_libraries(NKFrameworkDecomp PUBLIC ticpp)
 
-target_link_libraries(NKFrameworkDecomp PRIVATE hashlibpp ${Boost_LIBRARIES} ${JPEG_LIBRARY} ${PNG_LIBRARY})
+## utfcpp
+target_include_directories(NKFrameworkDecomp PUBLIC NewFramework/ThirdParty/utfcpp)
+
+# Include dirs
+target_include_directories(NKFrameworkDecomp PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
 
 # Installation
 include(GNUInstallDirs)
