@@ -23,12 +23,14 @@ bool NKModule::VerifyResponse(const std::string& data, const std::string& sig) {
 }
 
 void NKModule::RequestAgain(RequestContext ctx) {
-    Request(ctx.endpoint.path, ctx.data, ctx.method, ctx.callback, ctx.moduleCallback, ctx.timeout, ctx.retries, 0);
+    Request(ctx.endpoint.path, ctx.data, ctx.method, ctx.requestCallback, ctx.responseCallback, ctx.timeout, ctx.retries, 0);
 }
 
-void NKModule::Request(NKEndpoints::Endpoint endpoint, std::string data, HTTP_METHOD method,
-                       RequestContext::RequestCallback requestCb, boost::shared_ptr<boost::function_base> moduleCb,
-                       long timeout, int retries, long lowSpeedTime) {
+void NKModule::Request(
+    NKEndpoints::Endpoint endpoint, std::string data, HTTP_METHOD method,
+    RequestContext::RequestCallback requestCallback, boost::shared_ptr<boost::function_base> responseCallback,
+    long timeout, int retries, long lowSpeedTime) {
+
     std::shared_ptr<HttpCallbackFunctor> functor = std::make_shared<HttpCallbackFunctor>();
     functor->httpCallback = [this](const SHttpRequest& req) { ProcessResponse(req); };
     functor->field_40 = functor;
@@ -37,23 +39,21 @@ void NKModule::Request(NKEndpoints::Endpoint endpoint, std::string data, HTTP_ME
         ? NKRequestFactory::GenerateRequestFullURL(endpoint.path, data, method, functor.get(), timeout, lowSpeedTime)
         : NKRequestFactory::GenerateRequestPartialURL(endpoint.path, data, method, functor.get(), timeout, lowSpeedTime);
 
-    RequestContext ctx;
-    ctx.endpoint = endpoint;
-    ctx.data = data;
-    ctx.method = HTTP_METHOD::METHOD_POST;
-    ctx.moduleCallback = moduleCb;
-    ctx.callback = requestCb;
-    ctx.functor = functor;
-    ctx.retries = retries;
-    ctx.timeout = timeout;
-
+    RequestContext ctx = {
+        endpoint, data, method,
+        responseCallback, requestCallback,
+        functor, timeout, retries
+    };
     map[requestNumber] = ctx;
 }
 
-void NKModule::Request(std::string path, std::string data, HTTP_METHOD method,
-                       RequestContext::RequestCallback requestCb, boost::shared_ptr<boost::function_base> moduleCb,
-                       long timeout, int retries, long lowSpeedTime) {
-    NKModule::Request(NKEndpoints::Endpoint(path, false), data, method, requestCb, moduleCb, timeout, retries, lowSpeedTime);
+void NKModule::Request(
+    std::string path, std::string data, HTTP_METHOD method,
+    RequestContext::RequestCallback requestCallback, boost::shared_ptr<boost::function_base> responseCallback,
+    long timeout, int retries, long lowSpeedTime) {
+
+    NKEndpoints::Endpoint endpoint(path, false);
+    NKModule::Request(endpoint, data, method, requestCallback, responseCallback, timeout, retries, lowSpeedTime);
 }
 
 void NKModule::ProcessResponse(const SHttpRequest& req) {
@@ -122,8 +122,8 @@ void NKModule::ProcessResponse(const SHttpRequest& req) {
     }
 
     if (!error || error->reason != "ERR_API_IS_NOT_AVAILABLE" || ctx.retries > 9) {
-        if (!ctx.callback.empty()) {
-            ctx.callback(error, response, ctx);
+        if (!ctx.requestCallback.empty()) {
+            ctx.requestCallback(error, response, ctx);
         }
     } else {
         ++ctx.retries;

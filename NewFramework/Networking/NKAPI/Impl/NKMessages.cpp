@@ -1,6 +1,7 @@
 #include "NKMessages.h"
 #include "NewFramework/Platform/Shared/Logging.h"
 #include "NewFramework/Utilities/HashHelper.h"
+#include "NewFramework/Utilities/StringHelper.h"
 
 // remove this undef stuff when the time comes
 #undef ENFORCE_LINE
@@ -13,6 +14,10 @@ std::string errorStr = "object has no member called '" member "'"; \
 LOG_ERROR("%s", errorStr.c_str()); ENFORCE_LINE(line);\
 throw std::runtime_error("object has no member called '" member "'"); \
 }
+
+#define MISSING_KEY_ERROR(key, line) \
+LOG_ERROR("%s", StringHelper::Format("object is missing key: %s", key.c_str()).c_str()); ENFORCE_LINE(line); \
+throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
 
 uint64_t NKResponseUser::GetCreationTimeStamp() const
 {
@@ -135,15 +140,35 @@ const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj
     return true;
 }
 
+const bool NKJSON::TryParse(NKResponseUtilityTimeDate& out, const json_spirit::mObject& obj)
+{
+    out.time = GetUInt(obj, "time");
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUtilityTime& out, const json_spirit::mObject& obj)
+{
+    auto it = obj.find("date");
+
+    if (it == obj.end())
+    {
+        std::string error = "object has no member called 'date'";
+        LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(736);
+        throw std::runtime_error("object has no member called 'date'");
+    }
+
+    return TryParse(out.date, obj);
+}
+
 const bool NKJSON::TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj)
 {
-    auto userIt = obj.find("user");
+    auto it = obj.find("user");
 
-    if (userIt == obj.end())
+    if (it == obj.end())
     {
         std::string error = "object has no member called 'user'";
         LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(1680);
-        throw std::runtime_error("object has no member called 'reason'");
+        throw std::runtime_error("object has no member called 'user'");
     }
 
     return TryParse(out.user, obj);
@@ -175,10 +200,6 @@ const bool NKJSON::TryParse(NKMessageErrorDetails& out, const json_spirit::mObje
     return true;
 }
 
-
-
-
-
 const bool NKJSON::TryParse(NKMessageError& out, const json_spirit::mObject& obj)
 {
     auto typeIt = obj.find("type");
@@ -203,14 +224,6 @@ const bool NKJSON::TryParse(NKMessageError& out, const json_spirit::mObject& obj
 
     return TryParse(out.details, detailsIt->second.get_obj());
 }
-
-
-
-
-
-
-
-
 
 const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& obj)
 {
@@ -246,15 +259,6 @@ const bool NKJSON::TryParse(NKMessageResponse& out, const json_spirit::mObject& 
     return true;
 }
 
-
-
-
-
-
-
-
-
-
 const bool NKJSON::TryParse(NKMessageSession& out, const json_spirit::mObject& obj)
 {
     auto sessionIDIt = obj.find("sessionID");
@@ -268,11 +272,6 @@ const bool NKJSON::TryParse(NKMessageSession& out, const json_spirit::mObject& o
 
     return true;
 }
-
-
-
-
-
 
 const bool NKJSON::TryParse(NKResponseLogin& out, const json_spirit::mObject& obj)
 {
@@ -289,26 +288,18 @@ const bool NKJSON::TryParse(NKResponseLogin& out, const json_spirit::mObject& ob
     return TryParse(out.user, userIt->second.get_obj());
 }
 
-
-
-
-
-
-
-
-
 const bool NKJSON::TryParse(NKResponseCreate& out, const json_spirit::mObject& obj)
 {
-    auto userIt = obj.find("user");
+    auto it = obj.find("user");
 
-    if (userIt == obj.end())
+    if (it == obj.end())
     {
         std::string error = "object has no member called 'user'";
         LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(4958);
         throw std::runtime_error("object has no member called 'user'");
     }
 
-    return TryParse(out.user, userIt->second.get_obj());
+    return TryParse(out.user, it->second.get_obj());
 }
 
 // this is a bit of a sus method. surely this has a bunch of code #define'd out?
@@ -316,25 +307,6 @@ const bool NKJSON::TryParse(NKResponseLink& out, const json_spirit::mObject& obj
 {
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const bool NKJSON::TryParse(NKMessageResponseFileStorage& out, const json_spirit::mObject& obj)
 {
@@ -365,35 +337,12 @@ const bool NKJSON::TryParse(NKMessageResponseFileStorage& out, const json_spirit
     return TryParse(out.storageOptions, storageOptionsIt->second.get_obj());
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 const bool NKJSON::TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj)
 {
     auto storageIt = obj.find("storage");
     ASSERT_OBJECT_HAS_MEMBER(storageIt, "storage", 5034);
     return TryParse(out.storage, storageIt->second.get_obj());
 }
-
-
-
-
-
-
-
-
-
-
-
 
 const bool NKJSON::TryParse(NKEndpointFileOptions& out, const json_spirit::mObject& obj)
 {
@@ -414,4 +363,195 @@ const bool NKJSON::TryParse(NKEndpointFileOptions& out, const json_spirit::mObje
     out.reducedRedundancy = reducedRedundancyIt->second.get_bool();
 
     return true;
+}
+
+std::string NKJSON::GetString(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5087);
+    }
+
+    return it->second.get_str();
+}
+
+std::string NKJSON::GetStringWithDefault(const json_spirit::mObject& obj, std::string key, std::string defaultValue)
+{
+    try
+    {
+        return GetString(obj, key);
+    }
+    catch (const std::runtime_error& ex)
+    {
+        return defaultValue;
+    }
+}
+
+
+bool NKJSON::GetBool(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5111);
+    }
+
+    return it->second.get_bool();
+}
+
+uint64_t NKJSON::GetUInt(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5122);
+    }
+
+    return it->second.get_uint64();
+}
+
+int64_t NKJSON::GetInt(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5133);
+    }
+
+    return it->second.get_int64();
+}
+
+json_spirit::mArray NKJSON::GetArray(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5144);
+    }
+
+    return it->second.get_array();
+}
+
+json_spirit::mObject NKJSON::GetMap(const json_spirit::mObject& obj, std::string key)
+{
+    auto it = obj.find(key);
+    if (it == obj.end())
+    {
+        MISSING_KEY_ERROR(key, 5155);
+    }
+
+    return it->second.get_obj();
+}
+
+bool JSONCPP::GetValue(std::string& out, const Json::Value& value)
+{
+    if (!value.isString())
+        return false;
+
+    out = value.asString();
+    return true;
+}
+
+bool JSONCPP::GetValue(bool& out, const Json::Value& value)
+{
+    if (!value.isBool())
+        return false;
+
+    out = value.asBool();
+    return true;
+}
+
+bool JSONCPP::GetValue(uint64_t& out, const Json::Value& value)
+{
+    if (!value.isUInt64())
+        return false;
+
+    out = value.asUInt64();
+    return true;
+}
+
+bool JSONCPP::GetValue(int64_t& out, const Json::Value& value)
+{
+    if (!value.isInt64())
+        return false;
+
+    out = value.asInt64();
+    return true;
+}
+
+std::string NKJSONCPP::GetString(const Json::Value& value, std::string key)
+{
+    std::string out;
+
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!JSONCPP::GetValue(out, value[key]))
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return out;
+}
+
+std::string NKJSONCPP::GetStringWithDefault(const Json::Value& value, std::string key, std::string defaultValue)
+{
+
+    try
+    {
+        return GetString(value, key);
+    }
+    catch (const std::runtime_error& ex)
+    {
+        return defaultValue;
+    }
+}
+
+
+bool NKJSONCPP::GetBool(const Json::Value& value, std::string key)
+{
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!value[key].isBool())
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return value[key].asBool();
+}
+
+uint64_t NKJSONCPP::GetUInt(const Json::Value& value, std::string key)
+{
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!value[key].isUInt64())
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return value[key].asUInt64();
+}
+
+int64_t NKJSONCPP::GetInt(const Json::Value& value, std::string key)
+{
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!value[key].isInt64())
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return value[key].asInt64();
+}
+
+Json::Value NKJSONCPP::GetArray(const Json::Value& value, std::string key)
+{
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!value[key].isArray())
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return value[key];
+}
+
+Json::Value NKJSONCPP::GetMap(const Json::Value& value, std::string key)
+{
+    if (!value.isMember(key))
+        throw std::runtime_error(StringHelper::Format("object is missing key: %s", key.c_str()));
+    if (!value[key].isObject())
+        throw std::runtime_error(StringHelper::Format("value is wrong type: %s", key.c_str()));
+
+    return value[key];
 }

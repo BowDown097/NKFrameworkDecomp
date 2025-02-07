@@ -154,9 +154,9 @@ struct NKResponseUser
     uint64_t GetCreationTimeStamp() const;
 };
 
-struct NKResponseUserCurrent
+struct NKResponseCreate
 {
-    NKResponseUser user; // 0x00
+    NKResponseUser user;
 };
 
 struct NKResponseLogin
@@ -165,42 +165,57 @@ struct NKResponseLogin
     NKMessageSession session; // 0xC0
 };
 
-struct NKResponseCreate
+struct NKResponseUserCurrent
 {
-    NKResponseUser user; // 0x00
+    NKResponseUser user;
+};
+
+struct NKResponseUtilityTimeDate
+{
+    time_t time;
 };
 
 struct NKResponseUtilityTime
 {
-    time_t time; // 0x00
+    NKResponseUtilityTimeDate date;
 };
 
-// TODO: implement TryParse for NKResponseUser (depends on CProfanityFilter and unimplemented GetXXX methods)
+// TODO: implement TryParse for NKResponseUser (depends on CProfanityFilter)
 namespace NKJSON
 {
-    void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessage& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageSession& val, json_spirit::mObject& obj);
-    void Serialise(const NKResponseLogin& val, json_spirit::mObject& obj);
-    void Serialise(const NKResponseUser& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageStorageSaveOptions& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageStorageSave& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageStorageSaveBufferOptions& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageStorageSaveBuffer& val, json_spirit::mObject& obj);
-    void Serialise(const NKMessageStorageLoad& val, json_spirit::mObject& obj);
+    void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj); // 100D5C2CA
+    void Serialise(const NKMessage& val, json_spirit::mObject& obj); // 100D5C526
+    void Serialise(const NKMessageSession& val, json_spirit::mObject& obj); // 100D5C78C
+    void Serialise(const NKResponseLogin& val, json_spirit::mObject& obj); // 100D5CB4E
+    void Serialise(const NKResponseUser& val, json_spirit::mObject& obj); // 100D5CD40
+    void Serialise(const NKMessageStorageSaveOptions& val, json_spirit::mObject& obj); // 100D64F3C
+    void Serialise(const NKMessageStorageSave& val, json_spirit::mObject& obj); // 100D6530C
+    void Serialise(const NKMessageStorageSaveBufferOptions& val, json_spirit::mObject& obj); // 100D66EB8
+    void Serialise(const NKMessageStorageSaveBuffer& val, json_spirit::mObject& obj); // 100D67288
+    void Serialise(const NKMessageStorageLoad& val, json_spirit::mObject& obj); // 100D68D45
 
-    const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageResponse& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageSession& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKResponseLogin& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKResponseCreate& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKResponseLink& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageResponseFileStorage& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKEndpointFileOptions& out, const json_spirit::mObject& obj);
-    const bool TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj);
+    const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj); // 100D5F114
+    const bool TryParse(NKResponseUtilityTimeDate& out, const json_spirit::mObject& obj); // 100D63825
+    const bool TryParse(NKResponseUtilityTime& out, const json_spirit::mObject& obj); // 100D638F0
+    const bool TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj); // 100D6BB19
+    const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj); // 100D83352
+    const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj); // 100D835DF
+    const bool TryParse(NKMessageResponse& out, const json_spirit::mObject& obj); // 100D83873
+    const bool TryParse(NKMessageSession& out, const json_spirit::mObject& obj); // 100D83C35
+    const bool TryParse(NKResponseLogin& out, const json_spirit::mObject& obj); // 100D83E64
+    const bool TryParse(NKResponseCreate& out, const json_spirit::mObject& obj); // 100D840A6
+    const bool TryParse(NKResponseLink& out, const json_spirit::mObject& obj); // 100D841F2
+    const bool TryParse(NKMessageResponseFileStorage& out, const json_spirit::mObject& obj); // 100D841FA
+    const bool TryParse(NKEndpointFileOptions& out, const json_spirit::mObject& obj); // 100D848F1
+    const bool TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj); // 100D84D08
+
+    std::string GetString(const json_spirit::mObject& obj, std::string key);
+    std::string GetStringWithDefault(const json_spirit::mObject& obj, std::string key, std::string defaultValue);
+    bool GetBool(const json_spirit::mObject& obj, std::string key);
+    uint64_t GetUInt(const json_spirit::mObject& obj, std::string key);
+    int64_t GetInt(const json_spirit::mObject& obj, std::string key);
+    json_spirit::mArray GetArray(const json_spirit::mObject& obj, std::string key);
+    json_spirit::mObject GetMap(const json_spirit::mObject& obj, std::string key);
 
     template<typename T>
     const bool TryParse(T& out, const std::string& data)
@@ -222,5 +237,48 @@ namespace NKJSON
         json_spirit::mObject obj;
         Serialise(val, obj);
         return json_spirit::write(obj);
+    }
+}
+
+namespace JSONCPP
+{
+    bool GetValue(std::string& out, const Json::Value& value);
+    bool GetValue(bool& out, const Json::Value& value);
+    bool GetValue(uint64_t& out, const Json::Value& value);
+    bool GetValue(int64_t& out, const Json::Value& value);
+}
+
+namespace NKJSONCPP
+{
+    std::string GetString(const Json::Value& value, std::string key);
+    std::string GetStringWithDefault(const Json::Value& value, std::string key, std::string defaultValue);
+    bool GetBool(const Json::Value& value, std::string key);
+    uint64_t GetUInt(const Json::Value& value, std::string key);
+    int64_t GetInt(const Json::Value& value, std::string key);
+    Json::Value GetArray(const Json::Value& value, std::string key);
+    Json::Value GetMap(const Json::Value& value, std::string key);
+
+    template<typename T>
+    const bool TryParse(T& out, const std::string& data)
+    {
+        if (data.empty())
+            return false;
+
+        Json::Value value;
+        CJSONWrapper wrapper(nullptr);
+        if (!wrapper.ParseJSONData(reinterpret_cast<uint8_t*>(const_cast<char*>(data.data())), data.size(), value, true))
+            return false;
+
+        return TryParse(out, value);
+    }
+
+    template<typename T>
+    std::string Serialise(const T& val)
+    {
+        Json::Value jsonValue;
+        Serialise(val, jsonValue);
+
+        Json::FastWriter fastWriter;
+        return fastWriter.write(jsonValue);
     }
 }
