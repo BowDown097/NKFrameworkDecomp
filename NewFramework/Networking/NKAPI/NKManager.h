@@ -17,7 +17,7 @@ public:
     bool initialised{}; // 0x30
     NKResponseUtilityTime serverTime; // 0x38
     time_t localTime; // 0x40
-    time_t constructTime = time(nullptr); // 0x48
+    time_t constructTime; // 0x48
     bool serverTimeAvailable{}; // 0x50
     bool serverTimeUpdating{}; // 0x51
     std::uint32_t updateRetries; // 0x54
@@ -27,6 +27,8 @@ public:
     SNKManagerBlackboard* blackboard{}; // 0x70
 
     static NKManager* GetManager();
+    NKManager();
+    ~NKManager();
     void Initialise(const int& appID, const int& skuID, const std::string& privateKey,
                     eNKLinkServerCluster serverCluster, CBaseFileIO* fileIO, CTextureManager* textureManager,
                     CEventManager* eventManager, const std::string& crossPromoKey, LoginCallback loginCallback);
@@ -40,13 +42,13 @@ public:
     std::uint32_t GetSkuID() const { return skuID; }
     CBaseFileIO* GetFileIO() const { return fileIO; }
     void FetchNewServerTime(bool markUnavailable);
-    std::int64_t UpdateServerTime();
-    std::int64_t UpdateServerTimeResponse(const NKError* error, NKResponseUtilityTime time);
-    std::int64_t GetLocalTimeMS() const;
+    void UpdateServerTime();
+    void UpdateServerTimeResponse(const NKError* error, NKResponseUtilityTime time);
+    time_t GetLocalTimeMS() const;
     bool IsServerTimeAvailable() const { return serverTimeAvailable; }
-    std::int64_t GetTimeMS() const;
-    std::int64_t GetLocalTimeSinceLastServerTimeFetch() const { return GetLocalTimeMS() - localTime; }
-    std::int64_t GetTimeTo(int year, int month, int day) const;
+    time_t GetTimeMS() const;
+    time_t GetLocalTimeSinceLastServerTimeFetch() const { return GetLocalTimeMS() - localTime; }
+    time_t GetTimeTo(int year, int month, int day) const;
 private:
     inline static NKManager* s_Manager;
 

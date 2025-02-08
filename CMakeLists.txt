@@ -72,6 +72,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
         NewFramework/Networking/NKAPI/NKFileClient.cpp
+        NewFramework/Networking/NKAPI/NKManager.cpp
         NewFramework/Networking/NKAPI/NKModules.cpp
         NewFramework/Networking/NKAPI/NKSession.cpp
         NewFramework/Networking/NKAPI/NKSignature.cpp
