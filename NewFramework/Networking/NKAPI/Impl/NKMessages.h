@@ -128,6 +128,51 @@ struct NKMessageStorageSaveBuffer
     uint64_t maximumBufferDuration; // 0x90
 };
 
+struct NKMessageUtilityCountry
+{
+
+};
+
+struct NKMessageUtilityEsCreate
+{
+    std::string index; // 0x00
+    std::string payload; // 0x18
+};
+
+struct NKMessageUtilityEsUpdate
+{
+    std::string index; // 0x00
+    std::string id; // 0x18
+    bool modify; // 0x30
+};
+
+struct NKMessageUtilityGeoIP
+{
+    std::vector<std::string> ips; // 0x00
+    bool ownIP; // 0x18
+    bool distances; // 0x19
+};
+
+struct NKMessageUtilitySearch
+{
+    std::string hint; // 0x00
+    std::string index; // 0x18
+    std::string query; // 0x30
+    uint64_t limit; // 0x48
+    uint64_t offset; // 0x50
+    json_spirit::mObject options; // 0x58
+};
+
+struct NKMessageUtilitySession
+{
+
+};
+
+struct NKMessageUtilityTime
+{
+
+};
+
 struct NKResponseLink
 {
 
@@ -170,6 +215,52 @@ struct NKResponseUserCurrent
     NKResponseUser user;
 };
 
+struct NKResponseUtilityCountry
+{
+    std::string country; // 0x00
+    bool inEU; // 0x18
+};
+
+struct NKResponseUtilityEsCreate
+{
+    Json::Value document;
+};
+
+struct NKResponseUtilityEsUpdate
+{
+    bool success;
+};
+
+struct NKResponseUtilityGeoIPGeoI
+{
+    std::string country_code; // 0x00
+    std::string country_code3; // 0x18
+    std::string country_name; // 0x30
+    std::string continent_code; // 0x48
+    bool found; // 0x60
+    std::string ip; // 0x68
+    json_spirit::mObject distances; // 0x80
+};
+
+struct NKResponseUtilityGeoIP
+{
+    std::vector<NKResponseUtilityGeoIPGeoI> geoIP; // 0x00
+    std::string licence; // 0x18
+};
+
+struct NKResponseUtilitySearch
+{
+    uint64_t total; // 0x00
+    uint64_t next; // 0x08
+    uint64_t found; // 0x10
+    json_spirit::mArray results; // 0x18
+};
+
+struct NKResponseUtilitySession
+{
+    bool valid;
+};
+
 struct NKResponseUtilityTimeDate
 {
     time_t time;
@@ -188,6 +279,11 @@ namespace NKJSON
     void Serialise(const NKMessageSession& val, json_spirit::mObject& obj); // 100D5C78C
     void Serialise(const NKResponseLogin& val, json_spirit::mObject& obj); // 100D5CB4E
     void Serialise(const NKResponseUser& val, json_spirit::mObject& obj); // 100D5CD40
+    void Serialise(const NKMessageUtilityTime& val, json_spirit::mObject& obj); // 100D63649
+    void Serialise(const NKMessageUtilityGeoIP& val, json_spirit::mObject& obj); // 100D63A83
+    void Serialise(const NKMessageUtilitySession& val, json_spirit::mObject& obj); // 100D64653
+    void Serialise(const NKResponseUtilitySession& val, json_spirit::mObject& obj); // 100D64659
+    void Serialise(const NKMessageUtilitySearch& val, json_spirit::mObject& obj); // 100D647F2
     void Serialise(const NKMessageStorageSaveOptions& val, json_spirit::mObject& obj); // 100D64F3C
     void Serialise(const NKMessageStorageSave& val, json_spirit::mObject& obj); // 100D6530C
     void Serialise(const NKMessageStorageSaveBufferOptions& val, json_spirit::mObject& obj); // 100D66EB8
@@ -195,8 +291,15 @@ namespace NKJSON
     void Serialise(const NKMessageStorageLoad& val, json_spirit::mObject& obj); // 100D68D45
 
     const bool TryParse(NKResponseUser& out, const json_spirit::mObject& obj); // 100D5F114
+    const bool TryParse(NKMessageUtilityTime& out, const json_spirit::mObject& obj); // 100D6381D
     const bool TryParse(NKResponseUtilityTimeDate& out, const json_spirit::mObject& obj); // 100D63825
     const bool TryParse(NKResponseUtilityTime& out, const json_spirit::mObject& obj); // 100D638F0
+    const bool TryParse(NKMessageUtilityGeoIP& out, const json_spirit::mObject& obj); // 100D63CBC
+    const bool TryParse(NKResponseUtilityGeoIPGeoI& out, const json_spirit::mObject& obj); // 100D63DCC
+    const bool TryParse(NKResponseUtilityGeoIP& out, const json_spirit::mObject& obj); // 100D6421B
+    const bool TryParse(NKMessageUtilitySession& out, const json_spirit::mObject& obj); // 100D6471F
+    const bool TryParse(NKResponseUtilitySession& out, const json_spirit::mObject& obj); // 100D64727
+    const bool TryParse(NKResponseUtilitySearch& out, const json_spirit::mObject& obj); // 100D64AFF
     const bool TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj); // 100D6BB19
     const bool TryParse(NKMessageErrorDetails& out, const json_spirit::mObject& obj); // 100D83352
     const bool TryParse(NKMessageError& out, const json_spirit::mObject& obj); // 100D835DF
@@ -250,6 +353,14 @@ namespace JSONCPP
 
 namespace NKJSONCPP
 {
+    void Serialise(const NKMessageUtilityEsCreate& val, Json::Value& obj); // 100D84E57
+    void Serialise(const NKMessageUtilityEsUpdate& val, Json::Value& obj); // 100D851B1
+    void Serialise(const NKMessageUtilityCountry& val, Json::Value& obj); // 100D862F0
+
+    const bool TryParse(NKResponseUtilityEsCreate& out, const Json::Value& obj); // 100D84EF4
+    const bool TryParse(NKResponseUtilityEsUpdate& out, const Json::Value& obj); // 100D8528D
+    const bool TryParse(NKResponseUtilityCountry& out, const Json::Value& obj); // 100D88129
+
     std::string GetString(const Json::Value& value, std::string key);
     std::string GetStringWithDefault(const Json::Value& value, std::string key, std::string defaultValue);
     bool GetBool(const Json::Value& value, std::string key);
@@ -275,10 +386,10 @@ namespace NKJSONCPP
     template<typename T>
     std::string Serialise(const T& val)
     {
-        Json::Value jsonValue;
-        Serialise(val, jsonValue);
+        Json::Value obj;
+        Serialise(val, obj);
 
         Json::FastWriter fastWriter;
-        return fastWriter.write(jsonValue);
+        return fastWriter.write(obj);
     }
 }

@@ -67,6 +67,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.cpp
         NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.cpp
         NewFramework/Networking/NKAPI/Modules/NKModule.cpp
+        NewFramework/Networking/NKAPI/Modules/NKModuleUtility.cpp
         NewFramework/Networking/NKAPI/NKCrossPromo.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
@@ -158,6 +159,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebViewErrorToolTip.h
             NewFramework/Networking/NKAPI/Impl/SessionActions/NKAction_WebviewRequestListener.h
             NewFramework/Networking/NKAPI/Modules/NKModule.h
+            NewFramework/Networking/NKAPI/Modules/NKModuleUtility.h
             NewFramework/Networking/NKAPI/NKCrossPromo.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
             NewFramework/Networking/NKAPI/NKError.h

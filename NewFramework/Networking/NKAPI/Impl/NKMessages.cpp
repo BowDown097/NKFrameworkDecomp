@@ -81,6 +81,42 @@ void NKJSON::Serialise(const NKResponseUser& val, json_spirit::mObject& obj)
     obj["access"] = val.access;
 }
 
+void NKJSON::Serialise(const NKMessageUtilityTime& val, json_spirit::mObject& obj)
+{
+
+}
+
+void NKJSON::Serialise(const NKMessageUtilityGeoIP& val, json_spirit::mObject& obj)
+{
+    json_spirit::mArray ips;
+    for (const std::string& ip : val.ips)
+        ips.push_back(ip);
+
+    obj["ips"] = ips;
+    obj["ownIP"] = val.ownIP;
+    obj["distances"] = val.distances;
+}
+
+void NKJSON::Serialise(const NKMessageUtilitySession& val, json_spirit::mObject& obj)
+{
+
+}
+
+void NKJSON::Serialise(const NKResponseUtilitySession& val, json_spirit::mObject& obj)
+{
+    obj["valid"] = val.valid;
+}
+
+void NKJSON::Serialise(const NKMessageUtilitySearch& val, json_spirit::mObject& obj)
+{
+    obj["hint"] = val.hint;
+    obj["index"] = val.index;
+    obj["query"] = val.query;
+    obj["limit"] = val.limit;
+    obj["offset"] = val.offset;
+    obj["options"] = val.options;
+}
+
 void NKJSON::Serialise(const NKMessageStorageSaveOptions& val, json_spirit::mObject& obj)
 {
     obj["isPublic"] = val.isPublic;
@@ -140,6 +176,11 @@ const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj
     return true;
 }
 
+const bool NKJSON::TryParse(NKMessageUtilityTime& out, const json_spirit::mObject& obj)
+{
+    return true;
+}
+
 const bool NKJSON::TryParse(NKResponseUtilityTimeDate& out, const json_spirit::mObject& obj)
 {
     out.time = GetUInt(obj, "time");
@@ -158,6 +199,73 @@ const bool NKJSON::TryParse(NKResponseUtilityTime& out, const json_spirit::mObje
     }
 
     return TryParse(out.date, obj);
+}
+
+const bool NKJSON::TryParse(NKMessageUtilityGeoIP& out, const json_spirit::mObject& obj)
+{
+    out.ownIP = GetBool(obj, "ownIP");
+    out.distances = GetBool(obj, "distances");
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUtilityGeoIPGeoI& out, const json_spirit::mObject& obj)
+{
+    out.country_code = GetString(obj, "country_code");
+    out.country_code3 = GetString(obj, "country_code3");
+    out.country_name = GetString(obj, "country_name");
+    out.continent_code = GetString(obj, "continent_code");
+    out.found = GetBool(obj, "found");
+    out.ip = GetString(obj, "ip");
+
+    auto it = obj.find("distances");
+
+    if (it == obj.end())
+    {
+        std::string error = "object has no member called 'distances'";
+        LOG_ERROR("%s", error.c_str()); ENFORCE_LINE(791);
+        throw std::runtime_error("object has no member called 'distances'");
+    }
+
+    out.distances = it->second.get_obj();
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUtilityGeoIP& out, const json_spirit::mObject& obj)
+{
+    json_spirit::mArray geoIP = GetArray(obj, "geoIP");
+
+    for (const json_spirit::mValue& val : geoIP)
+    {
+        NKResponseUtilityGeoIPGeoI geoI;
+        TryParse(geoI, val.get_obj());
+        out.geoIP.push_back(geoI);
+    }
+
+    out.licence = GetString(obj, "licence");
+    return true;
+}
+
+const bool NKJSON::TryParse(NKMessageUtilitySession& out, const json_spirit::mObject& obj)
+{
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUtilitySession& out, const json_spirit::mObject& obj)
+{
+    out.valid = GetBool(obj, "valid");
+    return true;
+}
+
+const bool NKJSON::TryParse(NKResponseUtilitySearch& out, const json_spirit::mObject& obj)
+{
+    out.total = GetUInt(obj, "total");
+    out.next = GetUInt(obj, "next");
+    out.found = GetUInt(obj, "found");
+
+    out.results.clear();
+    out.results = GetArray(obj, "results");
+
+    return true;
 }
 
 const bool NKJSON::TryParse(NKResponseUserCurrent& out, const json_spirit::mObject& obj)
@@ -477,6 +585,43 @@ bool JSONCPP::GetValue(int64_t& out, const Json::Value& value)
         return false;
 
     out = value.asInt64();
+    return true;
+}
+
+void NKJSONCPP::Serialise(const NKMessageUtilityEsCreate& val, Json::Value& obj)
+{
+    obj["index"] = val.index;
+    obj["payload"] = val.payload;
+}
+
+void NKJSONCPP::Serialise(const NKMessageUtilityEsUpdate& val, Json::Value& obj)
+{
+    obj["index"] = val.index;
+    obj["id"] = val.id;
+    obj["modify"] = val.modify;
+}
+
+void NKJSONCPP::Serialise(const NKMessageUtilityCountry& val, Json::Value& obj)
+{
+    obj = Json::Value(Json::ValueType::objectValue);
+}
+
+const bool NKJSONCPP::TryParse(NKResponseUtilityEsCreate& out, const Json::Value& obj)
+{
+    out.document = GetMap(obj, "document");
+    return true;
+}
+
+const bool NKJSONCPP::TryParse(NKResponseUtilityEsUpdate& out, const Json::Value& obj)
+{
+    out.success = GetBool(obj, "success");
+    return true;
+}
+
+const bool NKJSONCPP::TryParse(NKResponseUtilityCountry& out, const Json::Value& obj)
+{
+    out.country = GetString(obj, "country");
+    out.inEU = GetBool(obj, "inEU");
     return true;
 }
 
