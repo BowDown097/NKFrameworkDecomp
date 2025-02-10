@@ -271,7 +271,6 @@ struct NKResponseUtilityTime
     NKResponseUtilityTimeDate date;
 };
 
-// TODO: implement TryParse for NKResponseUser (depends on CProfanityFilter)
 namespace NKJSON
 {
     void Serialise(const NKMessageAuth& val, json_spirit::mObject& obj); // 100D5C2CA
@@ -313,7 +312,7 @@ namespace NKJSON
     const bool TryParse(NKMessageResponseFile& out, const json_spirit::mObject& obj); // 100D84D08
 
     std::string GetString(const json_spirit::mObject& obj, std::string key);
-    std::string GetStringWithDefault(const json_spirit::mObject& obj, std::string key, std::string defaultValue);
+    std::string GetStringWithDefault(const json_spirit::mObject& obj, std::string key, std::string defaultValue = "");
     bool GetBool(const json_spirit::mObject& obj, std::string key);
     uint64_t GetUInt(const json_spirit::mObject& obj, std::string key);
     int64_t GetInt(const json_spirit::mObject& obj, std::string key);
@@ -362,7 +361,7 @@ namespace NKJSONCPP
     const bool TryParse(NKResponseUtilityCountry& out, const Json::Value& obj); // 100D88129
 
     std::string GetString(const Json::Value& value, std::string key);
-    std::string GetStringWithDefault(const Json::Value& value, std::string key, std::string defaultValue);
+    std::string GetStringWithDefault(const Json::Value& value, std::string key, std::string defaultValue = "");
     bool GetBool(const Json::Value& value, std::string key);
     uint64_t GetUInt(const Json::Value& value, std::string key);
     int64_t GetInt(const Json::Value& value, std::string key);

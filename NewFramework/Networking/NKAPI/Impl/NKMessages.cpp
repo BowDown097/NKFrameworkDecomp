@@ -2,6 +2,7 @@
 #include "NewFramework/Platform/Shared/Logging.h"
 #include "NewFramework/Utilities/HashHelper.h"
 #include "NewFramework/Utilities/StringHelper.h"
+#include "Uncategorized/ProfanityFilter.h"
 
 // remove this undef stuff when the time comes
 #undef ENFORCE_LINE
@@ -173,6 +174,28 @@ void NKJSON::Serialise(const NKMessageStorageLoad& val, json_spirit::mObject& ob
 
 const bool NKJSON::TryParse(NKResponseUser& out, const json_spirit::mObject& obj)
 {
+    out.nkapiID = GetString(obj, "nkapiID");
+    out.shortcode = GetStringWithDefault(obj, "shortcode");
+    out.displayName = GetString(obj, "displayName");
+    out.clan = GetUInt(obj, "clan");
+    out.country = GetString(obj, "country");
+    out.continent = GetString(obj, "continent");
+    out.avatar = GetUInt(obj, "avatar");
+    out.online = GetBool(obj, "online");
+    out.onlineApp = GetUInt(obj, "onlineApp");
+    out.age = GetInt(obj, "age");
+
+    json_spirit::mArray providersAvailable = GetArray(obj, "providersAvailable");
+    for (const json_spirit::mValue& provider : providersAvailable)
+    {
+        std::string providerStr = provider.get_str();
+        if (StringHelper::CountOccurrences(providerStr, "_") == 0)
+            out.providersAvailable.push_back(providerStr);
+    }
+
+    out.access = GetUInt(obj, "access");
+    out.displayName = CProfanityFilter::GetCensored(nullptr, out.displayName);
+
     return true;
 }
 
