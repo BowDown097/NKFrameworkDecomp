@@ -193,9 +193,9 @@ bool C_NKLoginWebView::UrlRequested(const std::string& url)
         if (urlParser.GetValue("provider", queryValue))
         {
             eNKLoginService loginServiceType = GetLoginServiceEnumFromString(queryValue);
-            if (loginServiceType != eNKLoginService::None)
+            if (loginServiceType != eNKLoginService::NONE)
             {
-                ServiceActionRequested(loginServiceType, eNKServiceAction::Login);
+                ServiceActionRequested(loginServiceType, eNKServiceAction::LOGIN);
                 return false;
             }
         }
@@ -219,9 +219,9 @@ bool C_NKLoginWebView::UrlRequested(const std::string& url)
         if (urlParser.GetValue("provider", provider))
         {
             eNKLoginService loginServiceType = GetLoginServiceEnumFromString(provider);
-            if (loginServiceType != eNKLoginService::None)
+            if (loginServiceType != eNKLoginService::NONE)
             {
-                ServiceActionRequested(loginServiceType, eNKServiceAction::Login);
+                ServiceActionRequested(loginServiceType, eNKServiceAction::LOGIN);
                 return false;
             }
         }

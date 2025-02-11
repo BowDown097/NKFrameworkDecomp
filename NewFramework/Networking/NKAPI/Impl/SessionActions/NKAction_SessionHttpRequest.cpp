@@ -1,5 +1,6 @@
 #include "NKAction_SessionHttpRequest.h"
 #include "NewFramework/Analytics/DGAnalytics.h"
+#include "NewFramework/Networking/NKAPI/NKEndpoints.h"
 #include "NewFramework/Networking/NKAPI/NKSignature.h"
 #include "NewFramework/Networking/Protocols/HTTP/HttpCallbackFunctor.h"
 #include "NewFramework/Utilities/StringHelper.h"

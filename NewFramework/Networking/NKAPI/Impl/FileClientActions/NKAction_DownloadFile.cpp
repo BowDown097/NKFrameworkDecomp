@@ -79,7 +79,7 @@ std::string BA_DownloadFileHeader::GetHttpCallbackKey() {
 std::string BA_DownloadFileHeader::GetUrl() {
     if (!blackboard->url.empty()) {
         return blackboard->url;
-    } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::Public) {
+    } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC) {
         return NKEndpoints::GetPublicFileUrl(
             blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->fileName);
     } else {
@@ -115,7 +115,7 @@ void BA_DownloadFileHeader::HandleMessage() {
 }
 
 bool BA_DownloadFileHeader::IsRendered() {
-    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::Public;
+    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::PUBLIC;
 }
 
 bool BA_DownloadFileHeader::IsStorageResponse() {
@@ -123,7 +123,7 @@ bool BA_DownloadFileHeader::IsStorageResponse() {
 }
 
 bool BA_DownloadFileHeader::SendsPostData() {
-    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::Public;
+    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::PUBLIC;
 }
 
 HTTP_METHOD BA_DownloadFileHeader::GetHTTPMethod() {
@@ -157,13 +157,13 @@ void BA_DownloadFile::ConstructMessage(std::string& data) {
 }
 
 std::string BA_DownloadFile::GetHttpCallbackKey() {
-    return requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::Public ? "NK-load-public" : "NK-load";
+    return requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC ? "NK-load-public" : "NK-load";
 }
 
 std::string BA_DownloadFile::GetUrl() {
     if (!blackboard->url.empty()) {
         return blackboard->url;
-    } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::Public) {
+    } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC) {
         return NKEndpoints::GetPublicFileUrl(
             blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->fileName);
     } else {
@@ -177,7 +177,7 @@ bool BA_DownloadFile::IsRendered() {
     }
 
     if (requestPublic) {
-        return blackboard->filePermissions != eNKFileClientFilePermissions::Public;
+        return blackboard->filePermissions != eNKFileClientFilePermissions::PUBLIC;
     }
 
     return true;
@@ -188,7 +188,7 @@ bool BA_DownloadFile::IsStorageResponse() {
 }
 
 bool BA_DownloadFile::SendsPostData() {
-    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::Public;
+    return !requestPublic || blackboard->filePermissions != eNKFileClientFilePermissions::PUBLIC;
 }
 
 HTTP_METHOD BA_DownloadFile::GetHTTPMethod() {

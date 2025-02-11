@@ -151,7 +151,7 @@ const bool NKFileClientImpl::Download(
     blackboard->url = url;
     blackboard->fileName = fileName;
     blackboard->savePath = savePath;
-    blackboard->filePermissions = eNKFileClientFilePermissions::Public;
+    blackboard->filePermissions = eNKFileClientFilePermissions::PUBLIC;
     blackboard->start = clock();
     blackboard->timeoutOptions = timeoutOpts;
 
@@ -198,7 +198,7 @@ const bool NKFileClientImpl::Download(
     NKFileClientCallback_t callback,
     bool stephen) {
 
-    if (filePermissions != eNKFileClientFilePermissions::Public &&
+    if (filePermissions != eNKFileClientFilePermissions::PUBLIC &&
         NKSession::GetActiveSession()->GetState() != NKSessionState::VALUE1) {
         return false;
     }
@@ -676,7 +676,7 @@ const bool NKFileClientImpl::Upload(
     sequence4->AddAction(appendFileSavePath);
 
     BA_DownloadFile* downloadFile = BA_DownloadFile::Create(
-        fileIO, eventManager, false, false, filePermissions != eNKFileClientFilePermissions::Public, true);
+        fileIO, eventManager, false, false, filePermissions != eNKFileClientFilePermissions::PUBLIC, true);
     sequence4->AddAction(downloadFile);
 
     BA_ConflictedFileCallback* conflictedFileCallback = BA_ConflictedFileCallback::Create(conflictCallback);

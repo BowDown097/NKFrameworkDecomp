@@ -7,7 +7,7 @@ class NKSessionBlackboard;
 
 class BA_OpenSessionUsingToken : public BehaviourTree::Leaf {
 public:
-    const bool ReadTokenFile(IFile* file, NKSessionBlackboard* blackboard);
+    const bool ReadTokenFile(IFile *const file, NKSessionBlackboard* blackboard);
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     BehaviourTree::Action* clone() override;
     static BA_OpenSessionUsingToken* Create(CBaseFileIO* fileIO);

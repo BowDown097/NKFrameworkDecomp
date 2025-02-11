@@ -10,7 +10,7 @@ public:
     BehaviourTree::Action* clone() override;
 private:
     I_NKLoginService* loginService; // 0x10
-    eNKLoginService loginServiceType = eNKLoginService::None; // 0x18
+    eNKLoginService loginServiceType = eNKLoginService::NONE; // 0x18
 
     BA_IsServiceAuthenticated() = default;
     BA_IsServiceAuthenticated(const eNKLoginService& loginServiceType)

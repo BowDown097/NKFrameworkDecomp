@@ -13,7 +13,7 @@ public:
     void OnServiceLogin(const eNKServiceLoginResult& loginResult) override;
     BehaviourTree::Action* clone() override;
 private:
-    eNKLoginService loginServiceType = eNKLoginService::None; // 0x20
+    eNKLoginService loginServiceType = eNKLoginService::NONE; // 0x20
     eNKServiceAuthMethod authMethod{}; // 0x24
     NKSessionBlackboard* blackboard; // 0x28
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "NewFramework/Networking/NKAPI/Impl/FileClientActions/NKAction_FileConflict.h"
+#include "NewFramework/Networking/NKAPI/NKEnums.h"
 #include "Uncategorized/BehaviourTree.h"
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/unordered/unordered_map.hpp>
@@ -7,7 +8,6 @@
 
 class CBaseFileIO;
 class CEventManager;
-enum class eNKFileClientFilePermissions;
 enum class FileClientCallbackAction;
 class IFile;
 struct NKError;

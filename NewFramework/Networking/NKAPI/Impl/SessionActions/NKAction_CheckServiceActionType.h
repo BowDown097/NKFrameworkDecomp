@@ -9,7 +9,7 @@ public:
     void Start(BehaviourTree::IBlackboard* blackboard) override;
     BehaviourTree::Action* clone() override;
 private:
-    eNKServiceAction serviceAction = eNKServiceAction::None; // 0x10
+    eNKServiceAction serviceAction = eNKServiceAction::NONE; // 0x10
 
     BA_CheckServiceActionType() = default;
     BA_CheckServiceActionType(const eNKServiceAction& serviceAction)

@@ -165,7 +165,7 @@ void BA_ShowWebView::WebView_LoginSucceeded(const std::string& sessionToken, boo
         blackboard->accessToken = NKAccessToken(responseLogin.session);
         blackboard->responseUser = responseLogin.user;
         blackboard->newUser = newUser;
-        blackboard->loginServiceFromToken = eNKLoginService::Email;
+        blackboard->loginServiceFromToken = eNKLoginService::EMAIL;
         state = BehaviourTree::AState::Success;
         return;
     }

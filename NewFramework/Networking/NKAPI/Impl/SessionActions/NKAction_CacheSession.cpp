@@ -1,5 +1,6 @@
 #include "NKAction_CacheSession.h"
 #include "NewFramework/IO/File/BaseFileIO.h"
+#include "NewFramework/Networking/NKAPI/NKEndpoints.h"
 #include "NewFramework/Utilities/StringHelper.h"
 #include "NewFramework/Utilities/Utilities.h"
 #include "Uncategorized/Blackboards.h"

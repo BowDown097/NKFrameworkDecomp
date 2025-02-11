@@ -15,16 +15,16 @@ void BA_AuthenticateService::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
     this->blackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
 
-    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::InBlackboard
+    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::IN_BLACKBOARD
         ? loginServiceType : this->blackboard->loginService;
     loginService = this->blackboard->sessionImpl->GetLoginService(localLoginServiceType);
 
     std::string message = "Authenticating " + GetLoginServiceStringFromEnum(localLoginServiceType) + ".. (Can show UI : ";
-    message += authMethod == eNKServiceAuthMethod::Email ? "True" : "False";
+    message += authMethod == eNKServiceAuthMethod::EMAIL ? "True" : "False";
     message += ")";
     this->blackboard->LogMsg(message);
 
-    if (authMethod == eNKServiceAuthMethod::Email) {
+    if (authMethod == eNKServiceAuthMethod::EMAIL) {
         this->blackboard->field_C0 = false;
     }
 
@@ -64,18 +64,18 @@ void BA_AuthenticateService::OnServiceLogin(const eNKServiceLoginResult& loginRe
         return;
     }
 
-    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::InBlackboard
+    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::IN_BLACKBOARD
         ? loginServiceType : blackboard->loginService;
 
     std::string message = GetLoginServiceStringFromEnum(localLoginServiceType) + " Authentication ";
-    message += loginResult == eNKServiceLoginResult::Success ? "Succeeded" : "Failed";
+    message += loginResult == eNKServiceLoginResult::SUCCESS ? "Succeeded" : "Failed";
     this->blackboard->LogMsg(message);
 
     switch (loginResult) {
-        case eNKServiceLoginResult::Success:
+        case eNKServiceLoginResult::SUCCESS:
             state = BehaviourTree::AState::Success;
             break;
-        case eNKServiceLoginResult::Failure:
+        case eNKServiceLoginResult::FAILURE:
             blackboard->error = NKError(NKErrorType::VALUE1, message, "", "Please try again.");
             state = BehaviourTree::AState::Failure;
             break;

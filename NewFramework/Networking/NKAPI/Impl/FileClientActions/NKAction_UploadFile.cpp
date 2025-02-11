@@ -1,5 +1,6 @@
 #include "NKAction_UploadFile.h"
 #include "NewFramework/Analytics/DGAnalytics.h"
+#include "NewFramework/Networking/NKAPI/NKEndpoints.h"
 #include "NewFramework/Utilities/Encoding.h"
 #include "NewFramework/Utilities/StringHelper.h"
 #include "Uncategorized/Blackboards.h"
@@ -16,7 +17,7 @@ void construct_upload_message(SNKFileClientBlackboard* blackboard, T& storage, s
         return;
     }
 
-    storage.options.isPublic = blackboard->filePermissions == eNKFileClientFilePermissions::Public;
+    storage.options.isPublic = blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC;
     storage.options.compress = false;
     storage.options.decode = false;
     storage.options.reducedRedundancy = false;

@@ -59,22 +59,22 @@ void NKSessionImpl::Open(bool needSession, bool a3, bool a6) {
     }
 
     if (!needSession) {
-        LoginUsingService(eNKLoginService::Steam, false, !a6, a3); // TODO: figure out how login service is acquired
+        LoginUsingService(eNKLoginService::STEAM, false, !a6, a3); // TODO: figure out how login service is acquired
         return;
     }
 
     BehaviourTree::Selector* selector = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
 
-    BA_IsServiceAuthenticated* isServiceAuthenticated = BA_IsServiceAuthenticated::Create(eNKLoginService::InBlackboard);
+    BA_IsServiceAuthenticated* isServiceAuthenticated = BA_IsServiceAuthenticated::Create(eNKLoginService::IN_BLACKBOARD);
     selector->AddAction(isServiceAuthenticated);
 
     BA_AuthenticateService* authenticateService = BA_AuthenticateService::Create(
-        eNKLoginService::InBlackboard, eNKServiceAuthMethod::Email);
+        eNKLoginService::IN_BLACKBOARD, eNKServiceAuthMethod::EMAIL);
     selector->AddAction(authenticateService);
 
     BehaviourTree::Selector* selector2 = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
 
-    BA_ServiceAction* loginAction = BA_ServiceAction::Create(eNKLoginService::InBlackboard, eNKServiceAction::Login);
+    BA_ServiceAction* loginAction = BA_ServiceAction::Create(eNKLoginService::IN_BLACKBOARD, eNKServiceAction::LOGIN);
     selector2->AddAction(loginAction);
 
     BehaviourTree::Sequence* sequence = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
@@ -86,10 +86,10 @@ void NKSessionImpl::Open(bool needSession, bool a3, bool a6) {
     BA_CheckErrorType* checkCannotFindLink = BA_CheckErrorType::Create(CANNOT_FIND_LINK);
     sequence->AddAction(checkCannotFindLink);
 
-    BA_ServiceAction* createAction = BA_ServiceAction::Create(eNKLoginService::InBlackboard, eNKServiceAction::Create);
+    BA_ServiceAction* createAction = BA_ServiceAction::Create(eNKLoginService::IN_BLACKBOARD, eNKServiceAction::CREATE);
     sequence->AddAction(createAction);
 
-    BA_ServiceAction* loginAction2 = BA_ServiceAction::Create(eNKLoginService::InBlackboard, eNKServiceAction::Login);
+    BA_ServiceAction* loginAction2 = BA_ServiceAction::Create(eNKLoginService::IN_BLACKBOARD, eNKServiceAction::LOGIN);
     sequence->AddAction(loginAction2);
     selector2->AddAction(sequence);
 
@@ -116,10 +116,10 @@ void NKSessionImpl::Open(bool needSession, bool a3, bool a6) {
     sequence5->AddAction(webviewListener);
 
     BehaviourTree::NotDecorator* serviceCheckNotDecorator = new BehaviourTree::NotDecorator;
-    serviceCheckNotDecorator->child = BA_CheckLoginServiceType::Create(eNKLoginService::None);
+    serviceCheckNotDecorator->child = BA_CheckLoginServiceType::Create(eNKLoginService::NONE);
     sequence5->AddAction(serviceCheckNotDecorator);
 
-    BA_CheckServiceActionType* loginActionCheck = BA_CheckServiceActionType::Create(eNKServiceAction::Login);
+    BA_CheckServiceActionType* loginActionCheck = BA_CheckServiceActionType::Create(eNKServiceAction::LOGIN);
     sequence5->AddAction(loginActionCheck);
 
     BehaviourTree::Selector* selector4 = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
@@ -243,7 +243,7 @@ void NKSessionImpl::LoginUsingService(const eNKLoginService& loginServiceType, b
     parallel->AddAction(sequenceFailure);
 
     BA_AuthenticateService* authenticateService = BA_AuthenticateService::Create(
-        loginServiceType, authWithEmail ? eNKServiceAuthMethod::Email : eNKServiceAuthMethod::Platform);
+        loginServiceType, authWithEmail ? eNKServiceAuthMethod::EMAIL : eNKServiceAuthMethod::PLATFORM);
     parallel->AddAction(authenticateService);
     selector->AddAction(parallel);
 
@@ -255,15 +255,15 @@ void NKSessionImpl::LoginUsingService(const eNKLoginService& loginServiceType, b
         a5Conditional->condition = static_cast<BehaviourTree::ABool>(a5);
         loginComposite->AddAction(a5Conditional);
 
-        BA_ServiceAction* createAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Create);
+        BA_ServiceAction* createAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::CREATE);
         loginComposite->AddAction(createAction);
 
-        BA_ServiceAction* loginAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Login);
+        BA_ServiceAction* loginAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::LOGIN);
         loginComposite->AddAction(loginAction);
     } else {
         loginComposite = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
 
-        BA_ServiceAction* loginAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Login);
+        BA_ServiceAction* loginAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::LOGIN);
         loginComposite->AddAction(loginAction);
 
         BehaviourTree::Sequence* sequence3 = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
@@ -275,10 +275,10 @@ void NKSessionImpl::LoginUsingService(const eNKLoginService& loginServiceType, b
         BA_CheckErrorType* checkCannotFindLink = BA_CheckErrorType::Create(CANNOT_FIND_LINK);
         sequence3->AddAction(checkCannotFindLink);
 
-        BA_ServiceAction* createAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Create);
+        BA_ServiceAction* createAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::CREATE);
         sequence3->AddAction(createAction);
 
-        BA_ServiceAction* loginAction2 = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Login);
+        BA_ServiceAction* loginAction2 = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::LOGIN);
         sequence3->AddAction(loginAction2);
         loginComposite->AddAction(sequence3);
     }
@@ -349,7 +349,7 @@ void NKSessionImpl::LinkService(const eNKLoginService& loginServiceType, bool au
     authSelector->AddAction(isServiceAuthenticated);
 
     BA_AuthenticateService* authenticateService = BA_AuthenticateService::Create(
-        loginServiceType, authWithEmail ? eNKServiceAuthMethod::Email : eNKServiceAuthMethod::Platform);
+        loginServiceType, authWithEmail ? eNKServiceAuthMethod::EMAIL : eNKServiceAuthMethod::PLATFORM);
     authSelector->AddAction(authenticateService);
 
     BehaviourTree::Sequence* masterSequence = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
@@ -357,7 +357,7 @@ void NKSessionImpl::LinkService(const eNKLoginService& loginServiceType, bool au
     BehaviourTree::Sequence* linkSequence = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
     linkSequence->AddAction(authSelector);
 
-    BA_ServiceAction* serviceAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::Link);
+    BA_ServiceAction* serviceAction = BA_ServiceAction::Create(loginServiceType, eNKServiceAction::LINK);
     linkSequence->AddAction(serviceAction);
 
     BehaviourTree::ForceState* getUserSuccess = new BehaviourTree::ForceState;
@@ -412,11 +412,11 @@ void NKSessionImpl::ShowUI() {
     sequence4->AddAction(webviewListener);
 
     BehaviourTree::NotDecorator* serviceCheckNotDecorator = new BehaviourTree::NotDecorator;
-    serviceCheckNotDecorator->child = BA_CheckLoginServiceType::Create(eNKLoginService::None);
+    serviceCheckNotDecorator->child = BA_CheckLoginServiceType::Create(eNKLoginService::NONE);
     sequence4->AddAction(serviceCheckNotDecorator);
 
     BehaviourTree::NotDecorator* actionCheckNotDecorator = new BehaviourTree::NotDecorator;
-    actionCheckNotDecorator->child = BA_CheckServiceActionType::Create(eNKServiceAction::None);
+    actionCheckNotDecorator->child = BA_CheckServiceActionType::Create(eNKServiceAction::NONE);
     sequence4->AddAction(actionCheckNotDecorator);
 
     BehaviourTree::Selector* selector2 = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
@@ -425,11 +425,11 @@ void NKSessionImpl::ShowUI() {
 
     BehaviourTree::Selector* selector3 = BehaviourTree::Selector::Create(BehaviourTree::LoopCondition::None);
 
-    BA_IsServiceAuthenticated* isServiceAuthenticated = BA_IsServiceAuthenticated::Create(eNKLoginService::InBlackboard);
+    BA_IsServiceAuthenticated* isServiceAuthenticated = BA_IsServiceAuthenticated::Create(eNKLoginService::IN_BLACKBOARD);
     selector3->AddAction(isServiceAuthenticated);
 
     BA_AuthenticateService* authenticateService = BA_AuthenticateService::Create(
-        eNKLoginService::InBlackboard, eNKServiceAuthMethod::Email);
+        eNKLoginService::IN_BLACKBOARD, eNKServiceAuthMethod::EMAIL);
     selector3->AddAction(authenticateService);
     sequence5->AddAction(selector3);
 
@@ -438,22 +438,22 @@ void NKSessionImpl::ShowUI() {
     BehaviourTree::Sequence* sequence6 = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
 
     BA_ServiceAction* blackboardAction = BA_ServiceAction::Create(
-        eNKLoginService::InBlackboard, eNKServiceAction::InBlackboard);
+        eNKLoginService::IN_BLACKBOARD, eNKServiceAction::IN_BLACKBOARD);
     sequence6->AddAction(blackboardAction);
     selector4->AddAction(sequence6);
 
     BehaviourTree::Sequence* sequence7 = BehaviourTree::Sequence::Create(BehaviourTree::LoopCondition::None);
 
-    BA_CheckServiceActionType* loginActionCheck = BA_CheckServiceActionType::Create(eNKServiceAction::Login);
+    BA_CheckServiceActionType* loginActionCheck = BA_CheckServiceActionType::Create(eNKServiceAction::LOGIN);
     sequence7->AddAction(loginActionCheck);
 
     BA_CheckErrorType* checkCannotFindLink = BA_CheckErrorType::Create(CANNOT_FIND_LINK);
     sequence7->AddAction(checkCannotFindLink);
 
-    BA_ServiceAction* createAction = BA_ServiceAction::Create(eNKLoginService::InBlackboard, eNKServiceAction::Create);
+    BA_ServiceAction* createAction = BA_ServiceAction::Create(eNKLoginService::IN_BLACKBOARD, eNKServiceAction::CREATE);
     sequence7->AddAction(createAction);
 
-    BA_ServiceAction* loginAction = BA_ServiceAction::Create(eNKLoginService::InBlackboard, eNKServiceAction::Login);
+    BA_ServiceAction* loginAction = BA_ServiceAction::Create(eNKLoginService::IN_BLACKBOARD, eNKServiceAction::LOGIN);
     sequence7->AddAction(loginAction);
     selector4->AddAction(sequence7);
     sequence5->AddAction(selector4);
@@ -510,7 +510,7 @@ bool NKSessionImpl::CheckBBForLinkAction(BehaviourTree::IBlackboard* blackboard)
     if (blackboard) {
         NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
         if (sessionBlackboard) {
-            return sessionBlackboard->serviceAction == eNKServiceAction::Link;
+            return sessionBlackboard->serviceAction == eNKServiceAction::LINK;
         }
     }
 

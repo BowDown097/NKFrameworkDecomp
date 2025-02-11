@@ -2,6 +2,7 @@
 #include "NewFramework/IO/File/BaseFileIO.h"
 #include "NewFramework/IO/File/IFile.h"
 #include "NewFramework/Networking/NKAPI/Impl/NKMessages.h"
+#include "NewFramework/Networking/NKAPI/NKEndpoints.h"
 #include "NewFramework/Platform/Shared/Logging.h"
 #include "NewFramework/Utilities/Utilities.h"
 #include "Uncategorized/Blackboards.h"
@@ -36,7 +37,7 @@ void BA_OpenSessionUsingToken::Start(BehaviourTree::IBlackboard* blackboard) {
     sessionBlackboard->LogMsg(message);
 }
 
-const bool BA_OpenSessionUsingToken::ReadTokenFile(IFile* file, NKSessionBlackboard* blackboard) {
+const bool BA_OpenSessionUsingToken::ReadTokenFile(IFile* const file, NKSessionBlackboard* blackboard) {
     std::string fileData;
     if (!file->ReadString(fileData)) {
         return false;
@@ -49,7 +50,6 @@ const bool BA_OpenSessionUsingToken::ReadTokenFile(IFile* file, NKSessionBlackbo
         CStephenEncryption stephenEncryption;
         fileData = fileData.substr(14);
         stephenEncryption.DecryptStream(reinterpret_cast<uint8_t*>(fileData.data()), fileData.size());
-
         if (GetCRCFromData(fileData.c_str(), fileData.size()) != fileCrc) {
             LOG_ERROR("Invalid File"); ENFORCE_LINE(54);
             return false;
@@ -63,7 +63,7 @@ const bool BA_OpenSessionUsingToken::ReadTokenFile(IFile* file, NKSessionBlackbo
 
     blackboard->accessToken = NKAccessToken(responseLogin.session);
     blackboard->responseUser = responseLogin.user;
-    blackboard->loginServiceFromToken = eNKLoginService::Cache;
+    blackboard->loginServiceFromToken = eNKLoginService::CACHE;
 
     state = BehaviourTree::AState::Success;
     return true;

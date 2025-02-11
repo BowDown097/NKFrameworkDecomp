@@ -17,8 +17,8 @@ public:
     static BA_ServiceAction* Create(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction);
 private:
     I_NKLoginService* loginService{}; // 0x28
-    eNKServiceAction serviceAction = eNKServiceAction::None; // 0x30
-    eNKLoginService loginServiceType = eNKLoginService::None; // 0x34
+    eNKServiceAction serviceAction = eNKServiceAction::NONE; // 0x30
+    eNKLoginService loginServiceType = eNKLoginService::NONE; // 0x34
 
     BA_ServiceAction() = default;
     BA_ServiceAction(const eNKLoginService& loginServiceType, const eNKServiceAction& serviceAction)

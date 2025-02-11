@@ -12,7 +12,7 @@ std::string BA_IsServiceAuthenticated::DebugString() {
 
 void BA_IsServiceAuthenticated::Start(BehaviourTree::IBlackboard* blackboard) {
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
-    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::InBlackboard
+    eNKLoginService localLoginServiceType = loginServiceType != eNKLoginService::IN_BLACKBOARD
         ? loginServiceType : sessionBlackboard->loginService;
     loginService = sessionBlackboard->sessionImpl->GetLoginService(localLoginServiceType);
 

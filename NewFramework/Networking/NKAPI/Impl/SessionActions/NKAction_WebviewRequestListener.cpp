@@ -11,8 +11,8 @@ void BA_WebviewRequestListener::Start(BehaviourTree::IBlackboard* blackboard) {
     this->blackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
     this->blackboard->LogMsg("Listening for webview app requests..");
 
-    this->blackboard->serviceAction = eNKServiceAction::None;
-    this->blackboard->loginService = eNKLoginService::None;
+    this->blackboard->serviceAction = eNKServiceAction::NONE;
+    this->blackboard->loginService = eNKLoginService::NONE;
 
     if (!this->blackboard->webView) {
         std::string errorInfo = "No webview to listen to?";

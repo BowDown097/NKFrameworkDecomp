@@ -1,10 +1,8 @@
 #pragma once
 #include "NewFramework/Networking/Protocols/HTTP/IHttpCallback.h"
+#include "NKEnums.h"
 
-enum class eNKLinkServerCluster { ALAN_DEV, ROSS_DEV, STAGING, LIVE, NONE };
-enum class eNKPublicUrlChannel { STANDARD, PRIORITY };
-
-// TODO: implement every method that's not sendMessage, and also come up with field names for Endpoint
+// TODO: implement every method that's not sendMessage
 namespace NKEndpoints
 {
     struct Endpoint

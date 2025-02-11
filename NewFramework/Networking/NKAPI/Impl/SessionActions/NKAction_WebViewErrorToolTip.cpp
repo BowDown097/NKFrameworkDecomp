@@ -10,19 +10,19 @@ void BA_WebViewErrorToolTip::Start(BehaviourTree::IBlackboard* blackboard) {
     std::string serviceKey;
 
     switch (sessionBlackboard->loginService) {
-        case eNKLoginService::GameCenter:
+        case eNKLoginService::GAMECENTER:
             serviceKey = "optional_login_ios";
             break;
-        case eNKLoginService::Facebook:
+        case eNKLoginService::FACEBOOK:
             serviceKey = "login_facebook";
             break;
-        case eNKLoginService::GooglePlay:
+        case eNKLoginService::GOOGLEPLAY:
             serviceKey = "optional_login_android_with_gp";
             break;
-        case eNKLoginService::Steam:
+        case eNKLoginService::STEAM:
             serviceKey = "optional_login_steam";
             break;
-        case eNKLoginService::Apple:
+        case eNKLoginService::APPLE:
             serviceKey = "optional_login_apple";
             break;
         default:

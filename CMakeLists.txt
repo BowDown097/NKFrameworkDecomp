@@ -70,6 +70,7 @@ target_sources(NKFrameworkDecomp
         NewFramework/Networking/NKAPI/Modules/NKModuleUtility.cpp
         NewFramework/Networking/NKAPI/NKCrossPromo.cpp
         NewFramework/Networking/NKAPI/NKEndpoints.cpp
+        NewFramework/Networking/NKAPI/NKEnums.cpp
         NewFramework/Networking/NKAPI/NKError.cpp
         NewFramework/Networking/NKAPI/NKFileClient.cpp
         NewFramework/Networking/NKAPI/NKManager.cpp
@@ -164,6 +165,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Networking/NKAPI/Modules/NKModuleUtility.h
             NewFramework/Networking/NKAPI/NKCrossPromo.h
             NewFramework/Networking/NKAPI/NKEndpoints.h
+            NewFramework/Networking/NKAPI/NKEnums.h
             NewFramework/Networking/NKAPI/NKError.h
             NewFramework/Networking/NKAPI/NKFileClient.h
             NewFramework/Networking/NKAPI/NKManager.h

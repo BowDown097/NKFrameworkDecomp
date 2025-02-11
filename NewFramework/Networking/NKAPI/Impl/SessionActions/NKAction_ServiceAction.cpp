@@ -7,11 +7,11 @@
 #include "Uncategorized/Blackboards.h"
 
 eNKServiceAction BA_ServiceAction::GetAction() const {
-    return serviceAction == eNKServiceAction::InBlackboard ? blackboard->serviceAction : serviceAction;
+    return serviceAction == eNKServiceAction::IN_BLACKBOARD ? blackboard->serviceAction : serviceAction;
 }
 
 eNKLoginService BA_ServiceAction::GetService() const {
-    return loginServiceType == eNKLoginService::InBlackboard ? blackboard->loginService : loginServiceType;
+    return loginServiceType == eNKLoginService::IN_BLACKBOARD ? blackboard->loginService : loginServiceType;
 }
 
 std::string BA_ServiceAction::DebugString() {
@@ -47,7 +47,7 @@ std::string BA_ServiceAction::ConstructUrl() {
 
 void BA_ServiceAction::ParseResponse(const NKMessageResponse& response) {
     switch (GetAction()) {
-        case eNKServiceAction::Link: {
+        case eNKServiceAction::LINK: {
             NKResponseLink responseLink;
             if (!NKJSON::TryParse<NKResponseLink>(responseLink, response.data)) {
                 throw std::runtime_error("Failed to parse NKResponseLink");
@@ -58,7 +58,7 @@ void BA_ServiceAction::ParseResponse(const NKMessageResponse& response) {
             DGAnalytics::Instance()->SendDataEvent(data, true, AnalyticsEventGroups::Group::Framework, 2);
             break;
         }
-        case eNKServiceAction::Login: {
+        case eNKServiceAction::LOGIN: {
             NKResponseLogin responseLogin;
             if (!NKJSON::TryParse<NKResponseLogin>(responseLogin, response.data)) {
                 throw std::runtime_error("Failed to parse NKResponseLogin");
@@ -69,7 +69,7 @@ void BA_ServiceAction::ParseResponse(const NKMessageResponse& response) {
             blackboard->loginServiceFromToken = GetService();
             break;
         }
-        case eNKServiceAction::Create: {
+        case eNKServiceAction::CREATE: {
             NKResponseCreate responseCreate;
             if (!NKJSON::TryParse<NKResponseCreate>(responseCreate, response.data)) {
                 throw std::runtime_error("Failed to parse NKResponseCreate");

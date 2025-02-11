@@ -1,9 +1,9 @@
 #pragma once
 #include "BehaviourTree.h"
 #include "NewFramework/Networking/NKAPI/Impl/NKMessages.h"
-#include "NewFramework/Networking/NKAPI/NKEndpoints.h"
+#include "NewFramework/Networking/NKAPI/NKEnums.h"
 #include "NewFramework/Networking/NKAPI/NKError.h"
-#include "Uncategorized/NKLoginService.h"
+#include "NewFramework/Networking/Protocols/HTTP/HttpRequest.h"
 #include <boost/smart_ptr/weak_ptr.hpp>
 
 class C_NKLoginWebView;
