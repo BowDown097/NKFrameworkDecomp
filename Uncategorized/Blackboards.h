@@ -25,7 +25,7 @@ struct SNKFileClientBlackboard : SNKErrorBlackboard
     std::string url; // 0x70
     std::string appIDStr; // 0x88
     std::string nkapiID; // 0xA0
-    std::string fileName; // 0xB8
+    std::string filename; // 0xB8
     std::string savePath; // 0xD0
     std::string postfix; // 0xE8
     clock_t start; // 0x100

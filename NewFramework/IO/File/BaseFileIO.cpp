@@ -35,9 +35,9 @@ CFilePolicy* CBaseFileIO::GetPolicyByName(const std::string& name) const
     return it != policyMap.end() ? it->second : nullptr;
 }
 
-std::string CBaseFileIO::GetPath(eFileLocation location, const std::string& fileName) const
+std::string CBaseFileIO::GetPath(eFileLocation location, const std::string& filename) const
 {
-    return GetStorageDirectory(location) + fileName;
+    return GetStorageDirectory(location) + filename;
 }
 
 std::string CBaseFileIO::GetStorageDirectory(eFileLocation location) const

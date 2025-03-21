@@ -103,10 +103,10 @@ const bool NKFileClientImpl::IsDownloadingURL(const std::string& url) const {
     std::string savePath = ConstructSavePath(url);
 
     size_t slashIndex = url.rfind('/');
-    std::string fileName = slashIndex != std::string::npos ? url.substr(slashIndex + 1) : url;
-    NKAssert(!fileName.empty(), "Filename empty, failed to download"); ENFORCE_LINE(107);
+    std::string filename = slashIndex != std::string::npos ? url.substr(slashIndex + 1) : url;
+    NKAssert(!filename.empty(), "Filename empty, failed to download"); ENFORCE_LINE(107);
 
-    auto it = treeDataMap.find(savePath + "/" + fileName);
+    auto it = treeDataMap.find(savePath + "/" + filename);
     return it != treeDataMap.end() && it->second.callbackAction == FileClientCallbackAction::Download;
 }
 
@@ -132,10 +132,10 @@ const bool NKFileClientImpl::Download(
     std::string savePath = ConstructSavePath(url);
 
     size_t slashIndex = url.rfind('/');
-    std::string fileName = slashIndex != std::string::npos ? url.substr(slashIndex + 1) : url;
-    NKAssert(!fileName.empty(), "Filename empty, failed to download"); ENFORCE_LINE(136);
+    std::string filename = slashIndex != std::string::npos ? url.substr(slashIndex + 1) : url;
+    NKAssert(!filename.empty(), "Filename empty, failed to download"); ENFORCE_LINE(136);
 
-    std::string fullPath = savePath + "/" + fileName;
+    std::string fullPath = savePath + "/" + filename;
     if (treeDataMap.find(fullPath) != treeDataMap.end()) {
         return false;
     }
@@ -149,7 +149,7 @@ const bool NKFileClientImpl::Download(
     blackboard->privateKey = NKSession::GetActiveSession()->GetPrivateKey();
     blackboard->serverCluster = NKSession::GetActiveSession()->GetServerCluster();
     blackboard->url = url;
-    blackboard->fileName = fileName;
+    blackboard->filename = filename;
     blackboard->savePath = savePath;
     blackboard->filePermissions = eNKFileClientFilePermissions::PUBLIC;
     blackboard->start = clock();
@@ -222,7 +222,7 @@ const bool NKFileClientImpl::Download(
     blackboard->serverCluster = NKSession::GetActiveSession()->GetServerCluster();
     blackboard->appIDStr = appID;
     blackboard->nkapiID = nkapiID;
-    blackboard->fileName = filename;
+    blackboard->filename = filename;
     blackboard->savePath = savePath;
     blackboard->filePermissions = filePermissions;
     blackboard->start = clock();
@@ -302,14 +302,14 @@ void NKFileClientImpl::ProcessBHTree(boost::shared_ptr<BehaviourTree::Action> ac
 
     action->Stop(fileClientBlackboard);
 
-    std::string fullPath = fileClientBlackboard->savePath + "/" + fileClientBlackboard->fileName;
+    std::string fullPath = fileClientBlackboard->savePath + "/" + fileClientBlackboard->filename;
 
     auto treeDataIt = treeDataMap.find(fullPath);
     if (treeDataIt == treeDataMap.end()) {
         return;
     }
 
-    auto uploadDataIt = uploadDataMap.find(fileClientBlackboard->fileName);
+    auto uploadDataIt = uploadDataMap.find(fileClientBlackboard->filename);
     treeDataMap.erase(treeDataIt);
     if (uploadDataIt == uploadDataMap.end()) {
         return;
@@ -639,7 +639,7 @@ const bool NKFileClientImpl::Upload(
     blackboard->serverCluster = NKSession::GetActiveSession()->GetServerCluster();
     blackboard->appIDStr = ss.str();
     blackboard->nkapiID = NKSession::GetActiveSession()->GetUserDetails().nkapiID;
-    blackboard->fileName = filename;
+    blackboard->filename = filename;
     blackboard->savePath = savePath;
     blackboard->filePermissions = filePermissions;
     blackboard->data = data;

@@ -35,11 +35,11 @@ public:
     SPromotion* GetPromotion(uint32_t index);
     SPromotion* GetPromotionWithTag(std::string tag);
     void OnAppPromoDownload(
-        bool success, const std::string& savePath, const std::string& fileName, const NKError* error, int appID);
+        bool success, const std::string& savePath, const std::string& filename, const NKError* error, int appID);
     uint32_t ParseAppPromoDownload(const json_spirit::mObject& obj, int appID);
     void TryStartAppPromoDownload();
     void OnImageDownload(
-        bool success, const std::string& savePath, const std::string& fileName, const NKError* error, int id);
+        bool success, const std::string& savePath, const std::string& filename, const NKError* error, int id);
     void ParsePromoDownload(const json_spirit::mObject& obj);
 private:
     bool downloadStarted{}; // 0x00

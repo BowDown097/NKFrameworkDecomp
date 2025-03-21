@@ -10,8 +10,8 @@ class NKModules;
 class NKManager {
 public:
     CBaseFileIO* fileIO{}; // 0x00
-    std::uint32_t appID; // 0x08
-    std::uint32_t skuID; // 0x0C
+    uint32_t appID; // 0x08
+    uint32_t skuID; // 0x0C
     std::string privateKey; // 0x10
     bool isSandbox; // 0x28
     bool initialised{}; // 0x30
@@ -20,7 +20,7 @@ public:
     time_t constructTime; // 0x48
     bool serverTimeAvailable{}; // 0x50
     bool serverTimeUpdating{}; // 0x51
-    std::uint32_t updateRetries; // 0x54
+    uint32_t updateRetries; // 0x54
     NKSession* session{}; // 0x58
     NKCrossPromo* crossPromo{}; // 0x60
     NKModules* modules{}; // 0x68
@@ -38,8 +38,8 @@ public:
     NKModules* GetModules() const { return modules; }
     const std::string& GetPrivateKey() const { return privateKey; }
     bool IsSandbox() const { return isSandbox; }
-    std::uint32_t GetAppID() const { return appID; }
-    std::uint32_t GetSkuID() const { return skuID; }
+    uint32_t GetAppID() const { return appID; }
+    uint32_t GetSkuID() const { return skuID; }
     CBaseFileIO* GetFileIO() const { return fileIO; }
     void FetchNewServerTime(bool markUnavailable);
     void UpdateServerTime();

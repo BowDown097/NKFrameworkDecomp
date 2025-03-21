@@ -95,7 +95,7 @@ void BA_FileWebRequest::HttpComplete(const SHttpRequest& request) {
 
 NKMessageResponseFile BA_FileWebRequest::ParseResponseMessage(const SHttpRequest& request) {
     NKMessageResponseFile out;
-    out.storage.filename = blackboard->fileName;
+    out.storage.filename = blackboard->filename;
     out.storage.url = GetUrl();
 
     if (request.statusCode == 304) {
@@ -205,7 +205,7 @@ void BA_FileWebRequest::HttpFailed(const SHttpRequest& request) {
     if (request.statusCode < 500) {
         if (request.statusCode == 403) {
             blackboard->error = NKError(NKErrorType::VALUE0, "", "", "");
-            blackboard->file.storage.filename = blackboard->fileName;
+            blackboard->file.storage.filename = blackboard->filename;
             blackboard->file.storage.data.clear();
             blackboard->file.storage.success = false;
             blackboard->file.storage.url = GetUrl();

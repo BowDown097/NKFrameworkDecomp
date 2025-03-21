@@ -25,7 +25,7 @@ void BA_FileClientCallback::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
     this->blackboard = dynamic_cast<SNKFileClientBlackboard*>(blackboard);
 
-    std::string filePath = this->blackboard->savePath + "/" + this->blackboard->fileName;
+    std::string filePath = this->blackboard->savePath + "/" + this->blackboard->filename;
     std::string action;
 
     switch (this->blackboard->callbackAction) {
@@ -47,7 +47,7 @@ void BA_FileClientCallback::Start(BehaviourTree::IBlackboard* blackboard) {
     #endif
         }
 
-        std::string file = this->blackboard->fileName + this->blackboard->postfix;
+        std::string file = this->blackboard->filename + this->blackboard->postfix;
         NKError* error = this->blackboard->error.type != NKErrorType::VALUE0 ? &this->blackboard->error : nullptr;
         callback(this->blackboard->file.storage.success, this->blackboard->savePath, file, error);
     }
@@ -66,7 +66,7 @@ BA_DownloadFileHeader* BA_DownloadFileHeader::Create(CBaseFileIO* fileIO, bool r
 
 void BA_DownloadFileHeader::ConstructMessage(std::string& data) {
     NKMessageStorageLoad storageLoad;
-    storageLoad.filename = blackboard->fileName;
+    storageLoad.filename = blackboard->filename;
     storageLoad.owner = blackboard->nkapiID;
     storageLoad.includeBody = false;
     data = NKJSON::Serialise<NKMessageStorageLoad>(storageLoad);
@@ -81,7 +81,7 @@ std::string BA_DownloadFileHeader::GetUrl() {
         return blackboard->url;
     } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC) {
         return NKEndpoints::GetPublicFileUrl(
-            blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->fileName);
+            blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->filename);
     } else {
         return NKEndpoints::GetBase(blackboard->serverCluster) + NKEndpoints::GetDownloadFile();
     }
@@ -93,7 +93,7 @@ void BA_DownloadFileHeader::HandleMessage() {
         return;
     }
 
-    std::string filePath = blackboard->savePath + "/" + blackboard->fileName;
+    std::string filePath = blackboard->savePath + "/" + blackboard->filename;
     auto it = blackboard->fileClientImpl->metadataMap.find(filePath);
 
     SNKManagerBlackboard* managerBlackboard = NKManager::GetManager()->blackboard;
@@ -140,7 +140,7 @@ BA_DownloadFile* BA_DownloadFile::Create(CBaseFileIO* fileIO, CEventManager* eve
 }
 
 void BA_DownloadFile::ConstructHeader(std::map<std::string, std::string>& headers) {
-    std::string filePath = blackboard->savePath + "/" + blackboard->fileName + blackboard->postfix;
+    std::string filePath = blackboard->savePath + "/" + blackboard->filename + blackboard->postfix;
     std::string etag = blackboard->fileClientImpl->GetCachedFileEtag(filePath);
 
     if (!etag.empty()) {
@@ -150,7 +150,7 @@ void BA_DownloadFile::ConstructHeader(std::map<std::string, std::string>& header
 
 void BA_DownloadFile::ConstructMessage(std::string& data) {
     NKMessageStorageLoad storageLoad;
-    storageLoad.filename = blackboard->fileName;
+    storageLoad.filename = blackboard->filename;
     storageLoad.owner = blackboard->nkapiID;
     storageLoad.includeBody = true;
     data = NKJSON::Serialise<NKMessageStorageLoad>(storageLoad);
@@ -165,7 +165,7 @@ std::string BA_DownloadFile::GetUrl() {
         return blackboard->url;
     } else if (requestPublic && blackboard->filePermissions == eNKFileClientFilePermissions::PUBLIC) {
         return NKEndpoints::GetPublicFileUrl(
-            blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->fileName);
+            blackboard->serverCluster, blackboard->appIDStr, blackboard->nkapiID, blackboard->filename);
     } else {
         return NKEndpoints::GetBase(blackboard->serverCluster) + NKEndpoints::GetDownloadFile();
     }
@@ -201,7 +201,7 @@ void BA_DownloadFile::HandleMessage() {
     }
 
     if (!blackboard->file.upToDate) {
-        std::string filePath = blackboard->savePath + "/" + blackboard->fileName + blackboard->postfix;
+        std::string filePath = blackboard->savePath + "/" + blackboard->filename + blackboard->postfix;
         IFile* file = fileIO->OpenFile(filePath, fileIO->cachePolicy, eFileOpenMode::ReadWriteNew);
 
         if (!file) {
@@ -245,12 +245,12 @@ void BA_DownloadFile::HandleMessage() {
 
         delete file;
     } else {
-        std::string filePath = blackboard->savePath + "/" + blackboard->fileName + blackboard->postfix;
+        std::string filePath = blackboard->savePath + "/" + blackboard->filename + blackboard->postfix;
         if (fileIO->FileExists(filePath, fileIO->cachePolicy)) {
             state = BehaviourTree::AState::Success;
         } else {
             std::string error = StringHelper::Format(
-                "Got cache file up to date for file %s, but file does not exist locally", blackboard->fileName.c_str());
+                "Got cache file up to date for file %s, but file does not exist locally", blackboard->filename.c_str());
             LOG_ERROR(error.c_str()); ENFORCE_LINE(254);
             blackboard->fileClientImpl->ClearCachedFileEtag(filePath);
             blackboard->error = NKError(NKErrorType::VALUE4, error, "", "");

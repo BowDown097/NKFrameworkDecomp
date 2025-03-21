@@ -73,7 +73,7 @@ void BA_UploadFile::HandleMessage() {
         return;
     }
 
-    std::string filePath = blackboard->savePath + "/" + blackboard->fileName;
+    std::string filePath = blackboard->savePath + "/" + blackboard->filename;
     IFile* file = fileIO->OpenFile(filePath, fileIO->cachePolicy, eFileOpenMode::ReadWriteNew);
 
     if (!file) {

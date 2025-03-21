@@ -19,7 +19,7 @@ public:
 
     CBaseFileIO();
     CFilePolicy* GetPolicyByName(const std::string& name) const;
-    std::string GetPath(eFileLocation location, const std::string& fileName) const;
+    std::string GetPath(eFileLocation location, const std::string& filename) const;
     std::string GetStorageDirectory(eFileLocation location) const;
     void AddSupportedStorage(eFileLocation location, const std::string& path);
     bool IsStorageSupported(eFileLocation location) const;

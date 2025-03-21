@@ -19,8 +19,8 @@ void BA_ConflictedFileCallback::Start(BehaviourTree::IBlackboard* blackboard) {
     if (!callback.empty()) {
         static std::string s_sMinePostfix = ".mine";
 
-        std::string mineFile = this->blackboard->fileName + s_sMinePostfix;
-        std::string blackboardFile = this->blackboard->fileName + this->blackboard->postfix;
+        std::string mineFile = this->blackboard->filename + s_sMinePostfix;
+        std::string blackboardFile = this->blackboard->filename + this->blackboard->postfix;
 
         callback(this->blackboard->savePath, mineFile, blackboardFile,
             boost::bind(&BA_ConflictedFileCallback::ResolveCallback, this, boost::placeholders::_1));
@@ -50,7 +50,7 @@ void BA_ResolveConflict::Start(BehaviourTree::IBlackboard* blackboard) {
     state = BehaviourTree::AState::Running;
     this->blackboard = dynamic_cast<SNKFileClientBlackboard*>(blackboard);
 
-    std::string filePath = this->blackboard->savePath + this->blackboard->fileName;
+    std::string filePath = this->blackboard->savePath + this->blackboard->filename;
     switch (this->blackboard->conflictResolutionType) {
         case NKConflictResolutionType::Delete:
             state = BehaviourTree::AState::Success;

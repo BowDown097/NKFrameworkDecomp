@@ -105,7 +105,7 @@ time_t NKManager::GetLocalTimeMS() const {
 }
 
 time_t NKManager::GetTimeMS() const {
-    static std::uint32_t uUnavailableCounter;
+    static uint32_t uUnavailableCounter;
     time_t result = GetLocalTimeMS();
 
     if (serverTimeAvailable) {

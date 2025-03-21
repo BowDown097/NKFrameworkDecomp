@@ -65,7 +65,7 @@ void NKCrossPromo::Download(const std::string& url) {
 }
 
 void NKCrossPromo::OnAppPromoDownload(
-    bool success, const std::string& savePath, const std::string& fileName, const NKError* error, int appID) {
+    bool success, const std::string& savePath, const std::string& filename, const NKError* error, int appID) {
 
     ++appPromoCompletions;
 
@@ -74,7 +74,7 @@ void NKCrossPromo::OnAppPromoDownload(
         TryStartAppPromoDownload();
     } else {
         CJSONWrapper jsonWrapper(fileIO);
-        if (!ParseAppPromoDownload(jsonWrapper.ReadObject(savePath + "/" + fileName, fileIO->cachePolicy), appID)) {
+        if (!ParseAppPromoDownload(jsonWrapper.ReadObject(savePath + "/" + filename, fileIO->cachePolicy), appID)) {
             appIDs.erase(appIDs.cbegin());
             TryStartAppPromoDownload();
         }
@@ -169,7 +169,7 @@ void NKCrossPromo::TryStartAppPromoDownload() {
 }
 
 void NKCrossPromo::OnImageDownload(
-    bool success, const std::string& savePath, const std::string& fileName, const NKError* error, int id) {
+    bool success, const std::string& savePath, const std::string& filename, const NKError* error, int id) {
 
     auto it = std::find_if(pendingPromotions.begin(), pendingPromotions.end(), [id](const NKCrossPromo::SPendingPromotion& pp) {
         return pp.id == id;
@@ -177,16 +177,16 @@ void NKCrossPromo::OnImageDownload(
 
     if (it != pendingPromotions.end()) {
         if (success && !error) {
-            std::string fullPath = savePath + "/" + fileName;
+            std::string fullPath = savePath + "/" + filename;
 
             std::string textureExtension, textureName;
-            size_t periodIndex = fileName.rfind('.');
+            size_t periodIndex = filename.rfind('.');
 
             if (periodIndex == std::string::npos) {
-                textureName = fileName;
+                textureName = filename;
             } else {
-                textureExtension = fileName.substr(periodIndex + 1);
-                textureName = fileName.substr(0, periodIndex);
+                textureExtension = filename.substr(periodIndex + 1);
+                textureName = filename.substr(0, periodIndex);
             }
 
             eTextureType textureType = CTexture::ParseTextureType(textureExtension);
