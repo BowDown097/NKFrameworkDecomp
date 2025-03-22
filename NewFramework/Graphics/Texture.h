@@ -29,7 +29,6 @@ public:
     // still not sure if these names are right
     enum class ePixelFormat { Unknown, RGBA8, RGBA4, RGBA, RGB8, RGB565, LA8, LA };
 
-    int field_8 = INT_MAX; // 0x08
     STextureDimensions dimensions{}; // 0x10
     std::string id; // 0x18
     std::string path; // 0x30

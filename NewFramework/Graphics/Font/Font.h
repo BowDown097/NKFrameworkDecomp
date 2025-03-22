@@ -2,13 +2,14 @@
 
 #include <NewFramework/Graphics/Font/CharacterInfo.h>
 #include <NewFramework/Graphics/Font/FontDefinition.h>
+#include <Uncategorized/ReferenceCounted.h>
 #include <Uncategorized/RGBA.h>
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 
 #include <string>
 
-class CFont {
+class CFont : public CReferenceCounted {
 public:
 	CFont() = default;
 	CFont(const std::string&, float, const boost::shared_ptr<const SFontDefinition>&, bool, const CRGBA&, float);
@@ -17,9 +18,6 @@ public:
 	[[nodiscard]] float GetLineHeight() const;
 	[[nodiscard]] bool HasCharacter(uint32_t) const;
 
-	virtual ~CFont() = default;
-
-	int mUnknownA = -1;
 	boost::shared_ptr<const SFontDefinition> mpDefinition = nullptr;
 	float mFontSize = 0.0f; // Unsure
 	std::string mName{};
