@@ -5,7 +5,9 @@ BA_StoreStateCallback* BA_StoreStateCallback::Create(boost::function1<void, cons
 }
 
 void BA_StoreStateCallback::Start(BehaviourTree::IBlackboard* blackboard) {
-    func(blackboard);
+    if (func) {
+        func(blackboard);
+    }
     state = BehaviourTree::AState::Success;
 }
 

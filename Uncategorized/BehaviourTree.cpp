@@ -527,17 +527,18 @@ namespace BehaviourTree
         if (child->state == AState::Idle)
         {
             state = AState::Failure;
+            return;
         }
-        else if ((child->state != AState::Success && state != AState::Failure) || !func(blackboard))
-        {
-            state = child->state;
-        }
-        else
-        {
-            child->Stop(blackboard);
-            child->Start(blackboard);
-            state = AState::Running;
-        }
+
+        state = child->state;
+        if (state != AState::Success && state != AState::Failure)
+            return;
+        if (!func || !func(blackboard))
+            return;
+
+        child->Stop(blackboard);
+        child->Start(blackboard);
+        state = AState::Running;
     }
 
     Action* LoopOnCondition::clone()

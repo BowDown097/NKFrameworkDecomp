@@ -7,7 +7,9 @@ BA_ReportErrorCallback* BA_ReportErrorCallback::Create(boost::function1<void, co
 
 void BA_ReportErrorCallback::Start(BehaviourTree::IBlackboard* blackboard) {
     NKSessionBlackboard* sessionBlackboard = dynamic_cast<NKSessionBlackboard*>(blackboard);
-    func(sessionBlackboard->error);
+    if (func) {
+        func(sessionBlackboard->error);
+    }
     state = BehaviourTree::AState::Success;
 }
 

@@ -2,12 +2,14 @@
 
 void HttpCallbackFunctor::HttpComplete(const SHttpRequest& req)
 {
-    httpCallback(req);
+    if (httpCallback)
+        httpCallback(req);
     field_40.reset();
 }
 
 void HttpCallbackFunctor::HttpFailed(const SHttpRequest& req)
 {
-    httpCallback(req);
+    if (httpCallback)
+        httpCallback(req);
     field_40.reset();
 }
