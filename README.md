@@ -11,4 +11,4 @@ The primary philosophy of this decompilation is to take as few liberties with th
 
 Some ground rules:
 - Files whose locations are unknown are put into the "Uncategorized" folder unless if a very probable guess to their locations can be made.
-- Liberties can be taken within reason for operations with C++ data types that disassemblers do not work well with (e.g. std::map) and data types that are mostly inlined by the compiler (e.g. most interfaces).
+- The [style guide](STYLE_GUIDE.md) should always be followed.
