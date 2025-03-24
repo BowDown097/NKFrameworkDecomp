@@ -220,6 +220,9 @@ endif()
 # Libraries
 
 ## Boost
+### for utmost accuracy, you can have this link to boost 1.63, the version used in the framework.
+### because boost is massive, it's not brought in by default, and we just use the system one.
+### NK also kind of does this, linking to one global boost install on a development machine.
 find_package(Boost REQUIRED)
 target_include_directories(NKFrameworkDecomp PUBLIC ${Boost_INCLUDE_DIRS})
 target_link_libraries(NKFrameworkDecomp PUBLIC ${Boost_LIBRARIES})
