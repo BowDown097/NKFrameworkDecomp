@@ -1,4 +1,5 @@
 #pragma once
+
 #include <json_spirit/json_spirit_value.h>
 
 namespace AnalyticsEventGroups {

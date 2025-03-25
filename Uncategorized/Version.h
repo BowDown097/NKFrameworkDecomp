@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Uncategorized/types.h"
+
 #include <string>
 
 class CVersion {
@@ -13,7 +15,7 @@ public:
     CVersion(int major, int minor, int patch);
     int ConstructIntVersion() const;
     std::string ConstructStrVersion() const;
-    CVersion(int versionCode);
+    explicit CVersion(int versionCode);
     void SetVersion(int versionCode);
     std::string ConstructStrVersionMajorMinor() const;
     bool IsEquivalent(const CVersion& version, bool checkPatch, bool checkMinor) const;

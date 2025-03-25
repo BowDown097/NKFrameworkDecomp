@@ -53,7 +53,7 @@ struct IAnalytics {
     virtual void SetDoNotTrack(int doNotTrack) {
         this->doNotTrack = doNotTrack;
     }
-    virtual bool SetUserConsent(bool) {
+    virtual bool SetUserConsent(bool consent) {
         ENFORCE_LINE(57); return NKAssert(false, "Setting consent unhandled by this interface");
     }
 };
@@ -63,8 +63,7 @@ struct SAnalyticsInitialisation {
     CVersion version; // 0x18
     IAnalytics* host; // 0x38
 
-    SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
-        : name(name), version(version), host(host) {}
+    SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host);
 };
 
 class DGAnalytics {
@@ -80,14 +79,18 @@ public:
     void AppPaused();
     void AppDestroyed();
     void DidReceiveMemoryWarning();
-    void SetCheckpoint(std::string a, std::map<std::string, std::string>* b, std::pair<double, std::string> c,
-                       AnalyticsEventGroups::Group d, unsigned int e);
+    void SetCheckpoint(
+        std::string a, std::map<std::string, std::string>* b,
+        std::pair<double, std::string> c,
+        AnalyticsEventGroups::Group d, unsigned int e);
     void StartTimedEvent(std::string a, std::map<std::string, std::string>* b);
     void EndTimedEvent(std::string a, std::map<std::string, std::string>* b);
     void SetKey(const std::string& a, const std::string& b);
     void SetKey(const std::string& a, double b);
     void SetKey(const std::string& a, unsigned long long b);
-    void SendDataEvent(const DGAnalyticsData& data, bool b, AnalyticsEventGroups::Group group, unsigned int d);
+    void SendDataEvent(
+        const DGAnalyticsData& data, bool b,
+        AnalyticsEventGroups::Group group, unsigned int d);
     std::string GetUserID();
     void SetDoNotTrack(int doNotTrack);
     std::string GetNonLiNKID();

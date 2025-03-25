@@ -115,8 +115,10 @@ target_sources(NKFrameworkDecomp
             NewFramework/BaseApplication/Screens/ScreenData.h
             NewFramework/BaseApplication/BasePointers.h
             NewFramework/Console/ConsoleVariable.h
-            NewFramework/Graphics/Font/FontManager.h
+            NewFramework/Graphics/Font/CharacterInfo.h
             NewFramework/Graphics/Font/Font.h
+            NewFramework/Graphics/Font/FontDefinition.h
+            NewFramework/Graphics/Font/FontManager.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
             NewFramework/Graphics/Management/PVR/PVRTextures.h

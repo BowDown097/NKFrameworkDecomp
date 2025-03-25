@@ -1,4 +1,5 @@
 #include "DGAnalyticsData.h"
+
 #include "NewFramework/Utilities/StringHelper.h"
 
 DGAnalyticsData& DGAnalyticsData::operator<<(const std::string& str) {
