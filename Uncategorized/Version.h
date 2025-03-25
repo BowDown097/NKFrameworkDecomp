@@ -1,17 +1,15 @@
 #pragma once
-#include <cstdint>
+#include "Uncategorized/types.h"
 #include <string>
 
-class CVersion
-{
+class CVersion {
 public:
-    int8_t major{};
-    int8_t minor{};
-    int8_t patch{};
-    int versionCode{};
-    std::string versionString;
+    uchar major{}; // 0x00
+    uchar minor{}; // 0x01
+    uchar patch{}; // 0x02
+    uint versionCode; // 0x04
+    std::string versionString; // 0x08
 
-    CVersion();
     CVersion(int major, int minor, int patch);
     int ConstructIntVersion() const;
     std::string ConstructStrVersion() const;

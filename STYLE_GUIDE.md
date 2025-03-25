@@ -28,11 +28,11 @@ Always use any other rules, unless if you are absolutely sure that something is 
     - vectors (rarely): vecVariable OR vectorVariable
 - The known qualifier prefixes are as follows:
     - mutable: mVariable
-    - private: m\_Variable
+    - private: \_Variable
     - static: sVariable
 - Qualifier and type prefixes can be mixed and stay lowercase when mixed.
 - Any variables that don't have any of the types or qualifiers listed should not be prefixed.
-- Prefixes (or a group of prefixes) count as a "word" themselves, so if using camel case, a variable will be named for example m\_ButtonName, not m\_buttonName.
+- Prefixes (or a group of prefixes) count as a "word" themselves, so if using camel case, a variable will be named for example sButtonName, not sbuttonName.
 - A static string just has one 's' as its prefix.
 - Member variables should have their offsets **as it is in the binary** noted in a comment, in hex, padded to 2 characters, unless if they are the only member variable of a type.
 - Member variable names are allowed to be inferred. If a name absolutely cannot be determined, then it will be in the format ``field_XX``, where XX is the offset as mentioned before, with no prefixes.
@@ -83,7 +83,7 @@ public:
         return {};
     }
 private:
-    mutable std::vector<IInterface*> m_mvecOtherInterfaces;
+    mutable std::vector<IInterface*> _mvecOtherInterfaces;
 };
 
 class CClass {
@@ -114,8 +114,8 @@ public:
         return true;
     }
 private:
-    IInterface* m_pInterface; // 0x00
-    eErrorType m_eResultError; // 0x08
+    IInterface* _pInterface; // 0x00
+    eErrorType _eResultError; // 0x08
     bool field_0C; // 0x0C
 
     bool HandleError(const std::string& error, uint16_t code) {

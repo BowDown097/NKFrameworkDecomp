@@ -107,8 +107,6 @@ target_sources(NKFrameworkDecomp
             NewFramework/Analytics/DGAnalytics.h
             NewFramework/Analytics/DGAnalyticsData.h
             NewFramework/Analytics/DGAnalyticsEventGroups.h
-            NewFramework/Analytics/IAnalytics.h
-            NewFramework/Analytics/SAnalyticsInitialisation.h
             NewFramework/BaseApplication/AppClass/AppClass.h
             NewFramework/BaseApplication/AppClass/NKApplication.h
             NewFramework/BaseApplication/AppClass/NKSDKApp.h
@@ -204,6 +202,7 @@ target_sources(NKFrameworkDecomp
             Uncategorized/SpriteInformation.h
             Uncategorized/StephenEncryption.h
             Uncategorized/StuffToRefactor.h
+            Uncategorized/types.h
             Uncategorized/Version.h
 )
 

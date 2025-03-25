@@ -1,5 +1,8 @@
 #pragma once
-#include "SAnalyticsInitialisation.h"
+
+#include "DGAnalyticsData.h"
+#include "DGAnalyticsEventGroups.h"
+#include "NewFramework/Platform/Shared/Assert.h"
 #include "Uncategorized/Version.h"
 
 static const std::string nullString = "";
@@ -18,13 +21,58 @@ static const std::string sNKError_HttpRequest = "HTTP:Request";
 static const std::string sNKError_HttpError = "HTTP:Error";
 static const std::string sNKError_HttpFileWrite = "HTTP:FileWrite";
 
-class DGAnalytics
-{
+struct IAnalytics {
+    bool field_8{}; // 0x08
+    int doNotTrack{}; // 0x0C
+    std::string name; // 0x10
+
+    virtual ~IAnalytics() = default;
+
+    virtual void Log(const std::string&);
+    virtual void SetUser(const std::string&);
+    virtual void AppActive();
+    virtual void AppPaused();
+    virtual void AppDestroyed();
+    virtual void DidReceiveMemoryWarning();
+    virtual void SetCheckpoint(
+        std::string&, std::map<std::string, std::string>*,
+        std::pair<double, std::string>, AnalyticsEventGroups::Group);
+    virtual void StartTimedEvent(std::string&, std::map<std::string, std::string>*);
+    virtual void EndTimedEvent(std::string&, std::map<std::string, std::string>*);
+    virtual void SendDataEventWithID(std::string, const DGAnalyticsData&, AnalyticsEventGroups::Server);
+    virtual void SetKey(const std::string&, const std::string&);
+    virtual void SetKey(const std::string&, double);
+    virtual void SetKey(const std::string&, unsigned long long);
+
+    virtual void Init(const std::string& name, const CVersion& version) {
+        this->name = name;
+    }
+    virtual unsigned int PassFilter(uint in) {
+        return (in & 2) >> 1;
+    }
+    virtual void SetDoNotTrack(int doNotTrack) {
+        this->doNotTrack = doNotTrack;
+    }
+    virtual bool SetUserConsent(bool) {
+        ENFORCE_LINE(57); return NKAssert(false, "Setting consent unhandled by this interface");
+    }
+};
+
+struct SAnalyticsInitialisation {
+    std::string name; // 0x00
+    CVersion version; // 0x18
+    IAnalytics* host; // 0x38
+
+    SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
+        : name(name), version(version), host(host) {}
+};
+
+class DGAnalytics {
 public:
-    DGAnalytics() : groupSettingsContainer(new AnalyticsEventGroups::CGroupSettingsContainer) {}
     static DGAnalytics* Instance();
     void ApplyEventGroupSettings(int throttleThreshold, json_spirit::mObject& obj);
     void Add(IAnalytics* host, std::string name, const CVersion& version, bool init);
+    IAnalytics* Get(std::string name);
     void Initialise();
     void Log(std::string message, ...);
     void SetUser(const std::string& user);
@@ -48,10 +96,10 @@ public:
 private:
     static inline DGAnalytics* _pInstance;
 
-    bool eventsSupported = true; // 0x00
-    bool dataEventsSupported{}; // 0x01
-    int sessionId{}; // 0x04
-    std::vector<IAnalytics*> analytics; // 0x08
-    std::vector<SAnalyticsInitialisation> analyticsInitialisation; // 0x20
-    AnalyticsEventGroups::CGroupSettingsContainer* groupSettingsContainer; // 0x38
+    bool _bEventsSupported = true; // 0x00
+    bool _bDataEventsSupported{}; // 0x01
+    int _sessionID{}; // 0x04
+    std::vector<IAnalytics*> _analytics; // 0x08
+    std::vector<SAnalyticsInitialisation> _analyticsInitialisation; // 0x20
+    AnalyticsEventGroups::CGroupSettingsContainer _groupSettingsContainer; // 0x38
 };

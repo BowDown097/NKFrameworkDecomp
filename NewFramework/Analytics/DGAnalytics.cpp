@@ -13,23 +13,23 @@ DGAnalytics* DGAnalytics::Instance()
 
 void DGAnalytics::ApplyEventGroupSettings(int throttleThreshold, json_spirit::mObject& obj)
 {
-    groupSettingsContainer->Deserialize(throttleThreshold, obj);
+    _groupSettingsContainer->Deserialize(throttleThreshold, obj);
 }
 
 void DGAnalytics::Add(IAnalytics* host, std::string name, const CVersion& version, bool init)
 {
-    analytics.push_back(host);
+    _analytics.push_back(host);
     if (init)
     {
         host->Init(name, version);
         return;
     }
-    analyticsInitialisation.emplace_back(name, version, host);
+    _analyticsInitialisation.emplace_back(name, version, host);
 }
 
 void DGAnalytics::Initialise()
 {
-    for (const SAnalyticsInitialisation& ai : analyticsInitialisation)
+    for (const SAnalyticsInitialisation& ai : _analyticsInitialisation)
         ai.host->Init(ai.name, ai.version);
 }
 
@@ -41,7 +41,7 @@ void DGAnalytics::Log(std::string message, ...)
     char text[2048];
     vsnprintf(text, sizeof(text), message.c_str(), args);
 
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->Log(text);
 
@@ -50,35 +50,35 @@ void DGAnalytics::Log(std::string message, ...)
 
 void DGAnalytics::SetUser(const std::string& user)
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->SetUser(user);
 }
 
 void DGAnalytics::AppActive()
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->AppActive();
 }
 
 void DGAnalytics::AppPaused()
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->AppPaused();
 }
 
 void DGAnalytics::AppDestroyed()
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->AppDestroyed();
 }
 
 void DGAnalytics::DidReceiveMemoryWarning()
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->DidReceiveMemoryWarning();
 }
@@ -86,51 +86,51 @@ void DGAnalytics::DidReceiveMemoryWarning()
 void DGAnalytics::SetCheckpoint(std::string a, std::map<std::string, std::string>* b, std::pair<double, std::string> c,
                                 AnalyticsEventGroups::Group d, unsigned int e)
 {
-    if (!eventsSupported)
+    if (!_bEventsSupported)
         return;
 
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8 && analyticsHost->PassFilter(e))
             analyticsHost->SetCheckpoint(a, b, c, d);
 }
 
 void DGAnalytics::StartTimedEvent(std::string a, std::map<std::string, std::string>* b)
 {
-    if (!eventsSupported)
+    if (!_bEventsSupported)
         return;
 
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->StartTimedEvent(a, b);
 }
 
 void DGAnalytics::EndTimedEvent(std::string a, std::map<std::string, std::string>* b)
 {
-    if (!eventsSupported)
+    if (!_bEventsSupported)
         return;
 
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->EndTimedEvent(a, b);
 }
 
 void DGAnalytics::SetKey(const std::string& a, const std::string& b)
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->SetKey(a, b);
 }
 
 void DGAnalytics::SetKey(const std::string& a, double b)
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->SetKey(a, b);
 }
 
 void DGAnalytics::SetKey(const std::string& a, unsigned long long b)
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8)
             analyticsHost->SetKey(a, b);
 }
@@ -138,11 +138,11 @@ void DGAnalytics::SetKey(const std::string& a, unsigned long long b)
 void DGAnalytics::SendDataEvent(const DGAnalyticsData& data, bool b, AnalyticsEventGroups::Group group, unsigned int d)
 {
     AnalyticsEventGroups::Server server = AnalyticsEventGroups::Server::Unk0;
-    if (!dataEventsSupported && group != AnalyticsEventGroups::Group::AlwaysSend)
+    if (!_bDataEventsSupported && group != AnalyticsEventGroups::Group::AlwaysSend)
     {
-        if (!eventsSupported)
+        if (!_bEventsSupported)
             return;
-        AnalyticsEventGroups::SGroupSettings& settings = groupSettingsContainer->GetSettings(group);
+        AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer->GetSettings(group);
         if (!settings.throttle)
             return;
         server = settings.server;
@@ -154,7 +154,7 @@ void DGAnalytics::SendDataEvent(const DGAnalyticsData& data, bool b, AnalyticsEv
                       data.field_40, group, d);
     }
 
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         if (analyticsHost->field_8 && analyticsHost->PassFilter(d))
             analyticsHost->SendDataEventWithID(GetUserID(), data, server);
 }
@@ -169,7 +169,7 @@ std::string DGAnalytics::GetUserID()
 
 void DGAnalytics::SetDoNotTrack(int doNotTrack)
 {
-    for (IAnalytics* analyticsHost : analytics)
+    for (IAnalytics* analyticsHost : _analytics)
         analyticsHost->SetDoNotTrack(doNotTrack);
 }
 
@@ -181,13 +181,13 @@ std::string DGAnalytics::GetNonLiNKID()
 
 void DGAnalytics::SetSessionID(int sessionId)
 {
-    if (this->sessionId != 0 && this->sessionId != sessionId)
+    if (this->_sessionID != 0 && this->_sessionID != sessionId)
         NKAssert(false, "Changing the session ID after it has already been set, is this intentional?");
-    this->sessionId = sessionId;
+    this->_sessionID = sessionId;
 }
 
 void DGAnalytics::EnableAnalyticsGroup(bool enabled, AnalyticsEventGroups::Group group)
 {
-    AnalyticsEventGroups::SGroupSettings& settings = groupSettingsContainer->GetSettings(group);
+    AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer->GetSettings(group);
     settings.throttle = enabled;
 }
