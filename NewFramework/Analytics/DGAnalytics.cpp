@@ -110,16 +110,6 @@
 
 
 
-
-
-
-
-
-
-
-SAnalyticsInitialisation::SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
-    : name(name), version(version), host(host) {}
-
 DGAnalytics* DGAnalytics::Instance() {
     if (!_pInstance) {
         _pInstance = new DGAnalytics;
@@ -135,9 +125,19 @@ void DGAnalytics::Add(IAnalytics* host, std::string name, const CVersion& versio
     _analytics.push_back(host);
     if (init) {
         host->Init(name, version);
-        return;
+    } else {
+        _analyticsInitialisation.emplace_back(name, version, host);
     }
-    _analyticsInitialisation.emplace_back(name, version, host);
+}
+
+IAnalytics* DGAnalytics::Get(std::string name) {
+    for (IAnalytics* analyticsHost : _analytics) {
+        if (analyticsHost->name == name) {
+            return analyticsHost;
+        }
+    }
+
+    return nullptr;
 }
 
 void DGAnalytics::Initialise() {
@@ -322,3 +322,6 @@ void DGAnalytics::EnableAnalyticsGroup(bool enabled, AnalyticsEventGroups::Group
     AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer.GetSettings(group);
     settings.throttle = enabled;
 }
+
+SAnalyticsInitialisation::SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
+    : name(name), version(version), host(host) {}
