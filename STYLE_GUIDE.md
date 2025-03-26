@@ -15,6 +15,7 @@ Always use any other rules, unless if you are absolutely sure that something is 
 - A type alias is typically made for type definitions which would certainly result in the rule above being broken when used. Type aliases do appear in function name symbols and error messages, so please check against those before creating one. If you do not see one being used, don't create one!
 - Pointer and reference modifiers are adjacent to the type (``int*``, ``int&``).
 - West const is used (``const int``, NOT ``int const``).
+- #include's are separated by library (i.e. framework headers are separate from STL headers, which are separate from Boost headers) and are also separate from the header guard and, in a source file, its respective header file.
 
 ## Variables
 - All variable names are in camel case.
@@ -28,14 +29,14 @@ Always use any other rules, unless if you are absolutely sure that something is 
     - vectors (rarely): vecVariable OR vectorVariable
 - The known qualifier prefixes are as follows:
     - mutable: mVariable
-    - private: \_Variable
+    - private: \_variable OR m\_variable
     - static: sVariable
 - Qualifier and type prefixes can be mixed and stay lowercase when mixed.
 - Any variables that don't have any of the types or qualifiers listed should not be prefixed.
-- Prefixes (or a group of prefixes) count as a "word" themselves, so if using camel case, a variable will be named for example sButtonName, not sbuttonName.
+- Prefixes (or a group of prefixes), excluding the prefixes for the private qualifier, count as a "word" themselves, so if using camel case, a variable will be named for example sButtonName, not sbuttonName.
 - A static string just has one 's' as its prefix.
 - Member variables should have their offsets **as it is in the binary** noted in a comment, in hex, padded to 2 characters, unless if they are the only member variable of a type.
-- Member variable names are allowed to be inferred. If a name absolutely cannot be determined, then it will be in the format ``field_XX``, where XX is the offset as mentioned before, with no prefixes.
+- Member variable names are allowed to be inferred. If a name absolutely cannot be determined, then it will be in the format ``field_XX``, where XX is the offset as mentioned before, with no prefixes and not padded.
 
 ## Types
 - Type names are in pascal case and are typically prefixed with the first letter of their kind as follows:
@@ -66,6 +67,15 @@ Always use any other rules, unless if you are absolutely sure that something is 
 Here's some code demonstrating pretty much everything:
 
 ```cpp
+// Class.h
+#pragma once
+
+#include "Uncategorized/types.h"
+
+#include <string>
+#include <unordered_map>
+#include <vector>
+
 class IInterface {
 public:
     using tChar16StringMap = std::unordered_map<
@@ -74,16 +84,17 @@ public:
 
     virtual void DoThing() const;
     virtual ~IInterface() = default;
+private:
+    mutable std::vector<IInterface*> _mvecOtherInterfaces;
 
     template<typename T, typename U>
     tChar16StringMap VeryLongFunction(
         const std::string& a, const std::string& b, const std::string& c,
         const tChar16StringMap& d, const T& e, const U& f) {
 
+        // ...
         return {};
     }
-private:
-    mutable std::vector<IInterface*> _mvecOtherInterfaces;
 };
 
 class CClass {
@@ -100,27 +111,41 @@ public:
         Minor
     };
 
-    bool CheckData(void* pData) {
-        static std::string sNullDataError = "Oh no! This is very very bad! It's over! "
-                                            "pData is null!";
-        static uint16_t suNullDataErrorCode = 57;
-
-        if (!pData) {
-            return HandleError(sNullDataError, suNullDataErrorCode);
-        }
-
-        // ...
-
-        return true;
-    }
+    bool CheckData(void* pData);
 private:
     IInterface* _pInterface; // 0x00
     eErrorType _eResultError; // 0x08
-    bool field_0C; // 0x0C
+    bool field_C; // 0x0C
 
-    bool HandleError(const std::string& error, uint16_t code) {
-        // ...
-        return false;
-    }
+    bool HandleError(const std::string& error, ushort code);
 };
+
+
+
+// Class.cpp
+#include "Class.h"
+
+#include "NewFramework/Utilities/StringHelper.h"
+
+#include <iostream>
+
+bool CClass::checkData(void* pData) {
+    static std::string sNullDataError = "Oh no! This is very very bad! It's over! "
+                                        "pData is null!";
+    static ushort suNullDataErrorCode = 57;
+
+    if (!pData) {
+        return HandleError(sNullDataError, suNullDataErrorCode);
+    }
+
+    // ...
+
+    return true;
+}
+
+bool HandleError(const std::string& error, ushort code) {
+    std::cout << StringHelper::Format("ERROR %s (code: %hu)", error.c_str(), code) << std::endl;
+    // ...
+    return false;
+}
 ```
