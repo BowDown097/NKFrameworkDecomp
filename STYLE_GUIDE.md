@@ -23,10 +23,11 @@ Always use any other rules, unless if you are absolutely sure that something is 
 - The known type prefixes are as follows:
     - booleans: bVariable
     - enums: eVariable
+    - floating point values: fVariable
     - pointers: pVariable
     - strings: sVariable
     - unsigned integers (of any bitness): uVariable
-    - vectors (rarely): vecVariable OR vectorVariable
+    - vectors (rarely, usually if there may be ambiguity): vecVariable OR vectorVariable
 - The known qualifier prefixes are as follows:
     - mutable: mVariable
     - private: \_variable OR m\_variable
@@ -52,7 +53,7 @@ Always use any other rules, unless if you are absolutely sure that something is 
 - Template type parameters always use ``typename`` and almost always follow the T, U, V... pattern.
 
 ## Functions
-- Function names are in pascal case and do not bear prefixes or suffixes.
+- Function names are in pascal case and do not bear prefixes or suffixes, unless if differentiating a public and private implementation with the same name (e.g. Send and \_Send)
 - Function parameters are in camel case and will rarely bear the same prefixes as variables. Generally, no prefixes or suffixes are added to these unless if they are found in an error message.
 - Function parameters are named both in header files and source files.
 - Function definitions should be kept to source files where possible.

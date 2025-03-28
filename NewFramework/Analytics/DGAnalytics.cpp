@@ -121,19 +121,19 @@ void DGAnalytics::ApplyEventGroupSettings(int throttleThreshold, json_spirit::mO
     _groupSettingsContainer.Deserialize(throttleThreshold, obj);
 }
 
-void DGAnalytics::Add(IAnalytics* host, std::string name, const CVersion& version, bool init) {
-    _analytics.push_back(host);
-    if (init) {
-        host->Init(name, version);
+void DGAnalytics::Add(IAnalytics* pAnalytics, std::string sName, const CVersion& version, bool bInit) {
+    _vecAnalytics.push_back(pAnalytics);
+    if (bInit) {
+        pAnalytics->Init(sName, version);
     } else {
-        _analyticsInitialisation.emplace_back(name, version, host);
+        _vecInitialisation.emplace_back(sName, version, pAnalytics);
     }
 }
 
-IAnalytics* DGAnalytics::Get(std::string name) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->name == name) {
-            return analyticsHost;
+IAnalytics* DGAnalytics::Get(std::string sName) {
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->sName == sName) {
+            return pAnalytics;
         }
     }
 
@@ -141,187 +141,187 @@ IAnalytics* DGAnalytics::Get(std::string name) {
 }
 
 void DGAnalytics::Initialise() {
-    for (const SAnalyticsInitialisation& ai : _analyticsInitialisation) {
-        ai.host->Init(ai.name, ai.version);
+    for (const SAnalyticsInitialisation& ai : _vecInitialisation) {
+        ai.pAnalytics->Init(ai.sName, ai.version);
     }
 }
 
-void DGAnalytics::Log(std::string message, ...) {
+void DGAnalytics::Log(std::string sMessage, ...) {
     va_list args;
-    va_start(args, message);
+    va_start(args, sMessage);
 
     char text[2048];
-    vsnprintf(text, sizeof(text), message.c_str(), args);
+    vsnprintf(text, sizeof(text), sMessage.c_str(), args);
 
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->Log(text);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->Log(text);
         }
     }
 
     va_end(args);
 }
 
-void DGAnalytics::SetUser(const std::string& user) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->SetUser(user);
+void DGAnalytics::SetUser(const std::string& sUser) {
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->SetUser(sUser);
         }
     }
 }
 
 void DGAnalytics::AppActive() {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->AppActive();
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->AppActive();
         }
     }
 }
 
 void DGAnalytics::AppPaused() {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->AppPaused();
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->AppPaused();
         }
     }
 }
 
 void DGAnalytics::AppDestroyed() {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->AppDestroyed();
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->AppDestroyed();
         }
     }
 }
 
 void DGAnalytics::DidReceiveMemoryWarning() {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->DidReceiveMemoryWarning();
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->DidReceiveMemoryWarning();
         }
     }
 }
 
 void DGAnalytics::SetCheckpoint(
-    std::string a, std::map<std::string, std::string>* b,
-    std::pair<double, std::string> c,
-    AnalyticsEventGroups::Group d, unsigned int e) {
+    std::string a2, std::map<std::string, std::string>* a3,
+    std::pair<double, std::string> a4,
+    AnalyticsEventGroups::Group a5, uint a6) {
 
     if (!_bEventsSupported) {
         return;
     }
 
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8 && analyticsHost->PassFilter(e)) {
-            analyticsHost->SetCheckpoint(a, b, c, d);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8 && pAnalytics->PassFilter(a6)) {
+            pAnalytics->SetCheckpoint(a2, a3, a4, a5);
         }
     }
 }
 
-void DGAnalytics::StartTimedEvent(std::string a, std::map<std::string, std::string>* b) {
+void DGAnalytics::StartTimedEvent(std::string a2, std::map<std::string, std::string>* a3) {
     if (!_bEventsSupported) {
         return;
     }
 
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->StartTimedEvent(a, b);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->StartTimedEvent(a2, a3);
         }
     }
 }
 
-void DGAnalytics::EndTimedEvent(std::string a, std::map<std::string, std::string>* b) {
+void DGAnalytics::EndTimedEvent(std::string a2, std::map<std::string, std::string>* a3) {
     if (!_bEventsSupported) {
         return;
     }
 
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->EndTimedEvent(a, b);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->EndTimedEvent(a2, a3);
         }
     }
 }
 
-void DGAnalytics::SetKey(const std::string& a, const std::string& b) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->SetKey(a, b);
+void DGAnalytics::SetKey(const std::string& a2, const std::string& a3) {
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->SetKey(a2, a3);
         }
     }
 }
 
-void DGAnalytics::SetKey(const std::string& a, double b) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->SetKey(a, b);
+void DGAnalytics::SetKey(const std::string& a2, double a3) {
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->SetKey(a2, a3);
         }
     }
 }
 
-void DGAnalytics::SetKey(const std::string& a, unsigned long long b) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8) {
-            analyticsHost->SetKey(a, b);
+void DGAnalytics::SetKey(const std::string& a2, unsigned long long a3) {
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8) {
+            pAnalytics->SetKey(a2, a3);
         }
     }
 }
 
 void DGAnalytics::SendDataEvent(
-    const DGAnalyticsData& data, bool b,
-    AnalyticsEventGroups::Group group, unsigned int d) {
+    const DGAnalyticsData& data, bool a3,
+    AnalyticsEventGroups::Group eGroup, uint a5) {
 
-    AnalyticsEventGroups::Server server = AnalyticsEventGroups::Server::Unk0;
-    if (!_bDataEventsSupported && group != AnalyticsEventGroups::Group::AlwaysSend) {
+    AnalyticsEventGroups::Server eServer = AnalyticsEventGroups::Server::Unk0;
+    if (!_bDataEventsSupported && eGroup != AnalyticsEventGroups::Group::AlwaysSend) {
         if (!_bEventsSupported) {
             return;
         }
-        AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer.GetSettings(group);
-        if (!settings.throttle) {
+        const AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer.GetSettings(eGroup);
+        if (!settings.bThrottle) {
             return;
         }
-        server = settings.server;
+        eServer = settings.eServer;
     }
 
-    if (b) {
+    if (a3) {
         SetCheckpoint(
             data.field_20, const_cast<std::map<std::string, std::string>*>(&data.field_60),
-            data.field_40, group, d);
+            data.field_40, eGroup, a5);
     }
 
-    for (IAnalytics* analyticsHost : _analytics) {
-        if (analyticsHost->field_8 && analyticsHost->PassFilter(d)) {
-            analyticsHost->SendDataEventWithID(GetUserID(), data, server);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        if (pAnalytics->field_8 && pAnalytics->PassFilter(a5)) {
+            pAnalytics->SendDataEventWithID(GetUserID(), data, eServer);
         }
     }
 }
 
 std::string DGAnalytics::GetUserID() {
-    std::string nkapiID = NKManager::GetManager()->GetSessionModule()->GetUserDetails().nkapiID;
-    return !nkapiID.empty() ? nkapiID : GetNonLiNKID();
+    std::string sNKapiID = NKManager::GetManager()->GetSessionModule()->GetUserDetails().nkapiID;
+    return !sNKapiID.empty() ? sNKapiID : GetNonLiNKID();
 }
 
 void DGAnalytics::SetDoNotTrack(int doNotTrack) {
-    for (IAnalytics* analyticsHost : _analytics) {
-        analyticsHost->SetDoNotTrack(doNotTrack);
+    for (IAnalytics* pAnalytics : _vecAnalytics) {
+        pAnalytics->SetDoNotTrack(doNotTrack);
     }
 }
 
 std::string DGAnalytics::GetNonLiNKID() {
-    std::string vendorId = CCore::GetVendorId();
-    return !vendorId.empty() ? "NO_LINK" + vendorId : "";
+    std::string sVendorID = CCore::GetVendorId();
+    return !sVendorID.empty() ? "NO_LINK" + sVendorID : "";
 }
 
-void DGAnalytics::SetSessionID(int sessionId) {
-    if (_sessionID != 0 && _sessionID != sessionId) {
+void DGAnalytics::SetSessionID(int sessionID) {
+    if (_sessionID != 0 && _sessionID != sessionID) {
         NKAssert(false, "Changing the session ID after it has already been set, is this intentional?"); ENFORCE_LINE(316);
     }
-    _sessionID = sessionId;
+    _sessionID = sessionID;
 }
 
-void DGAnalytics::EnableAnalyticsGroup(bool enabled, AnalyticsEventGroups::Group group) {
-    AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer.GetSettings(group);
-    settings.throttle = enabled;
+void DGAnalytics::EnableAnalyticsGroup(bool bEnabled, AnalyticsEventGroups::Group eGroup) {
+    AnalyticsEventGroups::SGroupSettings& settings = _groupSettingsContainer.GetSettings(eGroup);
+    settings.bThrottle = bEnabled;
 }
 
-SAnalyticsInitialisation::SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host)
-    : name(name), version(version), host(host) {}
+SAnalyticsInitialisation::SAnalyticsInitialisation(const std::string& sName, const CVersion& version, IAnalytics* pAnalytics)
+    : sName(sName), version(version), pAnalytics(pAnalytics) {}

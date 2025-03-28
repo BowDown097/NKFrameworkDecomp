@@ -21,12 +21,12 @@ namespace AnalyticsEventGroups {
     };
 
     struct SGroupSettings {
-        Group group; // 0x00
-        bool throttle; // 0x04
+        Group eGroup; // 0x00
+        bool bThrottle; // 0x04
         int throttlePercentage; // 0x08
-        Server server; // 0x0C
+        Server eServer; // 0x0C
 
-        SGroupSettings(Group group, bool throttle, Server server);
+        SGroupSettings(Group eGroup, bool bThrottle, Server eServer);
         void Serialize(json_spirit::mObject& obj);
         bool Deserialize(int throttleThreshold, json_spirit::mObject& obj);
     };
@@ -34,10 +34,10 @@ namespace AnalyticsEventGroups {
     class CGroupSettingsContainer {
     public:
         CGroupSettingsContainer();
-        SGroupSettings& GetSettings(Group group);
+        SGroupSettings& GetSettings(Group eGroup);
         void Serialize(json_spirit::mObject& obj);
         bool Deserialize(int throttleThreshold, json_spirit::mObject& obj);
     private:
-        std::vector<SGroupSettings> _groupSettings;
+        std::vector<SGroupSettings> _vecGroupSettings;
     };
 }

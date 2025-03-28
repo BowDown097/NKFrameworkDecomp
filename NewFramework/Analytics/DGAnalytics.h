@@ -24,7 +24,7 @@ static const std::string sNKError_HttpFileWrite = "HTTP:FileWrite";
 struct IAnalytics {
     bool field_8{}; // 0x08
     int doNotTrack{}; // 0x0C
-    std::string name; // 0x10
+    std::string sName; // 0x10
 
     virtual ~IAnalytics() = default;
 
@@ -44,65 +44,65 @@ struct IAnalytics {
     virtual void SetKey(const std::string&, double);
     virtual void SetKey(const std::string&, unsigned long long);
 
-    virtual void Init(const std::string& name, const CVersion& version) {
-        this->name = name;
+    virtual void Init(const std::string& sName, const CVersion& version) {
+        this->sName = sName;
     }
-    virtual unsigned int PassFilter(uint in) {
-        return (in & 2) >> 1;
+    virtual unsigned int PassFilter(uint uIn) {
+        return (uIn & 2) >> 1;
     }
     virtual void SetDoNotTrack(int doNotTrack) {
         this->doNotTrack = doNotTrack;
     }
-    virtual bool SetUserConsent(bool consent) {
+    virtual bool SetUserConsent(bool bConsent) {
         ENFORCE_LINE(57); return NKAssert(false, "Setting consent unhandled by this interface");
     }
 };
 
 struct SAnalyticsInitialisation {
-    std::string name; // 0x00
+    std::string sName; // 0x00
     CVersion version; // 0x18
-    IAnalytics* host; // 0x38
+    IAnalytics* pAnalytics; // 0x38
 
-    SAnalyticsInitialisation(const std::string& name, const CVersion& version, IAnalytics* host);
+    SAnalyticsInitialisation(const std::string& sName, const CVersion& version, IAnalytics* pAnalytics);
 };
 
 class DGAnalytics {
 public:
     static DGAnalytics* Instance();
     void ApplyEventGroupSettings(int throttleThreshold, json_spirit::mObject& obj);
-    void Add(IAnalytics* host, std::string name, const CVersion& version, bool init);
-    IAnalytics* Get(std::string name);
+    void Add(IAnalytics* pAnalytics, std::string sName, const CVersion& version, bool bInit);
+    IAnalytics* Get(std::string sName);
     void Initialise();
-    void Log(std::string message, ...);
-    void SetUser(const std::string& user);
+    void Log(std::string sMessage, ...);
+    void SetUser(const std::string& sUser);
     void AppActive();
     void AppPaused();
     void AppDestroyed();
     void DidReceiveMemoryWarning();
     void SetCheckpoint(
-        std::string a, std::map<std::string, std::string>* b,
-        std::pair<double, std::string> c,
-        AnalyticsEventGroups::Group d, unsigned int e);
-    void StartTimedEvent(std::string a, std::map<std::string, std::string>* b);
-    void EndTimedEvent(std::string a, std::map<std::string, std::string>* b);
-    void SetKey(const std::string& a, const std::string& b);
-    void SetKey(const std::string& a, double b);
-    void SetKey(const std::string& a, unsigned long long b);
+        std::string a2, std::map<std::string, std::string>* a3,
+        std::pair<double, std::string> a4,
+        AnalyticsEventGroups::Group a5, uint a6);
+    void StartTimedEvent(std::string a2, std::map<std::string, std::string>* a3);
+    void EndTimedEvent(std::string a2, std::map<std::string, std::string>* a3);
+    void SetKey(const std::string& a2, const std::string& a3);
+    void SetKey(const std::string& a2, double a3);
+    void SetKey(const std::string& a2, unsigned long long a3);
     void SendDataEvent(
-        const DGAnalyticsData& data, bool b,
-        AnalyticsEventGroups::Group group, unsigned int d);
+        const DGAnalyticsData& data, bool a3,
+        AnalyticsEventGroups::Group eGroup, uint a5);
     std::string GetUserID();
     void SetDoNotTrack(int doNotTrack);
     std::string GetNonLiNKID();
     void SetSessionID(int sessionId);
-    void EnableAnalyticsGroup(bool enabled, AnalyticsEventGroups::Group group);
+    void EnableAnalyticsGroup(bool bEnabled, AnalyticsEventGroups::Group eGroup);
 private:
     static inline DGAnalytics* _pInstance;
 
     bool _bEventsSupported = true; // 0x00
     bool _bDataEventsSupported{}; // 0x01
     int _sessionID{}; // 0x04
-    std::vector<IAnalytics*> _analytics; // 0x08
-    std::vector<SAnalyticsInitialisation> _analyticsInitialisation; // 0x20
+    std::vector<IAnalytics*> _vecAnalytics; // 0x08
+    std::vector<SAnalyticsInitialisation> _vecInitialisation; // 0x20
     AnalyticsEventGroups::CGroupSettingsContainer _groupSettingsContainer; // 0x38
 };

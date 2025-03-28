@@ -61,8 +61,8 @@ namespace AnalyticsEventGroups {
         Server::Unk2
     };
 
-    SGroupSettings::SGroupSettings(Group group, bool throttle, Server server)
-        : group(group), throttle(throttle), throttlePercentage(throttle ? 100 : 0), server(server) {}
+    SGroupSettings::SGroupSettings(Group eGroup, bool bThrottle, Server eServer)
+        : eGroup(eGroup), bThrottle(bThrottle), throttlePercentage(bThrottle ? 100 : 0), eServer(eServer) {}
 
     void SGroupSettings::Serialize(json_spirit::mObject& obj) {
         obj["throttle_percentage"] = throttlePercentage;
@@ -72,29 +72,29 @@ namespace AnalyticsEventGroups {
         JSON_PropertyReader propertyReader;
         propertyReader.sourceObject = &obj;
 
-        bool read = propertyReader.ReadIfExists(throttlePercentage, "throttle_percentage");
-        if (read) {
-            throttle = throttlePercentage > throttleThreshold;
+        bool bRead = propertyReader.ReadIfExists(throttlePercentage, "throttle_percentage");
+        if (bRead) {
+            bThrottle = throttlePercentage > throttleThreshold;
         }
 
-        return read;
+        return bRead;
     }
 
     CGroupSettingsContainer::CGroupSettingsContainer() {
-        _groupSettings.reserve(8);
+        _vecGroupSettings.reserve(8);
         for (int i = 0; i < 8; i++) {
-            _groupSettings.emplace_back(static_cast<Group>(i), true, server[i]);
+            _vecGroupSettings.emplace_back(static_cast<Group>(i), true, server[i]);
         }
     }
 
-    SGroupSettings& CGroupSettingsContainer::GetSettings(Group group) {
-        return _groupSettings.at(static_cast<int>(group));
+    SGroupSettings& CGroupSettingsContainer::GetSettings(Group eGroup) {
+        return _vecGroupSettings.at(static_cast<int>(eGroup));
     }
 
     void CGroupSettingsContainer::Serialize(json_spirit::mObject& obj) {
         for (int i = 0; i < 8; i++) {
             json_spirit::mObject serializedGroupSetting;
-            _groupSettings[i].Serialize(serializedGroupSetting);
+            _vecGroupSettings[i].Serialize(serializedGroupSetting);
             obj[names[i]] = serializedGroupSetting;
         }
     }
@@ -104,7 +104,7 @@ namespace AnalyticsEventGroups {
         propertyReader.sourceObject = &obj;
 
         for (int i = 0; i < 8; i++) {
-            if (propertyReader.ReadIfExists(obj, names[i]) && !_groupSettings[i].Deserialize(throttleThreshold, obj)) {
+            if (propertyReader.ReadIfExists(obj, names[i]) && !_vecGroupSettings[i].Deserialize(throttleThreshold, obj)) {
                 LOG_ERROR("Error applying settings to %s", names[i].c_str()); ENFORCE_LINE(108);
             }
         }
