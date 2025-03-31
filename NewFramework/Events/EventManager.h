@@ -12,6 +12,7 @@ using CEventType = const std::type_info*;
 struct IObserver;
 
 struct IEvent {
+    virtual ~IEvent() = default;
     virtual bool PersistsIfQueuedAndNotSeen() { return false; }
 };
 

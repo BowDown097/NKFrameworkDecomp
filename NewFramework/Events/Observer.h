@@ -71,5 +71,5 @@ public:
         }
     }
 private:
-    CEventManager* _pEventManager; // 0x08
+    CEventManager* _pEventManager{}; // 0x08
 };

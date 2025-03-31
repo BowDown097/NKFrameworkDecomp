@@ -1,40 +1,35 @@
 #pragma once
 
-// TODO: figure out field_90, field_C0, and field_D0 (if that's even possible)
-class IBasePointers
-{
-public:
-    class CTextureManager* textureManager{}; // 0x08
-    class CTextureLoader* textureLoader{}; // 0x10
-    class CCore* core{}; // 0x18
-    class CApp* app{}; // 0x20
-    class CFontManager* fontManager{}; // 0x28
-    class CBaseFileIO* fileIO{}; // 0x30
-    class CScreenManager* screenManager{}; // 0x38
-    class CSoundManager* soundManager{}; // 0x40
-    class CMusicManager* musicManager{}; // 0x48
-    class CTransitions* transitions{}; // 0x50
-    class CAgeGate* ageGate{}; // 0x58
-    class CSteamInterface* steamInterface{}; // 0x60
-    class CDebugXml* debugXml{}; // 0x68
-    class CLicensing* licensing{}; // 0x70
-    class CLegacyNetworkQueue* legacyNetworkQueue{}; // 0x78
-    class CLegacyNetConnectionManager* legacyNetConnectionManager{}; // 0x80
-    class CConnectionManager* connectionManager{}; // 0x88
-    void* field_90{}; // 0x90
-    class CNetworkMessageTranslator* networkMessageTranslator{}; // 0x98
-    class CCurlHttpRequestManager* requestManager{}; // 0xA0
-    class CPrivateGameInterface* privateGameInterface{}; // 0xA8
-    class CDebugStream* debugStream{}; // 0xB0
-    class CLoc* loc{}; // 0xB8
-    void* field_C0{}; // 0xC0
-    class CEventManager* eventManager{}; // 0xC8
+#include <memory>
+
+struct IBasePointers {
+    class CTextureManager* pTextureManager{}; // 0x00
+    class CTextureLoader* pTextureLoader{}; // 0x08
+    class CInput* pInput{}; // 0x10
+    class CApp* pApp{}; // 0x18
+    class CFontManager* pFontManager{}; // 0x20
+    class CBaseFileIO* pFileIO{}; // 0x28
+    class CScreenManager* pScreenManager{}; // 0x30
+    class CSoundManager* pSoundManager{}; // 0x38
+    class CMusicManager* pMusicManager{}; // 0x40
+    class CTransitions* pTransitions{}; // 0x48
+    class CStoreInterface* pStoreInterface{}; // 0x50
+    class CSteamInterface* pSteamInterface{}; // 0x58
+    class CDebugXml* pDebugXml{}; // 0x60
+    class CLicensing* pLicensing{}; // 0x68
+    class CLegacyNetworkQueue* pNetworkQueue{}; // 0x70
+    class CLegacyNetConnectionManager* pLegacyConnectionManager{}; // 0x78
+    std::shared_ptr<class CConnectionManager> pConnectionManager{}; // 0x80
+    class CNetworkMessageTranslator* pNetworkMessageTranslator{}; // 0x90
+    class IHttpRequestManager* pHttpRequestManager{}; // 0x98
+    void* field_A0{}; // 0xA0
+    class CDebugStream* pDebugStream{}; // 0xA8
+    class CLoc* pLoc{}; // 0xB0
+    void* field_B8{}; // 0xB8
+    class CEventManager* pEventManager{}; // 0xC0
+    void* field_C8{}; // 0xC8
     void* field_D0{}; // 0xD0
 
-
-    IBasePointers();
     void CopyFrom(const IBasePointers& other);
     void CopyTo(IBasePointers& other);
-
-	virtual ~IBasePointers() = default;
 };

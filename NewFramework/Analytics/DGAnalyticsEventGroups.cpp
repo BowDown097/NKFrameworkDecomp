@@ -35,9 +35,6 @@
 
 
 
-
-
-
 namespace AnalyticsEventGroups {
     std::string names[] = {
         "global",
@@ -62,7 +59,10 @@ namespace AnalyticsEventGroups {
     };
 
     SGroupSettings::SGroupSettings(Group eGroup, bool bThrottle, Server eServer)
-        : eGroup(eGroup), bThrottle(bThrottle), throttlePercentage(bThrottle ? 100 : 0), eServer(eServer) {}
+        : eGroup(eGroup),
+          bThrottle(bThrottle),
+          throttlePercentage(bThrottle ? 100 : 0),
+          eServer(eServer) {}
 
     void SGroupSettings::Serialize(json_spirit::mObject& obj) {
         obj["throttle_percentage"] = throttlePercentage;

@@ -1,84 +1,95 @@
 #pragma once
+
 #include "NewFramework/BaseApplication/BasePointers.h"
 #include "Uncategorized/Version.h"
-#include <cfloat>
+
+#include <boost/thread.hpp>
 
 enum class eREACH_Availability;
 
-class CApp : public IBasePointers // IBasePointers occupies 0x08-0xD8
-{
+class CApp : public IBasePointers {
 public:
-    enum class eNetworkType;
+    enum class eNetworkType {
+        Unk0,
+        Unk1
+    };
+
     enum class eRequiredDLCState;
 
     struct SRealtimeNetworkSettings;
 
-    CApp();
-    virtual ~CApp();
-
-    class CMemoryTracker* memoryTracker{}; // 0xE0
-    class CTimerTracker* timerTracker{}; // 0xE8
-    class CTimerTrackerGraph* timerTrackerGraph{}; // 0xF0
-    eREACH_Availability reachAvailability{}; // 0xF8
-    int field_FC{}; // 0xFC
-    int field_100{}; // 0x100
+    class CMemoryTracker* pMemoryTracker; // 0xE0
+    class CTimerTracker* pTimerTracker; // 0xE8
+    class CTimerTrackerGraph* pTimerTrackerGraph; // 0xF0
+    eREACH_Availability eReachAvailability{}; // 0xF8
+    uint field_FC{}; // 0xFC
+    uint field_100{}; // 0x100
     bool field_104{}; // 0x104
-    bool quitFlag{}; // 0x105
+    bool bQuitFlag{}; // 0x105
     bool field_106{}; // 0x106
-    bool hackerAppURLFlag{}; // 0x107
-    bool hackerBinaryFlag{}; // 0x108
+    bool bHackerAppURLFlag = true; // 0x107
+    bool bHackerBinaryFlag = true; // 0x108
     bool field_109{}; // 0x109
-    int field_10C{}; // 0x10C
-    double field_110 = DBL_MAX; // 0x110
+    bool field_10A{}; // 0x10A
+    bool field_10B{}; // 0x10B
+    bool field_10C{}; // 0x10C
+    bool field_10D{}; // 0x10D
+    bool field_10E{}; // 0x10E
+    bool field_10F{}; // 0x10F
+    double field_110 = std::numeric_limits<double>::max(); // 0x110
     CVersion version; // 0x118
-    void* field_138{}; // 0x138
-    void* field_140{}; // 0x140
-    void* field_148{}; // 0x148
-    void* field_150{}; // 0x150
-    void* field_158{}; // 0x158
-    void* field_160{}; // 0x160
+    std::string field_138; // 0x138
+    std::string field_150; // 0x150
     int field_168{}; // 0x168
-    bool field_16C{}; // 0x16C
-    bool field_16D{}; // 0x16D
+    bool bUsingAssetBundles = true; // 0x16C
+    bool bIsActive = true; // 0x16D
+    boost::thread* pRenderingThread; // 0x170
+    boost::barrier* pRenderingBarrier; // 0x178
+    boost::mutex* pRenderingMutex; // 0x180
 
-    bool NotesEnabled();
-    int GetAgeGate();
-    void SetRequiredDLCState(eRequiredDLCState);
-    class CStoreInterface* CreateStore();
-    void LoadRendering();
-    void DrawView();
+    virtual std::string GetGameId() = 0;
+    virtual ulong GetAgeGate();
+    virtual void SetRequiredDLCState(eRequiredDLCState);
+    virtual class CStoreInterface* CreateStore();
+    virtual void _StartFrame();
+    virtual ~CApp();
+    void LoadRendering(void* pGlView);
+    virtual void DrawView();
     void StartFrame();
     void EndFrame();
     void DebugDraw();
-    void ApplicationWillResignActive();
-    void ApplicationWillTerminate();
-    void ApplicationDidBecomeActive();
-    void ApplicationGainedAudioFocus();
-    void ApplicationLostAudioFocus();
+    virtual void ApplicationWillResignActive();
+    virtual void ApplicationWillTerminate();
+    virtual void ApplicationDidBecomeActive();
+    virtual void ApplicationGainedAudioFocus();
+    virtual void ApplicationLostAudioFocus();
+    virtual void NativeSurfaceCreated();
     void ForceQuit();
-    void ConnectivityChanged(eREACH_Availability);
-    eREACH_Availability GetGoogleReachable();
-    eNetworkType GetNetworkType();
-    void BackButtonPressed();
-    void ScreenResized();
+    virtual void ConnectivityChanged(eREACH_Availability);
+    virtual eREACH_Availability GetGoogleReachable();
+    virtual eNetworkType GetNetworkType();
+    virtual void BackButtonPressed();
+    virtual void ScreenResized();
     void BatteryLevelDidChange();
     void BatteryStateDidChange();
-    void PreRenderInit();
-    bool LoadContent(bool);
+    virtual void PreRenderInit();
+    virtual bool LoadContent();
+    virtual bool LoadContent(bool);
     void InitRealtimeNetworking(const SRealtimeNetworkSettings&);
     bool ReadSpriteInfo();
-    bool SetupFonts();
-    bool SetupSprites();
+    virtual bool SetupFonts();
+    virtual bool SetupSprites();
     std::string GetLanguageCode();
-    void InitValidation();
+    virtual void InitValidation();
     class CLegacyNetworkQueue* BuildNetworkQueue(const SRealtimeNetworkSettings&);
-    void CustomDebugDraw();
-    void DidReceiveMemoryWarning();
-    bool HandleURI(const std::string&);
-    bool GetTreatPlayerAsHacker();
-    eRequiredDLCState GetRequiredDLCState();
-    void DownloadMissingDLC();
-    void DLCFileDownloadFinished(bool, const std::string&, const std::string&, int);
+    virtual void CustomDebugDraw();
+    virtual bool NotesEnabled();
+    virtual void DidReceiveMemoryWarning();
+    virtual bool HandleURI(const std::string&);
+    virtual bool GetTreatPlayerAsHacker();
+    virtual eRequiredDLCState GetRequiredDLCState();
+    virtual void DownloadMissingDLC();
+    virtual void DLCFileDownloadFinished(bool, const std::string&, const std::string&, int);
 private:
     static int m_gameTime;
 };

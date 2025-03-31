@@ -2,6 +2,11 @@
 
 #include "NewFramework/Utilities/StringHelper.h"
 
+DGAnalyticsData::DGAnalyticsData(std::string field_20)
+    : field_0(true),
+      field_20(field_20),
+      field_38(true) {}
+
 DGAnalyticsData& DGAnalyticsData::operator<<(const std::string& str) {
     if (field_0) {
         field_8 = str;
@@ -40,6 +45,3 @@ DGAnalyticsData& DGAnalyticsData::AddPair(const std::string& key, int value) {
     field_60.emplace(key, StringHelper::Format("%d", value));
     return *this;
 }
-
-DGAnalyticsData::DGAnalyticsData(std::string field_20)
-    : field_0(true), field_20(field_20), field_38(true) {}

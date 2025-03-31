@@ -3,10 +3,9 @@
 
 class CApp;
 
-class A_NKApplication : public I_NKSDKApp
-{
+class A_NKApplication : public I_NKSDKApp {
 public:
-    A_NKApplication(CApp* app) : app(app) {}
+    explicit A_NKApplication(CApp* pApp);
     bool IsOnline() override;
     int GetScreenW() override;
     int GetScreenH() override;
@@ -15,5 +14,5 @@ public:
     int GetVersionCode() override;
     int GetAgeGate() override;
 private:
-    CApp* app;
+    CApp* m_pApp;
 };

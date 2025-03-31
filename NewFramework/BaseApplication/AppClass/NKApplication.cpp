@@ -2,37 +2,26 @@
 #include "AppClass.h"
 #include "Uncategorized/GlobalVariables.h"
 
-bool A_NKApplication::IsOnline()
-{
-    return app->GetGoogleReachable() != static_cast<eREACH_Availability>(0);
+A_NKApplication::A_NKApplication(CApp* pApp)
+    : m_pApp(pApp) {}
+bool A_NKApplication::IsOnline() {
+    return m_pApp->GetGoogleReachable() != static_cast<eREACH_Availability>(0);
 }
-
-int A_NKApplication::GetScreenW()
-{
+int A_NKApplication::GetScreenW() {
     return CGlobalVariables::Instance()->screenWidth;
 }
-
-int A_NKApplication::GetScreenH()
-{
+int A_NKApplication::GetScreenH() {
     return CGlobalVariables::Instance()->screenHeight;
 }
-
-float A_NKApplication::GetViewScale()
-{
+float A_NKApplication::GetViewScale() {
     return CGlobalVariables::Instance()->viewScale;
 }
-
-std::string A_NKApplication::GetLanguageCode()
-{
-    return app->GetLanguageCode();
+std::string A_NKApplication::GetLanguageCode() {
+    return m_pApp->GetLanguageCode();
 }
-
-int A_NKApplication::GetVersionCode()
-{
-    return app->version.versionCode;
+int A_NKApplication::GetVersionCode() {
+    return m_pApp->version.versionCode;
 }
-
-int A_NKApplication::GetAgeGate()
-{
-    return app->GetAgeGate();
+int A_NKApplication::GetAgeGate() {
+    return m_pApp->GetAgeGate();
 }

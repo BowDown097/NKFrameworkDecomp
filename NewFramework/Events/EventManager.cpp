@@ -121,7 +121,7 @@ void CEventManager::AddPendingObservers() {
 
 void CEventManager::RemovePendingObservers() {
     for (IObserver* pObserver : _pendingRemovingObservers) {
-        for (auto it = _subscribedObserverMap.begin(); it != _subscribedObserverMap.end();) {
+        for (auto it = _subscribedObserverMap.begin(); it != _subscribedObserverMap.end(); ++it) {
             for (auto it2 = it->second.begin(); it2 != it->second.end();) {
                 if (it2->second == pObserver) {
                     it->second.erase(it2);
@@ -129,7 +129,6 @@ void CEventManager::RemovePendingObservers() {
                     ++it2;
                 }
             }
-            _subscribedObserverMap.erase(it);
         }
     }
     _pendingRemovingObservers.clear();

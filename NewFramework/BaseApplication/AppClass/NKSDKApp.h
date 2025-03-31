@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
 
-struct I_NKSDKApp
-{
+struct I_NKSDKApp {
     virtual ~I_NKSDKApp() = default;
     virtual bool IsOnline() = 0;
     virtual int GetScreenW() = 0;
