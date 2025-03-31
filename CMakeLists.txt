@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.23)
 project(NKFrameworkDecomp VERSION 1.0 LANGUAGES C CXX)
 add_library(NKFrameworkDecomp)
 
@@ -8,12 +8,15 @@ set_target_properties(NKFrameworkDecomp
         CXX_STANDARD_REQUIRED ON
 )
 
+set(AD_SYSTEMS "" CACHE STRING "The ad systems to enable in the ad interface, semicolon separated (IronSource, Tapjoy, etc.).")
 set(TARGET_PLATFORM "steam" CACHE STRING "The platform that the game will be distributed to.")
+
 target_compile_definitions(NKFrameworkDecomp PUBLIC TARGET_PLATFORM="${TARGET_PLATFORM}")
 
 # Sources
 target_sources(NKFrameworkDecomp
     PRIVATE
+        NewFramework/AdServer/AdInterface.cpp
         NewFramework/Analytics/DGAnalytics.cpp
         NewFramework/Analytics/DGAnalyticsData.cpp
         NewFramework/Analytics/DGAnalyticsEventGroups.cpp
@@ -105,6 +108,7 @@ target_sources(NKFrameworkDecomp
         Uncategorized/Version.cpp
     PUBLIC
         FILE_SET HEADERS FILES
+            NewFramework/AdServer/AdInterface.h
             NewFramework/Analytics/DGAnalytics.h
             NewFramework/Analytics/DGAnalyticsData.h
             NewFramework/Analytics/DGAnalyticsEventGroups.h
@@ -212,12 +216,34 @@ target_sources(NKFrameworkDecomp
 )
 
 ## Platform-specific
+if("IronSource" IN_LIST AD_SYSTEMS)
+    target_compile_definitions(NKFrameworkDecomp PUBLIC USING_IRONSOURCE=1)
+    if(ANDROID)
+        target_sources(NKFrameworkDecomp PRIVATE NewFramework/AdServer/Android/IronSource/IronSource.cpp)
+        target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/AdServer/Android/IronSource/IronSource.h)
+    elseif(APPLE)
+        target_sources(NKFrameworkDecomp PRIVATE NewFramework/AdServer/iOS/IronSource/IronSource.mm)
+        target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/AdServer/iOS/IronSource/IronSource.h)
+    endif()
+endif()
+
+if("Tapjoy" IN_LIST AD_SYSTEMS)
+    target_compile_definitions(NKFrameworkDecomp PUBLIC USING_TAPJOY=1)
+    if(ANDROID)
+        target_sources(NKFrameworkDecomp PRIVATE NewFramework/AdServer/Android/Tapjoy/Tapjoy.cpp)
+        target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/AdServer/Android/Tapjoy/Tapjoy.h)
+    elseif(APPLE)
+        target_sources(NKFrameworkDecomp PRIVATE NewFramework/AdServer/iOS/Tapjoy/Tapjoy.mm)
+        target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/AdServer/iOS/Tapjoy/Tapjoy.h)
+    endif()
+endif()
+
 if(UNIX)
     target_sources(NKFrameworkDecomp PRIVATE NewFramework/Platform/iOS/File.cpp)
     target_sources(NKFrameworkDecomp PUBLIC FILE_SET HEADERS FILES NewFramework/Platform/iOS/File.h)
 endif()
 
-if(APPLE)
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     target_sources(NKFrameworkDecomp PRIVATE NewFramework/Platform/OSX/OSXCore.mm)
 endif()
 
