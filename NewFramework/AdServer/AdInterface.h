@@ -36,7 +36,7 @@ struct sAdPrivacyData {
 
 struct sAdProviderData {
     std::string sName; // 0x00
-#ifdef AD_SYSTEM
+#if USING_IRONSOURCE || USING_TAPJOY
     std::string sAppID; // 0x18
     std::string field_30; // 0x30
 #endif
