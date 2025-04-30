@@ -1,9 +1,7 @@
 # Style Guide
 
 ### Important Note
-THESE RULES DO NOT APPLY GLOBALLY. Sometimes the devs just felt like ignoring them.<br>
-Only fall back on rules for a name if you absolutely cannot find a symbol for or mention of the name.<br>
-Always use any other rules, unless if you are absolutely sure that something is done a different way (for example, NKMessages ignores many of these rules, verified with function name symbols and line numbers in errors).
+Always follow the rules, unless if it can be verified that something is being done a different way through symbols or error messages, because sometimes the devs just decide to not be consistent.
 
 ## Syntax
 - The opening bracket of a code block is placed on the same line.
@@ -18,8 +16,7 @@ Always use any other rules, unless if you are absolutely sure that something is 
 - #include's are separated by library (i.e. framework headers are separate from STL headers, which are separate from Boost headers) and are also separate from the header guard and, in a source file, its respective header file.
 
 ## Variables
-- All variable names are in camel case.
-- Variable names are prefixed based on certain types **for member variables only** and are prefixed on certain qualifiers **for all variables**.
+- Variable names are in camel case and are prefixed to indicate some types and qualifiers.
 - The known type prefixes are as follows:
     - booleans: bVariable
     - enums: eVariable
@@ -27,17 +24,20 @@ Always use any other rules, unless if you are absolutely sure that something is 
     - pointers: pVariable
     - strings: sVariable
     - unsigned integers (of any bitness): uVariable
-    - vectors (rarely, usually if there may be ambiguity): vecVariable OR vectorVariable
+- These type prefixes do rarely appear, but should not be used unless their usage is 100% known (e.g. exposed by a symbol):
+    - maps: mapVariable
+    - sets: setVariable
+    - signed integers (of any bitness): iVariable
+    - vectors (moreso if there's some kind of ambiguity): vecVariable
 - The known qualifier prefixes are as follows:
-    - mutable: mVariable
-    - private: \_variable OR m\_variable
-    - static: sVariable
-- Qualifier and type prefixes can be mixed and stay lowercase when mixed.
-- Any variables that don't have any of the types or qualifiers listed should not be prefixed.
-- Prefixes (or a group of prefixes), excluding the prefixes for the private qualifier, count as a "word" themselves, so if using camel case, a variable will be named for example sButtonName, not sbuttonName.
-- A static string just has one 's' as its prefix.
+    - global: g\_variable
+    - non-public: m\_variable OR \_variable
+    - public static: s\_variable
+- Prefixes can be mixed.
+- Static strings will typically only bear the string prefix and not the static prefix.
+- Type prefixes (or a group of them) count as a "word" themselves, so for example, a string variable for a button name will be named sButtonName, not sbuttonName.
 - Member variables should have their offsets **as it is in the binary** noted in a comment, in hex, padded to 2 characters, unless if they are the only member variable of a type.
-- Member variable names are allowed to be inferred. If a name absolutely cannot be determined, then it will be in the format ``field_XX``, where XX is the offset as mentioned before, with no prefixes and not padded.
+- Member variable names can be inferred. If a name absolutely cannot be determined, then it will be in the format ``field_XX``, where XX is the offset as mentioned before, with no prefixes and not padded.
 
 ## Types
 - Type names are in pascal case and are typically prefixed with the first letter of their kind as follows:
@@ -53,15 +53,15 @@ Always use any other rules, unless if you are absolutely sure that something is 
 - Template type parameters always use ``typename`` and almost always follow the T, U, V... pattern.
 
 ## Functions
-- Function names are in pascal case and do not bear prefixes or suffixes, unless if differentiating a public and private implementation with the same name (e.g. Send and \_Send)
-- Function parameters are in camel case and will rarely bear the same prefixes as variables. Generally, no prefixes or suffixes are added to these unless if they are found in an error message.
+- Function names are in pascal case and do not bear prefixes or suffixes, unless if differentiating a public and non-public implementation with the same name (e.g. Send and \_Send).
+- Function parameters are in camel case and are prefixed like standard variables.
 - Function parameters are named both in header files and source files.
 - Function definitions should be kept to source files where possible.
 
 ## Files
 - Source and header file names are in pascal case and are only prefixed if they contain one interface type that is reimplemented with the same name elsewhere (e.g. IFile, CFile -> IFile.h, File.h).
 - Source files use the .cpp file extension and header files the .h file extension.
-- The existence of a source file can usually (but not always!) be verified by searching "\_cpp" in function names, granted function name symbols are available.
+- The existence of a source file can usually (but not always!) be verified by searching "\_cpp" in the binary's function names in a disassembler, granted function name symbols are available.
 
 <br><br><br><br><br>
 
@@ -86,8 +86,6 @@ public:
     virtual void DoThing() const;
     virtual ~IInterface() = default;
 private:
-    mutable std::vector<IInterface*> _mvecOtherInterfaces;
-
     template<typename T, typename U>
     tChar16StringMap VeryLongFunction(
         const std::string& a, const std::string& b, const std::string& c,
@@ -114,8 +112,8 @@ public:
 
     bool CheckData(void* pData);
 private:
-    IInterface* _pInterface; // 0x00
-    eErrorType _eResultError; // 0x08
+    IInterface* m_pInterface; // 0x00
+    eErrorType m_eResultError; // 0x08
     bool field_C; // 0x0C
 
     bool HandleError(const std::string& error, ushort code);
@@ -133,10 +131,10 @@ private:
 bool CClass::checkData(void* pData) {
     static std::string sNullDataError = "Oh no! This is very very bad! It's over! "
                                         "pData is null!";
-    static ushort suNullDataErrorCode = 57;
+    static ushort s_uNullDataErrorCode = 57;
 
     if (!pData) {
-        return HandleError(sNullDataError, suNullDataErrorCode);
+        return HandleError(sNullDataError, s_uNullDataErrorCode);
     }
 
     // ...
@@ -144,7 +142,7 @@ bool CClass::checkData(void* pData) {
     return true;
 }
 
-bool HandleError(const std::string& error, ushort code) {
+bool CClass::HandleError(const std::string& error, ushort code) {
     std::cout << StringHelper::Format("ERROR %s (code: %hu)", error.c_str(), code) << std::endl;
     // ...
     return false;
