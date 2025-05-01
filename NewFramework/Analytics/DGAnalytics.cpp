@@ -110,6 +110,7 @@
 
 
 
+
 DGAnalytics* DGAnalytics::Instance() {
     if (!_pInstance) {
         _pInstance = new DGAnalytics;
@@ -312,9 +313,7 @@ std::string DGAnalytics::GetNonLiNKID() {
 }
 
 void DGAnalytics::SetSessionID(int sessionID) {
-    if (_sessionID != 0 && _sessionID != sessionID) {
-        NKAssert(false, "Changing the session ID after it has already been set, is this intentional?"); ENFORCE_LINE(316);
-    }
+    NKAssert(!_sessionID || _sessionID == sessionID, "Changing the session ID after it has already been set, is this intentional?"); ENFORCE_LINE(316);
     _sessionID = sessionID;
 }
 

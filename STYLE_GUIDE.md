@@ -49,6 +49,7 @@ Always follow the rules, unless if it can be verified that something is being do
     - tMyTypeAlias
     - MyTypeAlias\_t
 - Enum members are put on their own lines, one-by-one, and are typically pascal case but are sometimes in screaming snake case.
+- If an enum member name cannot be determined, then it will be in the format UnkXX, where XX is the integer value of the member.
 - Enum classes are always preferred over plain enums.
 - Template type parameters always use ``typename`` and almost always follow the T, U, V... pattern.
 
@@ -56,7 +57,8 @@ Always follow the rules, unless if it can be verified that something is being do
 - Function names are in pascal case and do not bear prefixes or suffixes, unless if differentiating a public and non-public implementation with the same name (e.g. Send and \_Send).
 - Function parameters are in camel case and are prefixed like standard variables.
 - Function parameters are named both in header files and source files.
-- Function definitions should be kept to source files where possible.
+- Function definitions should be kept to source files where possible, though if the body is empty, the definition can be kept in the header file, in one line.
+- Variable initializations in constructor initializer lists should be on their own line.
 
 ## Files
 - Source and header file names are in pascal case and are only prefixed if they contain one interface type that is reimplemented with the same name elsewhere (e.g. IFile, CFile -> IFile.h, File.h).

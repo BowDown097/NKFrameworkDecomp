@@ -1,6 +1,6 @@
 #pragma once
+
 #include "NewFramework/Platform/Shared/Assert.h"
-#include "NewFramework/Platform/Shared/Logging.h"
 
 struct LegacyFeatures {
     static bool bAndroidSquareAspectScale;

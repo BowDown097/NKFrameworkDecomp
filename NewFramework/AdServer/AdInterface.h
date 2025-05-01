@@ -168,21 +168,21 @@ public:
     void AppReturnFromBackground();
     void CheckForRewards();
     void AdEndedWithoutNotification();
-    void PopulateCurrentFillStats(const std::string&, std::map<std::string, std::string>&);
+    void PopulateCurrentFillStats(const std::string&, std::map<std::string, std::string>&) {}
     void SetupManager(std::string a2, IBasePointers* pBasePointers, int eProviders);
     void HandleEvent(CConsentRequestComplete* pEvent) override;
     void AddAdZone(const sCurrencyData& currencyData);
     void AddAdSystem(const sCurrencyData& currencyData, C_AdInterface* pInterface);
     C_AdInterface* AddAdSystem(const sCurrencyData& currencyData, sAdProviderData& providerData);
-    void AdsInitialised(std::string);
+    void AdsInitialised(std::string) {}
     void AddAdSystemFromJSON(JSON_PropertyReader& reader, const sCurrencyData& currencyData, bool bEnforceCoppa);
     void ParseAdServerJSON(json_spirit::mObject& obj, std::string a3, sAdPrivacyData privacyData);
     bool IsOfferwallSupported();
     void PrintConsentInfos();
-    void ShowAdTrackingRequest();
+    void ShowAdTrackingRequest() {}
     bool AdTrackingAllowed();
     bool AdTrackingRequestNeeded();
-    void InitConsentProvider(const std::string&, bool);
+    void InitConsentProvider(const std::string&, bool) {}
     char* ShowConsentRequest(bool a2);
     std::string GetConsentData();
     bool ConsentRequestNeeded();

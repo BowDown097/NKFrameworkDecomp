@@ -381,10 +381,6 @@ void C_AdManager::AdEndedWithoutNotification() {
     }
 }
 
-void C_AdManager::PopulateCurrentFillStats(const std::string&, std::map<std::string, std::string>&) {
-
-}
-
 void C_AdManager::SetupManager(std::string a2, IBasePointers* pBasePointers, int eProviders) {
     field_C8 = a2;
     m_pHttpRequestManager = pBasePointers->pHttpRequestManager;
@@ -608,6 +604,10 @@ void C_AdManager::AddAdSystem(const sCurrencyData& currencyData, C_AdInterface* 
 
 
 
+
+
+
+
 C_AdInterface* C_AdManager::AddAdSystem(const sCurrencyData& currencyData, sAdProviderData& providerData) {
     C_AdInterface* pResult{};
     if (!NKAssert(m_eProviders != ADPROVIDER_NULL, "Manager needs setup before use")) { ENFORCE_LINE(613);
@@ -616,22 +616,22 @@ C_AdInterface* C_AdManager::AddAdSystem(const sCurrencyData& currencyData, sAdPr
 
     std::string sError;
     if (providerData.sName == "IronSource") {
-        if ((m_eProviders & ADPROVIDER_IRONSOURCE) == ADPROVIDER_NULL) {
-            sError = "IronSource is disabled";
-        } else {
+        if ((m_eProviders & ADPROVIDER_IRONSOURCE) != ADPROVIDER_NULL) {
         #if USING_IRONSOURCE
             pResult = new C_IronSourceInterface(this, adProviderData, currencyData);
             m_mapInterfaces[currencyData.sCurrency].push_back(pResult);
         #endif
+        } else {
+            sError = "IronSource is disabled";
         }
     } else if (providerData.sName == "Tapjoy") {
-        if ((m_eProviders & ADPROVIDER_TAPJOY) == ADPROVIDER_NULL) {
-            sError = "Tapjoy is disabled";
-        } else {
+        if ((m_eProviders & ADPROVIDER_TAPJOY) != ADPROVIDER_NULL) {
         #if USING_TAPJOY
             pResult = new C_TapjoyInterface(this, adProviderData, currencyData);
             m_mapInterfaces[currencyData.sCurrency].push_back(pResult);
         #endif
+        } else {
+            sError = "Tapjoy is disabled";
         }
     } else {
         sError = StringHelper::Format(
@@ -682,10 +682,6 @@ C_AdInterface* C_AdManager::AddAdSystem(const sCurrencyData& currencyData, sAdPr
     return pResult;
 }
 
-void C_AdManager::AdsInitialised(std::string) {
-
-}
-
 void C_AdManager::AddAdSystemFromJSON(JSON_PropertyReader& reader, const sCurrencyData& currencyData, bool bEnforceCoppa) {
     std::string sAdID;
     std::string sAppID;
@@ -695,7 +691,7 @@ void C_AdManager::AddAdSystemFromJSON(JSON_PropertyReader& reader, const sCurren
     bool bReadAppID = reader.ReadIfExists(sAppID, "appID");
     reader.ReadIfExists(sAdID, "adID");
 
-    if (bReadAppID & bReadName) {
+    if (bReadAppID && bReadName) {
         bool bEnabled = true;
         reader.ReadIfExists(bEnabled, "enabled");
 
@@ -825,20 +821,12 @@ void C_AdManager::PrintConsentInfos() {
     }
 }
 
-void C_AdManager::ShowAdTrackingRequest() {
-
-}
-
 bool C_AdManager::AdTrackingAllowed() {
     return m_bAdTrackingAllowed;
 }
 
 bool C_AdManager::AdTrackingRequestNeeded() {
     return false;
-}
-
-void C_AdManager::InitConsentProvider(const std::string&, bool) {
-
 }
 
 char* C_AdManager::ShowConsentRequest(bool a2) {
