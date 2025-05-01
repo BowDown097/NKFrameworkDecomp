@@ -5,9 +5,9 @@
 #include <NewFramework/Platform/Shared/Logging.h>
 
 CAssetBag::CAssetBag(IBasePointers* basePointers, const std::string& source)
-	: m_pTextureManager{basePointers->textureManager},
-		m_pTextureLoader{basePointers->textureLoader},
-		m_pFontManager{basePointers->fontManager},
+	: m_pTextureManager{basePointers->pTextureManager},
+		m_pTextureLoader{basePointers->pTextureLoader},
+		m_pFontManager{basePointers->pFontManager},
 		mAssetSource{source}
 {
 	m_pTextureLoader->AddListener(this);

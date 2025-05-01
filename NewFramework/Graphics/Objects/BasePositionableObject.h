@@ -13,7 +13,10 @@ struct _BasePositionableObjectDetail {
     struct SBasePositionableObjectListTag {};
 };
 enum struct SPRITE_ALIGNMENT : int32_t {};
-struct SGameTime;
+struct SGameTime {
+    float fTime;
+};
+
 class CBasePositionableObject
     : public boost::intrusive::list_base_hook<
         boost::intrusive::tag<_BasePositionableObjectDetail::SBasePositionableObjectListTag>,

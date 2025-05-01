@@ -131,6 +131,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Graphics/Management/PVR/PVRTextures.h
             NewFramework/Graphics/Management/TextureLoader.h
             NewFramework/Graphics/Management/TextureManager.h
+            NewFramework/Graphics/Objects/BasePositionableObject.h
             NewFramework/Graphics/Render/RenderSystem.h
             NewFramework/Graphics/Texture.h
             NewFramework/IO/File/BaseFileIO.h
@@ -188,6 +189,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Platform/Shared/Logging.h
             NewFramework/Platform/Shared/LoggingComponent.h
             NewFramework/ThirdParty/libpng/load_png.h
+            NewFramework/Utilities/Bitmask.h
             NewFramework/Utilities/Encoding.h
             NewFramework/Utilities/HashHelper.h
             NewFramework/Utilities/JSON/JSON_PropertyReader/JSON_PropertyException.h

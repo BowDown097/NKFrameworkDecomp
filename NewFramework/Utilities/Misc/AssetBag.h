@@ -3,7 +3,7 @@
 #include <NewFramework/Graphics/Management/TextureLoader.h>
 #include <NewFramework/BaseApplication/BasePointers.h>
 
-#include <boost/thread/pthread/recursive_mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
 #include <boost/unordered/unordered_map.hpp>
 #include <string>
 
