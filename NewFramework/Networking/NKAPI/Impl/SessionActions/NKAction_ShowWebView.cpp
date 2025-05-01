@@ -3,6 +3,7 @@
 #include "NewFramework/BaseApplication/AppClass/NKSDKApp.h"
 #include "NewFramework/Networking/NKAPI/Impl/NKSessionImpl.h"
 #include "NewFramework/Networking/NKAPI/NKSignature.h"
+#include "NewFramework/Platform/Shared/Logging.h"
 #include "NewFramework/Utilities/Encoding.h"
 #include "Uncategorized/Blackboards.h"
 #include "Uncategorized/NKLoginQuery.h"
@@ -46,7 +47,6 @@ void BA_ShowWebView::Start(BehaviourTree::IBlackboard* blackboard) {
 
 void BA_ShowWebView::Stop(BehaviourTree::IBlackboard* blackboard) {
     BehaviourTree::Action::Stop(blackboard);
-
     if (this->blackboard && this->blackboard->webView) {
         this->blackboard->webView->Update(0);
         this->blackboard->webView->RemoveListener(this);

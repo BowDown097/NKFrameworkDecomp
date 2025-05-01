@@ -1,0 +1,17 @@
+language: c++
+
+before_install:
+  - sudo apt-get install libboost-dev
+
+compiler:
+  - gcc
+  - clang
+
+script:
+  - mkdir build
+  - cd build
+  - cmake ..
+  - cmake --build . --target all --
+
+after_script:
+  - ctest
