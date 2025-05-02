@@ -2,49 +2,48 @@
 
 ConsoleVariable* g_cvar_head{};
 
-ConsoleVariable::ConsoleVariable(const char* name, const char* description, const char* defaultValue)
-    : name(name), description(description), head(g_cvar_head) {
+ConsoleVariable::ConsoleVariable(const char* sName, const char* sDescription, const char* sDefaultValue)
+    : sName(sName),
+      sDescription(sDescription),
+      pHead(g_cvar_head) {
+
     g_cvar_head = this;
-    cvar::set(this, defaultValue);
+    cvar::set(this, sDefaultValue);
 }
 
-void cvar::set(ConsoleVariable* variable, const std::string& value) {
-    if (variable->stringValue == value) {
-        return;
+void cvar::set(ConsoleVariable* pVariable, const std::string& sValue) {
+    if (pVariable->sValue != sValue) {
+        pVariable->sValue = sValue;
+        pVariable->fValue = atof(pVariable->sValue.c_str());
+        pVariable->iValue = atoi(pVariable->sValue.c_str());
     }
-
-    variable->stringValue = value;
-    variable->floatValue = atof(variable->stringValue.c_str());
-    variable->intValue = atoi(variable->stringValue.c_str());
 }
 
 ConsoleVariable* cvar::get_list() {
     return g_cvar_head;
 }
 
-ConsoleVariable* cvar::get(const std::string& name) {
+ConsoleVariable* cvar::get(const std::string& sName) {
     ConsoleVariable* result = g_cvar_head;
-
-    while (result && result->name != name) {
-        result = result->head;
+    while (result && result->sName != sName) {
+        result = result->pHead;
     }
-
     return result;
 }
 
-void cvar::set_integer(ConsoleVariable* variable, int value) {
+void cvar::set_integer(ConsoleVariable* pVariable, int iValue) {
     char s[32];
-    snprintf(s, sizeof(s), "%i", value);
-    cvar::set(variable, s);
+    snprintf(s, sizeof(s), "%i", iValue);
+    cvar::set(pVariable, s);
 }
 
-void cvar::set_value(ConsoleVariable* variable, float value) {
+void cvar::set_value(ConsoleVariable* pVariable, float fValue) {
     char s[32];
-    if (int(value) == value) {
-        snprintf(s, sizeof(s), "%i", int(value));
+    if (int(fValue) == fValue) {
+        snprintf(s, sizeof(s), "%i", int(fValue));
     } else {
-        snprintf(s, sizeof(s), "%f", value);
+        snprintf(s, sizeof(s), "%f", fValue);
     }
 
-    cvar::set(variable, s);
+    cvar::set(pVariable, s);
 }

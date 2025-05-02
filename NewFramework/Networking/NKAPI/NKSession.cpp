@@ -42,7 +42,7 @@ void NKSession::EnableLogging(bool enabled) const {
 }
 
 bool NKSession::LoggingEnabled() const {
-    return g_allow_graphing_cvar.intValue != 0;
+    return g_allow_graphing_cvar.iValue != 0;
 }
 
 int NKSession::GetAppID() const {

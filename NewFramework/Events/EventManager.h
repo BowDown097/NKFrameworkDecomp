@@ -29,15 +29,15 @@ public:
     void QueueEvent(IEvent* pEvent);
     void ProcessQueue();
 private:
-    std::map<CEventType, std::vector<std::pair<bool, IObserver*>>> _subscribedObserverMap; // 0x00
-    std::vector<std::pair<IObserver*, CEventType>> _pendingObservers; // 0x18
-    std::vector<IObserver*> _pendingRemovingObservers; // 0x30
-    uint _uProcessingCount{}; // 0x48
-    boost::recursive_mutex _queueMutex; // 0x50
+    std::map<CEventType, std::vector<std::pair<bool, IObserver*>>> m_subscribedObserverMap; // 0x00
+    std::vector<std::pair<IObserver*, CEventType>> m_pendingObservers; // 0x18
+    std::vector<IObserver*> m_pendingRemovingObservers; // 0x30
+    uint m_uProcessingCount{}; // 0x48
+    boost::recursive_mutex m_queueMutex; // 0x50
     std::deque<IEvent*> field_90; // 0x90
     std::deque<IEvent*> field_C0; // 0xC0
     ushort field_F0{}; // 0xF0 // yes, this is a short value, despite being used as a bool. very weird.
-    bool _bDummy{}; // 0xF2
+    bool m_bDummy{}; // 0xF2
 
     bool _SendEvent(IEvent* pEvent, bool bDontDeleteEvent);
 };

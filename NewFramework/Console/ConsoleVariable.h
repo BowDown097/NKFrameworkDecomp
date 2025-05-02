@@ -1,21 +1,22 @@
 #pragma once
+
 #include <string>
 
 struct ConsoleVariable {
-    const char* name; // 0x00
-    const char* description; // 0x08
-    std::string stringValue; // 0x10
-    float floatValue; // 0x28
-    int intValue; // 0x2C
-    ConsoleVariable* head; // 0x30
+    const char* sName; // 0x00
+    const char* sDescription; // 0x08
+    std::string sValue; // 0x10
+    float fValue; // 0x28
+    int iValue; // 0x2C
+    ConsoleVariable* pHead; // 0x30
 
-    ConsoleVariable(const char* name, const char* description, const char* defaultValue);
+    ConsoleVariable(const char* sName, const char* sDescription, const char* sDefaultValue);
 };
 
 namespace cvar {
-    void set(ConsoleVariable* variable, const std::string& value);
+    void set(ConsoleVariable* pVariable, const std::string& sValue);
     ConsoleVariable* get_list();
-    ConsoleVariable* get(const std::string& name);
-    void set_integer(ConsoleVariable* variable, int value);
-    void set_value(ConsoleVariable* variable, float value);
+    ConsoleVariable* get(const std::string& sName);
+    void set_integer(ConsoleVariable* pVariable, int iValue);
+    void set_value(ConsoleVariable* pVariable, float fValue);
 }

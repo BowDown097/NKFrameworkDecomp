@@ -6,7 +6,7 @@
 void CEventManager::SendEvent(IEvent* pEvent) {
     if (pEvent) {
         _SendEvent(pEvent, false);
-        if (_uProcessingCount == 0) {
+        if (m_uProcessingCount == 0) {
             RemovePendingObservers();
             AddPendingObservers();
         }
@@ -14,7 +14,7 @@ void CEventManager::SendEvent(IEvent* pEvent) {
 }
 
 void CEventManager::QueueEvent(IEvent* pEvent) {
-    boost::unique_lock lock(_queueMutex);
+    boost::unique_lock lock(m_queueMutex);
     if (field_F0) {
         field_C0.push_back(pEvent);
     } else {
@@ -23,13 +23,13 @@ void CEventManager::QueueEvent(IEvent* pEvent) {
 }
 
 void CEventManager::Unsubscribe(IObserver* pObserver, const std::type_info& typeInfo) {
-    if (_uProcessingCount > 0) {
+    if (m_uProcessingCount > 0) {
         AddPendingRemovingObserver(pObserver, typeInfo);
         return;
     }
 
-    auto it = _subscribedObserverMap.find(&typeInfo);
-    if (it != _subscribedObserverMap.end()) {
+    auto it = m_subscribedObserverMap.find(&typeInfo);
+    if (it != m_subscribedObserverMap.end()) {
         for (auto it2 = it->second.begin(); it2 != it->second.end();) {
             if (it2->second == pObserver) {
                 it->second.erase(it2);
@@ -41,29 +41,29 @@ void CEventManager::Unsubscribe(IObserver* pObserver, const std::type_info& type
 }
 
 void CEventManager::Subscribe(IObserver* pObserver, const std::type_info& typeInfo) {
-    NKAssert(!_bDummy, "Something has tried to subscribe to a dummy event manager"); ENFORCE_LINE(44);
+    NKAssert(!m_bDummy, "Something has tried to subscribe to a dummy event manager"); ENFORCE_LINE(44);
 
-    if (_uProcessingCount > 0) {
+    if (m_uProcessingCount > 0) {
         AddPendingSubscribingObserver(pObserver, typeInfo);
         return;
     }
 
-    auto it = _subscribedObserverMap.emplace(&typeInfo, std::vector<std::pair<bool, IObserver*>>{});
+    auto it = m_subscribedObserverMap.emplace(&typeInfo, std::vector<std::pair<bool, IObserver*>>{});
     it.first->second.emplace_back(true, pObserver);
 }
 
 void CEventManager::Clear() {
-    _subscribedObserverMap.clear();
+    m_subscribedObserverMap.clear();
 }
 
 void CEventManager::AddPendingSubscribingObserver(IObserver* pObserver, const std::type_info& typeInfo) {
-    auto it = _subscribedObserverMap.find(&typeInfo);
+    auto it = m_subscribedObserverMap.find(&typeInfo);
 
-    if (!_pendingRemovingObservers.empty()) {
+    if (!m_pendingRemovingObservers.empty()) {
         bool bFoundMatch{};
-        for (auto it2 = _pendingRemovingObservers.begin(); it2 != _pendingRemovingObservers.end();) {
+        for (auto it2 = m_pendingRemovingObservers.begin(); it2 != m_pendingRemovingObservers.end();) {
             if (*it2 == pObserver) {
-                if (it != _subscribedObserverMap.end()) {
+                if (it != m_subscribedObserverMap.end()) {
                     for (auto it3 = it->second.begin(); it3 != it->second.end(); ++it3) {
                         if (it3->second == pObserver) {
                             bFoundMatch = true;
@@ -71,7 +71,7 @@ void CEventManager::AddPendingSubscribingObserver(IObserver* pObserver, const st
                         }
                     }
                 }
-                _pendingRemovingObservers.erase(it2);
+                m_pendingRemovingObservers.erase(it2);
             } else {
                 ++it2;
             }
@@ -81,14 +81,14 @@ void CEventManager::AddPendingSubscribingObserver(IObserver* pObserver, const st
         }
     }
 
-    _pendingObservers.emplace_back(pObserver, &typeInfo);
+    m_pendingObservers.emplace_back(pObserver, &typeInfo);
 }
 
 void CEventManager::AddPendingRemovingObserver(IObserver* pObserver, const std::type_info& typeInfo) {
-    auto it = _subscribedObserverMap.find(&typeInfo);
+    auto it = m_subscribedObserverMap.find(&typeInfo);
     bool bFoundMatch{};
 
-    if (it != _subscribedObserverMap.end()) {
+    if (it != m_subscribedObserverMap.end()) {
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
             if (it2->second == pObserver) {
                 it2->first = false;
@@ -98,9 +98,9 @@ void CEventManager::AddPendingRemovingObserver(IObserver* pObserver, const std::
         }
     }
 
-    for (auto it2 = _pendingObservers.begin(); it2 != _pendingObservers.end();) {
+    for (auto it2 = m_pendingObservers.begin(); it2 != m_pendingObservers.end();) {
         if (it2->first == pObserver) {
-            _pendingObservers.erase(it2);
+            m_pendingObservers.erase(it2);
             bFoundMatch = false;
         } else {
             ++it2;
@@ -108,20 +108,20 @@ void CEventManager::AddPendingRemovingObserver(IObserver* pObserver, const std::
     }
 
     if (bFoundMatch) {
-        _pendingRemovingObservers.push_back(pObserver);
+        m_pendingRemovingObservers.push_back(pObserver);
     }
 }
 
 void CEventManager::AddPendingObservers() {
-    for (auto it = _pendingObservers.begin(); it != _pendingObservers.end(); ++it) {
+    for (auto it = m_pendingObservers.begin(); it != m_pendingObservers.end(); ++it) {
         Subscribe(it->first, *it->second);
     }
-    _pendingObservers.clear();
+    m_pendingObservers.clear();
 }
 
 void CEventManager::RemovePendingObservers() {
-    for (IObserver* pObserver : _pendingRemovingObservers) {
-        for (auto it = _subscribedObserverMap.begin(); it != _subscribedObserverMap.end(); ++it) {
+    for (IObserver* pObserver : m_pendingRemovingObservers) {
+        for (auto it = m_subscribedObserverMap.begin(); it != m_subscribedObserverMap.end(); ++it) {
             for (auto it2 = it->second.begin(); it2 != it->second.end();) {
                 if (it2->second == pObserver) {
                     it->second.erase(it2);
@@ -131,16 +131,16 @@ void CEventManager::RemovePendingObservers() {
             }
         }
     }
-    _pendingRemovingObservers.clear();
+    m_pendingRemovingObservers.clear();
 }
 
 bool CEventManager::_SendEvent(IEvent* pEvent, bool bDontDeleteEvent) {
-    ++_uProcessingCount;
+    ++m_uProcessingCount;
 
-    auto it = _subscribedObserverMap.find(&typeid(pEvent));
+    auto it = m_subscribedObserverMap.find(&typeid(pEvent));
     bool bFoundMatch{};
 
-    if (it != _subscribedObserverMap.end()) {
+    if (it != m_subscribedObserverMap.end()) {
         bool bHandled{};
         for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it) {
             if (it2->first) {
@@ -160,29 +160,29 @@ bool CEventManager::_SendEvent(IEvent* pEvent, bool bDontDeleteEvent) {
         pEvent = nullptr;
     }
 
-    --_uProcessingCount;
+    --m_uProcessingCount;
     return pEvent == nullptr;
 }
 
 void CEventManager::ProcessQueue() {
-    boost::unique_lock lock(_queueMutex);
+    boost::unique_lock lock(m_queueMutex);
     std::vector<IEvent*> processed;
 
-    field_F0 = !field_F0;
+    ushort field_F0old = field_F0;
+    field_F0 = !field_F0old;
+    std::deque<IEvent*>& queue = field_F0old ? field_C0 : field_90;
 
-    std::deque<IEvent*>& queue = field_F0 ? field_C0 : field_90;
-    for (auto it = queue.begin(); it != queue.end();) {
+    for (auto it = queue.begin(); it != queue.end(); queue.pop_front()) {
         if (*it && !_SendEvent(*it, true)) {
             processed.push_back(*it);
         }
-        queue.pop_front();
     }
 
     for (IEvent* pEvent : processed) {
         queue.push_back(pEvent);
     }
 
-    if (_uProcessingCount == 0) {
+    if (m_uProcessingCount == 0) {
         RemovePendingObservers();
         AddPendingObservers();
     }

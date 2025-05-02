@@ -29,8 +29,8 @@ template<typename T>
 class CObserver : public IObserver {
 public:
     ~CObserver() override {
-        if (_pEventManager) {
-            Unsubscribe(_pEventManager);
+        if (m_pEventManager) {
+            Unsubscribe(m_pEventManager);
         }
     }
 
@@ -42,7 +42,7 @@ public:
     }
 
     void ManagerDestroyed() override {
-        _pEventManager = nullptr;
+        m_pEventManager = nullptr;
     }
 
     virtual void HandleEvent(T* pEvent) {}
@@ -52,24 +52,24 @@ public:
     }
 
     void Subscribe(CEventManager* pEventManager) {
-        if (_pEventManager) {
+        if (m_pEventManager) {
             Unsubscribe(pEventManager);
         }
         if (pEventManager) {
             pEventManager->Subscribe(this, typeid(T));
-            _pEventManager = pEventManager;
+            m_pEventManager = pEventManager;
         }
     }
 
     void Unsubscribe(CEventManager* pEventManager) {
         if (pEventManager) {
-            if (_pEventManager) {
-                NKAssert(_pEventManager == pEventManager, "Trying to unsubscribe from a different manager to our subscribed one"); ENFORCE_LINE(67);
+            if (m_pEventManager) {
+                NKAssert(m_pEventManager == pEventManager, "Trying to unsubscribe from a different manager to our subscribed one"); ENFORCE_LINE(67);
             }
             pEventManager->Unsubscribe(this, typeid(T));
-            _pEventManager = nullptr;
+            m_pEventManager = nullptr;
         }
     }
 private:
-    CEventManager* _pEventManager{}; // 0x08
+    CEventManager* m_pEventManager{}; // 0x08
 };
