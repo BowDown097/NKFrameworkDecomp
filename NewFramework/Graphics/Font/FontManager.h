@@ -1,16 +1,8 @@
 #pragma once
 
-#include <NewFramework/Graphics/Font/FontDefinition.h>
-#include <Uncategorized/RGBA.h>
-
-#include <boost/smart_ptr/shared_ptr.hpp>
-
-#include <map>
-#include <string>
-#include <vector>
+#include "Font.h"
 
 class CBaseFileIO;
-class CFont;
 class CTextureManager;
 
 class IFontImporter {};

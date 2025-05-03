@@ -122,9 +122,7 @@ target_sources(NKFrameworkDecomp
             NewFramework/Console/ConsoleVariable.h
             NewFramework/Events/EventManager.h
             NewFramework/Events/Observer.h
-            NewFramework/Graphics/Font/CharacterInfo.h
             NewFramework/Graphics/Font/Font.h
-            NewFramework/Graphics/Font/FontDefinition.h
             NewFramework/Graphics/Font/FontManager.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
