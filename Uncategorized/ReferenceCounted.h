@@ -1,10 +1,10 @@
 #pragma once
 
+#include <climits>
+
 class CReferenceCounted
 {
 public:
-    CReferenceCounted() : mRefCount(0x7FFFFFFF) {}
+    mutable int mRefCount = INT_MAX;
     virtual ~CReferenceCounted() = default;
-private:
-    mutable int mRefCount;
 };

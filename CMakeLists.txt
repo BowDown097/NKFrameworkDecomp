@@ -28,8 +28,9 @@ target_sources(NKFrameworkDecomp
         NewFramework/BaseApplication/BasePointers.cpp
         NewFramework/Console/ConsoleVariable.cpp
         NewFramework/Events/EventManager.cpp
-        NewFramework/Graphics/Font/FontManager.cpp
         NewFramework/Graphics/Font/Font.cpp
+        NewFramework/Graphics/Font/FontManager.cpp
+        NewFramework/Graphics/Font/XmlFontImporter.cpp
         NewFramework/Graphics/Management/JPEG/JPEGTextures.cpp
         NewFramework/Graphics/Management/JPNG/JPNGTextures.cpp
         NewFramework/Graphics/Management/PVR/PVRTextures.cpp
@@ -123,7 +124,10 @@ target_sources(NKFrameworkDecomp
             NewFramework/Events/EventManager.h
             NewFramework/Events/Observer.h
             NewFramework/Graphics/Font/Font.h
+            NewFramework/Graphics/Font/FontDefinition.h
+            NewFramework/Graphics/Font/FontImporter.h
             NewFramework/Graphics/Font/FontManager.h
+            NewFramework/Graphics/Font/XmlFontImporter.h
             NewFramework/Graphics/Management/JPEG/JPEGTextures.h
             NewFramework/Graphics/Management/JPNG/JPNGTextures.h
             NewFramework/Graphics/Management/PVR/PVRTextures.h

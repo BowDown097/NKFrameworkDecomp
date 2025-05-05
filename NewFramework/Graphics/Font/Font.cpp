@@ -2,9 +2,6 @@
 
 #include "NewFramework/Graphics/Management/TextureManager.h"
 
-#define MATCH_CHARACTER(map, code) \
-    std::find_if(map.begin(), map.end(), [code](const std::pair<uint, SCharacterInfo>& p) { return p.first >= code; });
-
 CFont::CFont(
     const std::string& sName, float fSize,
     boost::shared_ptr<const SFontDefinition> pDefinition,
@@ -18,7 +15,7 @@ CFont::CFont(
 
 SCharacterInfo CFont::GetCharacterInfo(uint uCode, bool bUseFallback) const {
     if (m_pDefinition) {
-        auto it = MATCH_CHARACTER(m_pDefinition->characterInfoMap, uCode);
+        auto it = m_pDefinition->MatchCharacter(uCode);
         if (it != m_pDefinition->characterInfoMap.end() && it->first == uCode) {
             return it->second;
         }
@@ -37,7 +34,7 @@ boost::shared_ptr<const SFontDefinition> CFont::GetDefinition() const {
 
 float CFont::GetLineHeight() const {
     if (m_pDefinition) {
-        return CTextureManager::GetSpriteScale(m_pDefinition->textures.front()->size) * m_pDefinition->fHeight * m_fSize;
+        return CTextureManager::GetSpriteScale(m_pDefinition->textures.front()->size) * m_pDefinition->fLineHeight * m_fSize;
     } else {
         return 0.0f;
     }
@@ -45,7 +42,7 @@ float CFont::GetLineHeight() const {
 
 bool CFont::HasCharacter(uint uCode) const {
     if (m_pDefinition) {
-        auto it = MATCH_CHARACTER(m_pDefinition->characterInfoMap, uCode);
+        auto it = m_pDefinition->MatchCharacter(uCode);
         return it != m_pDefinition->characterInfoMap.end() && it->first == uCode;
     } else {
         return false;

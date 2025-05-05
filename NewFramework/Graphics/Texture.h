@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <string>
 
+enum class ePixelFormat { Unknown, RGBA8, RGBA4, RGBA, RGB8, RGB565, LA8, LA }; // still not sure if these names are right
 enum class eTextureFilePolicy { Document, Cache, Unk1, Asset, Unk2, External };
 enum class eTextureSize { Unknown, Low, High, Tablet, Ultra };
 enum class eTextureState { None, Loading, Created, Loaded, Failure, Unloaded };
@@ -26,9 +27,6 @@ struct STextureRect
 class CTexture : public CReferenceCounted
 {
 public:
-    // still not sure if these names are right
-    enum class ePixelFormat { Unknown, RGBA8, RGBA4, RGBA, RGB8, RGB565, LA8, LA };
-
     STextureDimensions dimensions{}; // 0x10
     std::string id; // 0x18
     std::string path; // 0x30
