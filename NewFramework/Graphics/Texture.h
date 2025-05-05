@@ -1,9 +1,10 @@
 #pragma once
 #include "Uncategorized/ReferenceCounted.h"
-#include <climits>
 #include <cstdint>
 #include <string>
 
+enum class ePixelDataFormat {};
+enum class ePixelDataType {};
 enum class ePixelFormat { Unknown, RGBA8, RGBA4, RGBA, RGB8, RGB565, LA8, LA }; // still not sure if these names are right
 enum class eTextureFilePolicy { Document, Cache, Unk1, Asset, Unk2, External };
 enum class eTextureSize { Unknown, Low, High, Tablet, Ultra };

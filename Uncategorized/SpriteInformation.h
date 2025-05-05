@@ -9,6 +9,11 @@ struct RectStruct
     float field_4; // 0x04
     float field_8; // 0x08
     float field_C; // 0x0C
+};
+
+struct SpriteInformation
+{
+    RectStruct rect; // 0x00
     int field_10; // 0x10
     int field_14; // 0x14
     int field_18;
@@ -39,11 +44,6 @@ struct RectStruct
     int field_7C;
     int field_80;
     int field_84;
-};
-
-struct SpriteInformation
-{
-    RectStruct rect; // 0x00
     std::vector<CVec2> field_88; // 0x88
     std::vector<CVec2> field_A0; // 0xA0
     std::string field_B8; // 0xB8

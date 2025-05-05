@@ -2,11 +2,11 @@
 
 void SpriteInformation::ScaleCoords(float factor)
 {
-    rect.field_38 *= factor;
-    rect.field_48 *= factor;
-    rect.field_58 *= factor;
-    rect.field_5C *= factor;
-    rect.field_60 *= factor;
-    rect.field_30 *= factor;
-    rect.field_34 *= factor;
+    field_38 *= factor;
+    field_48 *= factor;
+    field_58 *= factor;
+    field_5C *= factor;
+    field_60 *= factor;
+    field_30 *= factor;
+    field_34 *= factor;
 }
