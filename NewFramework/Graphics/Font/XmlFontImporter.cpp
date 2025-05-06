@@ -27,16 +27,16 @@
 
 
 
-const bool FindFontFile(CBaseFileIO* pFileIO, eTextureSize eMaxSize, const std::string& sFolder, const std::string& sName) {
-    for (int i = static_cast<int>(eMaxSize); i > 0; --i) {
-        std::string sFontPath = CTexture::TextureSizeToString(static_cast<eTextureSize>(i)) + sFolder + "/" + sName + ".fnt";
-        if (pFileIO->FileExists(sFontPath, pFileIO->assetPolicy)) {
-            return pFileIO->OpenFile(sFontPath, pFileIO->assetPolicy, eFileOpenMode::Read);
-        }
-    }
 
-    return false;
-}
+
+
+
+
+
+
+
+
+
 
 CXmlFontImporter::CXmlFontImporter(CTextureManager* pTextureManager)
     : m_pTextureManager(pTextureManager) {}

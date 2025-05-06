@@ -21,8 +21,8 @@ SCharacterInfo CFont::GetCharacterInfo(uint uCode, bool bUseFallback) const {
         }
     }
 
-    if (bUseFallback && m_uCodeFallback != 0 && m_uCodeFallback != uCode) {
-        return GetCharacterInfo(m_uCodeFallback, true);
+    if (bUseFallback && m_uFallbackCharacter != 0 && m_uFallbackCharacter != uCode) {
+        return GetCharacterInfo(m_uFallbackCharacter, true);
     } else {
         return SCharacterInfo();
     }

@@ -90,7 +90,7 @@ public:
     tMapStringSpriteInfo* GetTextureSprites(const std::string&);
     bool HasTextureSprites(const std::string&, tMapStringSpriteInfo&);
     SAnimationInfo* GetAnimationPtr(const std::string&);
-    eTextureSize GetTextureSize();
+    static eTextureSize GetTextureSize();
     tMapStringSpriteInfo GetSpritesInTexture(const std::string&);
     eTextureSize FindTexture(const std::string&, const std::string&, eTextureType);
     eTextureSize FindTextureXML(const std::string&, const std::string&, CFilePolicy&);

@@ -4,40 +4,42 @@
 
 class CBaseFileIO;
 class CTextureManager;
+struct IFontImporter;
 
-class IFontImporter {};
 struct SLocalisedFontInfo {
-	std::string mFontName{};
-	std::string mFontFile{};
-	float mC = 0.0f;
-	bool mD = false;
-	bool mE = false;
-	bool mF = false;
-	CRGBA mColor{};
-	float mAlpha = 0.0f;
+    std::string sName;
+    std::string sSource;
+    float fSize{};
+    bool bLuminanceAlpha{};
+    bool field_35{};
+    bool field_36{};
+    CRGBA colour;
+    float fAlpha{};
 };
 
 class CFontManager {
 public:
-	CFontManager(CTextureManager* textureManager, CBaseFileIO* fileIO);
-	~CFontManager() = default;
-
-	const boost::shared_ptr<CFont> AddFont(const SLocalisedFontInfo& fontInfo);
-	void AddFonts(const std::vector<SLocalisedFontInfo>& fontInfos);
-	void AddImporter(boost::shared_ptr<IFontImporter> importer);
-	int DecFontRefCount(const std::string& name, const std::string& source);
-	void FontCleanup();
-	boost::shared_ptr<CFont> GetFont(const std::string& name);
-	std::string GetFontTextureName(boost::shared_ptr<CFont> font);
-	std::string GetFontTextureName(const std::string& fontName);
-	const boost::shared_ptr<const SFontDefinition> ImportFontDefinition(const std::string& fontName, const bool unknown);
-	int IncFontRefCount(const std::string& name, const std::string& source);
-	void PrintRefCountInfo() const;
-	bool ResumeFont(const std::string& fontName);
-	void SetCharacterFallbackEnabled(bool enabled);
-	void SuspendFont(const std::string& fontName);
-	void UpdateFont(const SLocalisedFontInfo& fontInfo);
-
-	std::vector<boost::shared_ptr<IFontImporter>> mFontImporters{};
-	std::map<std::string, boost::shared_ptr<const SFontDefinition>> mFontDefinitions{};
+    CFontManager(CTextureManager* pTextureManager, CBaseFileIO* pFileIO);
+    void AddImporter(boost::shared_ptr<IFontImporter> pImporter);
+    boost::shared_ptr<CFont> GetFont(const std::string& sName);
+    void AddFonts(const std::vector<SLocalisedFontInfo>& fontInfos);
+    const boost::shared_ptr<CFont> AddFont(const SLocalisedFontInfo& fontInfo);
+    const boost::shared_ptr<CFont> UpdateFont(const SLocalisedFontInfo& fontInfo);
+    int DecFontRefCount(const std::string& sName, const std::string& sSource);
+    void FontCleanup();
+    int IncFontRefCount(const std::string& sName, const std::string& sSource);
+    std::string GetFontTextureName(boost::shared_ptr<CFont> pFont);
+    bool SuspendFont(const std::string& sName);
+    bool ResumeFont(const std::string& sName);
+    void PrintRefCountInfo() const;
+    std::string GetFontTextureName(const std::string& sFontName);
+    const boost::shared_ptr<const SFontDefinition> ImportFontDefinition(const std::string& sSource, bool bLuminanceAlpha);
+    void SetCharacterFallbackEnabled(bool bEnabled);
+private:
+    std::vector<boost::shared_ptr<IFontImporter>> m_fontImporters; // 0x00
+    std::map<std::string, boost::shared_ptr<const SFontDefinition>> m_fontDefinitionMap; // 0x18
+    std::map<std::string, boost::shared_ptr<CFont>> m_fontMap; // 0x30
+    CTextureManager* m_pTextureManager; // 0x48
+    CBaseFileIO* m_pFileIO; // 0x50
+    bool m_bCharacterFallbackEnabled{}; // 0x58
 };

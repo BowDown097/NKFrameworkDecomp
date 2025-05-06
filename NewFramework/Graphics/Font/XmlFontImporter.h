@@ -6,8 +6,6 @@
 class CBaseFileIO;
 class CTextureManager;
 
-const bool FindFontFile(CBaseFileIO* pFileIO, eTextureSize eMaxSize, const std::string& sFolder, const std::string& sName);
-
 struct SPage {
     int id; // 0x00
     std::string sFile; // 0x08

@@ -10,7 +10,10 @@
 class CTexture;
 
 class CFont : public CReferenceCounted {
+    friend class CFontManager;
 public:
+    inline static uint s_uDefaultFallbackCharacter = 161;
+
     CFont(
         const std::string& sName, float fSize,
         boost::shared_ptr<const SFontDefinition> pDefinition,
@@ -26,5 +29,5 @@ private:
     bool field_40; // 0x40
     CRGBA m_colour; // 0x44
     float m_fAlpha; // 0x48
-    uint m_uCodeFallback{}; // 0x4C
+    uint m_uFallbackCharacter{}; // 0x4C
 };
